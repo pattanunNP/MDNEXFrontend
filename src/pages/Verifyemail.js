@@ -13,7 +13,7 @@ export default function VerifyEmail() {
   let query = useQuery();
   let uuid = query.get("uuid");
 
-  let baseUrl = process.env.API_URL;
+  let baseUrl = process.env.REACT_APP_API_URL;
 
   const [sent, setSent] = useState(false);
   const [resent, setResent] = useState(true);
