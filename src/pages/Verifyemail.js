@@ -13,7 +13,7 @@ export default function VerifyEmail() {
   let query = useQuery();
   let uuid = query.get("uuid");
 
-  let baseUrl = process.env.NODE_ENV;
+  let baseUrl = process.env.API_URL;
 
   const [sent, setSent] = useState(false);
   const [resent, setResent] = useState(true);
@@ -28,7 +28,7 @@ export default function VerifyEmail() {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
-        `http://127.0.0.1:8000/api/v1/check/verify-email?uuid=${uuid}`
+        `${baseUrl}/api/v1/check/verify-email?uuid=${uuid}`
       );
 
       setInfo({
@@ -51,7 +51,7 @@ export default function VerifyEmail() {
     };
 
     axios
-      .post(`http://127.0.0.1:8000/api/v1/send/confrim-email`, payload)
+      .post(`${baseUrl}/api/v1/send/confrim-email`, payload)
       .then((response) => {
         if (response.status === 200) {
           setSent(true);
