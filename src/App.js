@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import verifyEmail from "./pages/Verifyemail";
+import { PrivateRoute } from "./components/PrivateRoute";
 import "./App.css";
 
 function App() {
@@ -15,7 +16,8 @@ function App() {
           <Route exact path="/" component={Home}></Route>
           <Route exact path="/login" component={Login}></Route>
           <Route exact path="/register" component={Register}></Route>
-          <Route exact path="/dashboard" component={Dashboard}></Route>
+
+          <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/verify/email" component={verifyEmail}></Route>
         </Switch>
       </BrowserRouter>

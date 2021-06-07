@@ -4,8 +4,14 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import BuildIcon from "@material-ui/icons/Build";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
-
-export default function Sidenavbar() {
+import { useHistory } from "react-router-dom";
+export default function Sidenavbar(props) {
+  const history = useHistory();
+  function handleLogout() {
+    sessionStorage.removeItem("access_token");
+    sessionStorage.removeItem("refresh_token");
+    history.push("/login");
+  }
   return (
     <aside className="z-20 flex-shrink-0 hidden w-60 pl-2 overflow-y-auto bg-white rounded-r-2xl filter drop-shadow-lg md:block">
       <div>
@@ -19,20 +25,20 @@ export default function Sidenavbar() {
               <img
                 alt="user"
                 className=" my-5 hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
-                src="https://image.flaticon.com/icons/png/512/149/149071.png"
+                src={props.profileImage}
               />
               <p className="font-bold text-gray-600 pt-2 text-center w-24">
-                Pattanun Numpong
+                {props.username}
               </p>
               <p className="font-normal  text-gray-400 pt-2 text-center w-24">
-                Project owner
+                {props.role}
               </p>
-              <a
-                href="/"
+              <button
+                onClick={handleLogout}
                 className="mt-4 p-1 font-bold text-center rounded-lg bg-red-400 w-24 hover:bg-red-500"
               >
                 <ExitToAppIcon /> Logout
-              </a>
+              </button>
               <div>
                 <ul className="mt-2 leading-10">
                   <li className="relative px-2 py-8 ">

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import Sidenavbar from "../components/Sidenavbar";
@@ -6,11 +7,45 @@ import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import axios from "axios";
 
 export default function Dashboard() {
+  let baseUrl = process.env.REACT_APP_API_URL;
+
+  const [userdata, setUserData] = useState({});
+  const history = useHistory();
+  let acess_token = sessionStorage.getItem("access_token");
+  let refresh_token = sessionStorage.getItem("refresh_token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${acess_token}`,
+      };
+
+      await axios
+        .get(`${baseUrl}/api/v1/dashboard`, { headers: headers })
+        .then((response) => {
+          setUserData({
+            profileImage: response.data.profileImage,
+            username: response.data.username,
+            role: response.data.role,
+          });
+        })
+        .catch((e) => {
+          history.push("login");
+        });
+    };
+    fetchData();
+  }, [baseUrl, acess_token, refresh_token, history]);
   return (
     <div className="flex h-screen">
-      <Sidenavbar />
+      <Sidenavbar
+        username={userdata.username}
+        role={userdata.role}
+        profileImage={userdata.profileImage}
+      />
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
         <header className="z-40 py-4 bg-none">
           <div className="flex justify-center  mt-2 mr-4">
