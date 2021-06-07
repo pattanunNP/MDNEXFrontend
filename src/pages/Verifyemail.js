@@ -45,7 +45,7 @@ export default function VerifyEmail() {
     };
 
     fetchData();
-  }, [uuid]);
+  }, [uuid, baseUrl]);
 
   const sendemail = () => {
     const payload = {
