@@ -262,7 +262,7 @@ export default function Register() {
             <div>
               <Paper
                 style={{
-                  height: "625px",
+                  height: "640px",
                   borderRadius: "30px",
                 }}
                 variant="outlined"
