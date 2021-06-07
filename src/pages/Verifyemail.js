@@ -4,6 +4,7 @@ import { Paper, Typography } from "@material-ui/core";
 import { EmailOutlined } from "@material-ui/icons";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useLocation, Link } from "react-router-dom";
+import { process } from "autoprefixer";
 
 export default function VerifyEmail() {
   function useQuery() {
@@ -12,9 +13,12 @@ export default function VerifyEmail() {
 
   let query = useQuery();
   let uuid = query.get("uuid");
-
-  let baseUrl = process.env.REACT_APP_API_URL;
-
+  let baseUrl;
+  if (process.env.NODE_ENV === "production") {
+    baseUrl = process.env.REACT_APP_API_URL_PRODUCTION;
+  } else {
+    baseUrl = process.env.REACT_APP_API_URL_DEV;
+  }
   const [sent, setSent] = useState(false);
   const [resent, setResent] = useState(true);
   const [info, setInfo] = useState({
