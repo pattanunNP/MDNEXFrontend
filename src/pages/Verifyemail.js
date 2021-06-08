@@ -91,7 +91,7 @@ export default function VerifyEmail() {
                       </span>{" "}
                     </p>
                     <p className="mt-5 font-bold text-red-600">
-                      * Verify link will vilid for{" "}
+                      * Verify link will valid{" "}
                       <span className=" title font-extrabold">
                         {info.expire}
                       </span>

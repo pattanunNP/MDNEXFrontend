@@ -54,7 +54,7 @@ export default function Sidenavbar(props) {
                   <li className="relative px-2 py-8 ">
                     <a
                       className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                      href="/dashboard"
+                      href="/teams"
                     >
                       <PeopleIcon />
 

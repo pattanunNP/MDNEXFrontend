@@ -1,46 +1,182 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import Sidenavbar from "../components/Sidenavbar";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+// import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
+import SendIcon from "@material-ui/icons/Send";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-export default function Dashboard() {
-  let baseUrl = process.env.REACT_APP_API_URL;
+import PeopleIcon from "@material-ui/icons/People";
+import Modal from "../components/Modal";
+import EmailOutlined from "@material-ui/icons/EmailOutlined";
+import {
+  IconButton,
+  Select,
+  MenuItem,
+  Tooltip,
+  Typography,
+  Paper,
+} from "@material-ui/core";
 
+export default function Dashboard() {
+  const inputElement = useRef("");
   const [userdata, setUserData] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [matchedQuery, setMatchedQuery] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [invite, setInvite] = useState({});
   const history = useHistory();
-  let acess_token = sessionStorage.getItem("access_token");
-  let refresh_token = sessionStorage.getItem("refresh_token");
 
   useEffect(() => {
+    let access_token = sessionStorage.getItem("access_token");
+    let baseUrl = process.env.REACT_APP_API_URL;
     const fetchData = async () => {
       const headers = {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${acess_token}`,
+        Authorization: `Bearer ${access_token}`,
       };
 
       await axios
         .get(`${baseUrl}/api/v1/dashboard`, { headers: headers })
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setUserData({
             profileImage: response.data.profileImage,
             username: response.data.username,
             role: response.data.role,
             isVerified: response.data.isVerified,
+            count_projects: response.data.count_projects,
+            to_labels: 0,
+            count_teams: response.data.count_teams,
+            last_edit_projects: "Bone Segment",
           });
         })
         .catch((e) => {
           history.push("login");
         });
     };
+
     fetchData();
-  }, [baseUrl, acess_token, refresh_token, history]);
+  }, [history]);
+
+  useEffect(() => {
+    let access_token = sessionStorage.getItem("access_token");
+    let baseUrl = process.env.REACT_APP_API_URL;
+
+    if (searchQuery.length > 0) {
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      };
+
+      axios
+        .get(`${baseUrl}/api/v1/search?query=${inputElement.current.value}`, {
+          headers: headers,
+        })
+        .then((response) => {
+          setMatchedQuery([]);
+          console.log(response.data.match);
+          setMatchedQuery(response.data.match);
+        });
+    } else {
+      setMatchedQuery([]);
+    }
+  }, [searchQuery]);
+
+  function handleSearch(e) {
+    console.log(e.target.value);
+    setSearchQuery(e.target.value);
+  }
+  function handleInvite() {
+    setOpen(true);
+  }
+  function sendemail() {}
+
+  function role_color(role) {
+    let color;
+    if (role === "admin") {
+      color = "justify-self-start font-normal text-red-300";
+    } else if (role === "co-responding") {
+      color = "justify-self-start font-normal text-blue-300";
+    } else if (role === "labeler") {
+      color = "justify-self-start font-normal text-yellow-300";
+    }
+    return color;
+  }
+  const modalContent = (
+    <div className="flex justify-center">
+      <Paper
+        style={{
+          margin: 50,
+          width: "550px",
+          height: "550px",
+          padding: "1rem",
+          borderRadius: "30px",
+        }}
+      >
+        <div className="flex justify-between h-full w-full">
+          <div>
+            <EmailOutlined className="text-green-500 w-64 font-bold" />
+            <Typography>
+              <h1 className="mt-2 title text-3xl font-extrabold">
+                {" "}
+                Invite people to join your project{" "}
+              </h1>
+              <p className="mt-4 font-semibold">
+                {" "}
+                Link will send to{" "}
+                <span className="font-bold text-green-500">
+                  {invite.email}
+                </span>{" "}
+              </p>
+              <p className="mt-5 font-bold text-red-600">
+                * Link will valid{" "}
+                <span className=" title font-extrabold">{invite.expire}</span>
+              </p>
+            </Typography>
+            <p className="mt-5 w-full text-black">Select Role</p>
+            <Select
+              className="mt-5 w-full text-black"
+              name="role"
+              style={{
+                color: "black",
+              }}
+              variant="outlined"
+              label="Select Role"
+              value={invite.role}
+            >
+              <MenuItem value="" disabled>
+                <em>Select Role</em>
+              </MenuItem>
+              <MenuItem value="Reviewer">Corresponding</MenuItem>
+              <MenuItem value="Admin">Admin</MenuItem>
+              <MenuItem value="Labeler">Labeler</MenuItem>
+            </Select>
+            <button
+              className="mt-10 w-32 p-3 bg-green-400 text-white font-bold rounded-3xl  ring-4 ring-green-300 hover:bg-green-500"
+              onClick={sendemail}
+            >
+              Send
+            </button>
+          </div>
+
+          <div>
+            <IconButton
+              className="order-5"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CancelIcon className="text-red-500 text-3xl hover:text-red-600" />
+            </IconButton>
+          </div>
+        </div>
+      </Paper>
+    </div>
+  );
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
       <Sidenavbar
@@ -50,37 +186,86 @@ export default function Dashboard() {
       />
 
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
-        <Navbar
-          not_image={true}
-          search_box={
-            <div className="flex justify-center  mt-2 mr-4">
-              <div className="relative flex w-96 flex-wrap items-stretch mb-3">
-                <input
-                  type="search"
-                  placeholder="Search"
-                  className="form-input px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10"
-                />
-                <span className="z-10 h-full leading-snug font-normal  text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 -mt-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </span>
-              </div>
+        <Modal open={open} content={modalContent} />
+        <header className="z-20 py-2 bg-gray-800 h-16">
+          <div className="flex justify-center  mt-2 mr-4">
+            <div className="relative flex w-96 flex-wrap items-stretch mb-3">
+              <input
+                ref={inputElement}
+                type="search"
+                placeholder="Search"
+                name="search"
+                onChange={handleSearch}
+                className="form-input px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus: w-full pr-10 rounded-none"
+              />
+              <span className="z-60 h-full leading-snug font-normal  text-center text-gray-400 absolute bg-transparent rounded-lg text-base items-center justify-center w-8 right-0 pr-3 py-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 -mt-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </span>
+              {matchedQuery.length > 0 ? (
+                <div className="z-60 bg-white overflow-auto">
+                  <ul className="pt-1 pb-2 rounded-b-xl w-96 bg-none">
+                    {matchedQuery.map((search) => (
+                      <li
+                        className="flex justify-between h-full p-1 w-full"
+                        key={search.uuid}
+                      >
+                        <div className="order-3">
+                          <img
+                            alt="profile_img"
+                            src={search.profileimage}
+                            className="w-8 h-8 justify-self-start rounded-full flex items-center justify-center"
+                          />
+                          <div className="order-5">
+                            <span className="font-bold">{search.username}</span>
+                          </div>
+                          <div className="order-5">
+                            <span className={role_color(search.role)}>
+                              {search.role}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="order-last">
+                          <Tooltip title="Send Invite">
+                            <IconButton
+                              onClick={() => {
+                                setInvite({
+                                  ...invite,
+                                  uuid: search.uuid,
+                                  email: search.email,
+                                  username: search.username,
+
+                                  expire: "1 days",
+                                });
+                                handleInvite();
+                              }}
+                            >
+                              <SendIcon className="text-green-300 hover:text-green-400" />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
-          }
-        />
-        <header className="z-40 py-4 bg-none"></header>
+          </div>
+        </header>
         <main>
           <div className="grid mb-4 pb-10 px-8 mx-4 rounded-3xl ">
             <div className="grid grid-cols-12 gap-6">
@@ -89,17 +274,17 @@ export default function Dashboard() {
                 href="/work"
               >
                 <div className="p-5">
-                  <div className="flex justify-between"></div>
-                  <div className="ml-2 w-full flex-1">
-                    <div>
-                      <PhotoLibraryIcon className="text-indigo-400" />
-                      <div className="mt-3 text-3xl font-bold leading-8">
-                        232
-                      </div>
-                      <div className="mt-1 text-base text-gray-600">
-                        Image to labels
-                      </div>
+                  <div className="my-4 flex justify-center">
+                    <PhotoLibraryIcon className="text-indigo-400" />
+                  </div>
+
+                  <div className="flex justify-center">
+                    <div className="mt-3 text-3xl font-bold">
+                      {userdata.to_labels}
                     </div>
+                  </div>
+                  <div className="flex justify-center">
+                    <div className="mt-4 text-base text-gray-600">Images</div>
                   </div>
                 </div>
               </a>
@@ -109,16 +294,39 @@ export default function Dashboard() {
                 href="/work"
               >
                 <div className="p-5">
-                  <div className="flex justify-between"></div>
-                  <div className="ml-2 w-full flex-1">
-                    <div>
-                      <CheckCircleOutlineIcon className="text-green-400" />
+                  <div className="my-4 flex justify-center">
+                    <CheckCircleOutlineIcon className="text-green-400" />
+                  </div>
 
-                      <div className="mt-3 text-3xl font-bold leading-8">3</div>
-                      <div className="mt-1 text-base text-gray-600">
-                        Active Projects
-                      </div>
+                  <div className="flex justify-center">
+                    <div className="mt-3 text-3xl font-bold">
+                      {" "}
+                      {userdata.count_projects}
                     </div>
+                  </div>
+                  <div className="flex justify-center">
+                    <div className="mt-4 text-base text-gray-600">
+                      Active Projects
+                    </div>
+                  </div>
+                </div>
+              </a>
+              <a
+                className="transform hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+                href="/work"
+              >
+                <div className="p-5">
+                  <div className="my-4 flex justify-center">
+                    <PeopleIcon className="text-red-400" />
+                  </div>
+
+                  <div className="flex justify-center">
+                    <div className="mt-3 text-3xl font-bold">
+                      {userdata.count_teams}
+                    </div>
+                  </div>
+                  <div className="flex justify-center">
+                    <div className="mt-4 text-base text-gray-600">Teams</div>
                   </div>
                 </div>
               </a>
@@ -127,33 +335,17 @@ export default function Dashboard() {
                 href="/work"
               >
                 <div className="p-5">
-                  <div className="flex justify-between"></div>
-                  <div className="ml-2 w-full flex-1">
-                    <div>
-                      <InsertDriveFileIcon className="text-yellow-400" />
-                      <div className="mt-3 text-3xl font-bold leading-8">4</div>
-                      <div className="mt-1 text-base text-gray-600">
-                        Project
-                      </div>
+                  <div className="my-4 flex justify-center">
+                    <AccessTimeIcon className="text-pink-300" />
+                  </div>
+                  <div className="flex justify-center">
+                    <div className="mt-3 text-2xl font-bold leading-8">
+                      Last edited project
                     </div>
                   </div>
-                </div>
-              </a>
-              <a
-                className="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
-                href="/work"
-              >
-                <div className="p-5">
-                  <div className="flex justify-between"></div>
-                  <div className="ml-2 w-full flex-1">
-                    <div>
-                      <AccessTimeIcon className="text-pink-300" />
-                      <div className="mt-3 text-3xl font-bold leading-8">
-                        Last edited project
-                      </div>
-                      <div className="mt-1 text-base text-gray-600">
-                        Bones Segmentation
-                      </div>
+                  <div className="flex justify-center">
+                    <div className="mt-1 text-base text-gray-600">
+                      {userdata.last_edit_projects}
                     </div>
                   </div>
                 </div>

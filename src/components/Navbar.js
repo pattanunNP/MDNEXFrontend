@@ -1,4 +1,3 @@
-import NotificationsIcon from "@material-ui/icons/Notifications";
 export default function Navbar(props) {
   return (
     <nav className="p-1 bg-gray-800 relative select-none bg-grey lg:flex lg:items-stretch w-full">
@@ -14,7 +13,7 @@ export default function Navbar(props) {
         ) : (
           <div></div>
         )}
-        <div className="mx-24">{props.search_box}</div>
+
         <button className="block lg:hidden cursor-pointer ml-auto relative w-12 h-12 p-4">
           <svg
             className="fill-current text-blue-500"
@@ -39,7 +38,7 @@ export default function Navbar(props) {
           >
             {props.btn_name}
           </a>
-          {!props.notify === undefined ? <NotificationsIcon /> : <div></div>}
+
           <a
             href="/dashboard"
             className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-green-500 no-underline flex items-center hover:bg-grey-dark font-bold"
