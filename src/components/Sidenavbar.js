@@ -13,26 +13,26 @@ export default function Sidenavbar(props) {
     history.push("/login");
   }
   return (
-    <aside className="z-20 flex-shrink-0 hidden w-60 pl-2 overflow-y-auto bg-white rounded-r-2xl filter drop-shadow-lg md:block">
+    <aside className="z-20 flex-shrink-0 hidden w-60 pl-2 overflow-y-auto bg-gray-800 rounded-rb-2xl filter drop-shadow-lg md:block">
       <div>
         <div className="text-white">
           <div className="flex justify-center">
             <div className="grid grid-row-1">
-              <a href="/" className="mt-5 justify-self-center font-bold">
-                <span className="text-indigo-400">MD</span>
-                <span className="text-pink-400">NEX</span>
+              <a href="/">
+                <img alt="logo" src="/favicon.ico" className="w-20" />
               </a>
               <img
                 alt="user"
-                className=" my-5 hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
+                className=" my-1 hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
                 src={props.profileImage}
               />
-              <p className="font-bold text-gray-600 pt-2 text-center w-24">
+              <p className="font-bold text-green-500 pt-2 text-center w-24">
                 {props.username}
               </p>
-              <p className="font-normal  text-gray-400 pt-2 text-center w-24">
+              <p className="font-normal  text-gray-200 pt-2 text-center w-24">
                 {props.role}
               </p>
+
               <button
                 onClick={handleLogout}
                 className="mt-4 p-1 font-bold text-center rounded-lg bg-red-400 w-24 hover:bg-red-500"

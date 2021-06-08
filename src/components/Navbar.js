@@ -1,14 +1,20 @@
-export default function Navbar() {
+import NotificationsIcon from "@material-ui/icons/Notifications";
+export default function Navbar(props) {
   return (
-    <nav className=" bg-white relative select-none bg-grey lg:flex lg:items-stretch w-full">
+    <nav className="p-1 bg-gray-800 relative select-none bg-grey lg:flex lg:items-stretch w-full">
       <div className="flex flex-no-shrink items-stretch h-12">
-        <a
-          href="/"
-          className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-blue-500 no-underline flex items-center hover:bg-grey-dark font-bold"
-        >
-          MD.Labeltools
-        </a>
-
+        {props.no_image === true ? (
+          <a href="/" className="p-1">
+            <img
+              alt="logo"
+              src="https://res.cloudinary.com/image-chatbot/image/upload/v1623151505/MDNEX_LOGO_250_NEON_xv8b2y.png"
+              className="w-10 rounded-2xl"
+            />
+          </a>
+        ) : (
+          <div></div>
+        )}
+        <div className="mx-24">{props.search_box}</div>
         <button className="block lg:hidden cursor-pointer ml-auto relative w-12 h-12 p-4">
           <svg
             className="fill-current text-blue-500"
@@ -22,14 +28,21 @@ export default function Navbar() {
       <div className="lg:flex lg:items-stretch lg:flex-no-shrink lg:flex-grow">
         <div className="lg:flex lg:items-stretch lg:justify-end ml-auto">
           <a
-            href="/login"
-            className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-blue-500 no-underline flex items-center hover:bg-grey-dark font-bold"
+            href="/"
+            className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-green-500 no-underline flex items-center hover:bg-grey-dark font-bold"
           >
-            Login
+            Home
           </a>
           <a
+            href={props.btn_link}
+            className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-red-500 no-underline flex items-center hover:bg-grey-dark font-bold"
+          >
+            {props.btn_name}
+          </a>
+          {!props.notify === undefined ? <NotificationsIcon /> : <div></div>}
+          <a
             href="/dashboard"
-            className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-blue-500 no-underline flex items-center hover:bg-grey-dark font-bold"
+            className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-green-500 no-underline flex items-center hover:bg-grey-dark font-bold"
           >
             Dashboard
           </a>

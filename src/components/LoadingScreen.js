@@ -1,34 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Lottie from "react-lottie";
-import loadingAnimation from "./animation/loading.json";
+import loadingAnimation from "./animation/loading2.json";
 
-export default function LoadingScreen(props) {
-  const [loading, setLoading] = useState(true);
+export default function LoadingScreen() {
   const defaultOptions = {
-    loop: props.isloop,
-    autoplay: props.isautoplay,
+    loop: true,
+    autoplay: true,
     animationData: loadingAnimation,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, props.delay);
-  }, []);
 
   const Loadingpage = (
-    <Lottie
-      style={{
-        marginTop: "30px",
-      }}
-      options={defaultOptions}
-      height={500}
-      width={500}
-    />
+    <div className="flex justify-center">
+      <Lottie
+        style={{
+          marginTop: "30px",
+        }}
+        options={defaultOptions}
+        height={500}
+        width={500}
+      />
+    </div>
   );
-  return (
-    <div>{loading ? <div>{Loadingpage}</div> : <div>{props.content}</div>}</div>
-  );
+  return <div>{Loadingpage}</div>;
 }

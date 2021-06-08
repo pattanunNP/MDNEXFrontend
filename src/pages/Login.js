@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Typography, TextField } from "@material-ui/core";
@@ -66,33 +68,41 @@ export default function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setOpen(true);
-    setLoadingFetch(true);
     let payload = {
       username: userdata.username,
       password: userdata.password,
     };
+
     setTimeout(() => {
-      axios
-        .post(`${baseUrl}/api/v1/login`, payload)
-        .then((response) => {
-          setSuccess(true);
-          // console.log(response.data);
-          success_text["message"] = response.data.message;
-          setSuccessText(success_text);
-          sessionStorage.setItem("access_token", response.data.access_token);
-          sessionStorage.setItem("refresh_token", response.data.refresh_token);
-          history.push("/dashboard");
-        })
-        .catch((error) => {
-          setSuccess(false);
-          let errors = {};
-          let error_detail = error.response.data.detail;
-          errors["message"] = error_detail;
-          setError(errors);
-        });
       setLoadingFetch(false);
-    }, 5000);
+      setOpen(false);
+      setTimeout(() => {
+        setLoadingFetch(true);
+        setOpen(true);
+        axios
+          .post(`${baseUrl}/api/v1/login`, payload)
+          .then((response) => {
+            setSuccess(true);
+            success_text["message"] = response.data.message;
+            setSuccessText(success_text);
+            sessionStorage.setItem("access_token", response.data.access_token);
+            sessionStorage.setItem(
+              "refresh_token",
+              response.data.refresh_token
+            );
+            history.push("/dashboard");
+            setSuccess(true);
+          })
+          .catch((error) => {
+            setSuccess(false);
+            setLoadingFetch(false);
+            let errors = {};
+            let error_detail = error.response.data.detail;
+            errors["message"] = error_detail;
+            setError(errors);
+          });
+      }, 2200);
+    }, 1000);
   }
   const modalContent = (
     <div className="flex justify-center">
@@ -129,27 +139,7 @@ export default function Login() {
           </div>
         ) : (
           <div>
-            {!success ? (
-              <div className="p-1">
-                <Typography className="flex justify-center">
-                  <h1 className="title font-bold text-3xl"> Failed</h1>
-                </Typography>
-
-                <Lottie
-                  style={{
-                    marginTop: "30px",
-                  }}
-                  options={defaultOptions3}
-                  height={200}
-                  width={200}
-                ></Lottie>
-                <Typography className="flex justify-center">
-                  <h1 className="title font-bold text-3xl">
-                    {errors["message"]}
-                  </h1>
-                </Typography>
-              </div>
-            ) : (
+            {success ? (
               <div className="p-1">
                 <Typography className="flex justify-center">
                   <h1 className="title font-bold text-3xl">Success</h1>
@@ -169,6 +159,26 @@ export default function Login() {
                   </h1>
                 </Typography>
               </div>
+            ) : (
+              <div className="p-1">
+                <Typography className="flex justify-center">
+                  <h1 className="title font-bold text-3xl"> Failed</h1>
+                </Typography>
+
+                <Lottie
+                  style={{
+                    marginTop: "30px",
+                  }}
+                  options={defaultOptions3}
+                  height={200}
+                  width={200}
+                ></Lottie>
+                <Typography className="flex justify-center">
+                  <h1 className="title font-bold text-3xl">
+                    {errors["message"]}
+                  </h1>
+                </Typography>
+              </div>
             )}
           </div>
         )}
@@ -177,97 +187,80 @@ export default function Login() {
   );
   return (
     <div>
-      <Modal open={open} content={modalContent} />
-      <Typography>
-        <h1 className="my-5 bg-white w-64  justify-self-center title text-2xl text-black font-semibold border-green-300">
-          Welcome to
-          <span className="text-indigo-400  border-white"> MD</span>
-          <span className="text-pink-400  border-white">NEX</span>
-        </h1>
-      </Typography>
-      <div className="bg-auto flex justify-center">
-        <div className={classes.root}>
-          <Paper
-            variant="outlined"
-            className=" p-5 bg-white-300 bg-opacity-40 shadow-lg blur-lg"
-          >
-            <Typography>
-              <h1 className="title text-4xl font-bold">Login</h1>
-            </Typography>
-            <div
-              style={{
-                marginTop: "20px",
-              }}
-              className="h-56
+      <div className="bg-left-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 w-full h-screen">
+        <Navbar btn_name={"Register"} btn_link={"/register"} />
+        <Modal open={open} content={modalContent} />
+
+        <div className="bg-auto flex justify-center">
+          <div className={classes.root}>
+            <Paper
+              variant="outlined"
+              className=" p-5 bg-white-300 bg-opacity-40 shadow-lg blur-lg"
+            >
+              <Typography className="flex justify-center">
+                <h1 className="title text-4xl font-bold">Login</h1>
+              </Typography>
+              <div
+                style={{
+                  marginTop: "20px",
+                }}
+                className="h-56
           flex flex-wrap content-start content-between"
-            >
-              <form onSubmit={handleSubmit}>
-                <TextField
-                  style={{
-                    marginTop: "20px",
-                  }}
-                  className="mt-5 w-full"
-                  label="username"
-                  name="username"
-                  variant="outlined"
-                  type="text"
-                  onChange={handleChange}
-                />
-                <TextField
-                  style={{
-                    marginTop: "20px",
-                  }}
-                  className="mt-5 w-full"
-                  name="password"
-                  label="password"
-                  variant="outlined"
-                  type="password"
-                  onChange={handleChange}
-                />
+              >
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    style={{
+                      marginTop: "20px",
+                    }}
+                    className="mt-5 w-full"
+                    label="username"
+                    name="username"
+                    variant="outlined"
+                    type="text"
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    style={{
+                      marginTop: "20px",
+                    }}
+                    className="mt-5 w-full"
+                    name="password"
+                    label="password"
+                    variant="outlined"
+                    type="password"
+                    onChange={handleChange}
+                  />
 
-                <CTA
-                  name={"Login"}
-                  type={"submit"}
-                  classStyle={
-                    "mt-5 p-5 title text-sm font-bold transition duration-500 ease-in-out bg-red-400 text-white font-bold w-full rounded-full hover:bg-red-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
-                  }
-                />
-              </form>
-            </div>
+                  <CTA
+                    name={"Login"}
+                    type={"submit"}
+                    classStyle={
+                      "mt-5 p-5 title text-sm font-bold transition duration-500 ease-in-out bg-red-400 text-white font-bold w-full rounded-full hover:bg-red-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
+                    }
+                  />
+                </form>
+              </div>
 
-            <a
-              href="/forgotpassword"
-              className="mt-5 title text-sm font-bold flex justify-self-stretch text-blue-300 hover:text-blue-400"
-            >
-              {" "}
-              Forgot password ?
-            </a>
-          </Paper>
+              <Typography>
+                <a
+                  href="/forgotpassword"
+                  className="mt-5 title text-sm font-bold flex justify-self-stretch text-blue-300 hover:text-blue-400"
+                >
+                  {" "}
+                  Forgot password ?
+                </a>
+                <a
+                  href="/register"
+                  className="font-medium text-blue-300 hover:text-blue-400"
+                >
+                  <span>Don't have accout</span> Register
+                </a>
+              </Typography>
+            </Paper>
+          </div>
         </div>
       </div>
-      <Typography>
-        <a
-          href="/register"
-          className="font-medium text-white hover:text-blue-200"
-        >
-          <span>Don't have accout</span> Register
-        </a>
-      </Typography>
-      <Typography>
-        <a
-          href="/contact"
-          className="mx-3 font-medium text-white hover:text-blue-200 "
-        >
-          Contact us
-        </a>
-
-        <a
-          href="/terms"
-          className="mx-3 font-medium text-white hover:text-blue-200"
-        >
-          Terms of use
-        </a>
-      </Typography>
+      <Footer />
     </div>
   );
 }

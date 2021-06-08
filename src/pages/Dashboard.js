@@ -8,7 +8,7 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import CancelIcon from "@material-ui/icons/Cancel";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import axios from "axios";
-
+import Navbar from "../components/Navbar";
 export default function Dashboard() {
   let baseUrl = process.env.REACT_APP_API_URL;
 
@@ -27,10 +27,12 @@ export default function Dashboard() {
       await axios
         .get(`${baseUrl}/api/v1/dashboard`, { headers: headers })
         .then((response) => {
+          console.log(response.data);
           setUserData({
             profileImage: response.data.profileImage,
             username: response.data.username,
             role: response.data.role,
+            isVerified: response.data.isVerified,
           });
         })
         .catch((e) => {
@@ -40,40 +42,45 @@ export default function Dashboard() {
     fetchData();
   }, [baseUrl, acess_token, refresh_token, history]);
   return (
-    <div className="flex h-screen">
+    <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
       <Sidenavbar
         username={userdata.username}
         role={userdata.role}
         profileImage={userdata.profileImage}
       />
+
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
-        <header className="z-40 py-4 bg-none">
-          <div className="flex justify-center  mt-2 mr-4">
-            <div className="relative flex w-96 flex-wrap items-stretch mb-3">
-              <input
-                type="search"
-                placeholder="Search"
-                className="form-input px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10"
-              />
-              <span className="z-10 h-full leading-snug font-normal  text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 -mt-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </span>
+        <Navbar
+          not_image={true}
+          search_box={
+            <div className="flex justify-center  mt-2 mr-4">
+              <div className="relative flex w-96 flex-wrap items-stretch mb-3">
+                <input
+                  type="search"
+                  placeholder="Search"
+                  className="form-input px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white rounded-lg text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10"
+                />
+                <span className="z-10 h-full leading-snug font-normal  text-center text-gray-400 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 -mt-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </span>
+              </div>
             </div>
-          </div>
-        </header>
+          }
+        />
+        <header className="z-40 py-4 bg-none"></header>
         <main>
           <div className="grid mb-4 pb-10 px-8 mx-4 rounded-3xl ">
             <div className="grid grid-cols-12 gap-6">
