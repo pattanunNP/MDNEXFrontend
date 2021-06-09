@@ -1,8 +1,9 @@
 /* This example requires Tailwind CSS v2.0+ */
 import React from "react";
 import { Paper } from "@material-ui/core";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+
+import Navbar from "../../components/objects/Navbar";
+import Footer from "../../components/objects/Footer";
 // const navigation = [{ name: "Features", href: "#" }];
 
 export default function Terms() {

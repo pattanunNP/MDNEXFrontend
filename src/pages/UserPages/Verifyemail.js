@@ -5,8 +5,8 @@ import { EmailOutlined } from "@material-ui/icons";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useLocation, Link } from "react-router-dom";
 
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../../components/objects/Navbar";
+import Footer from "../../components/objects/Footer";
 
 export default function VerifyEmail() {
   function useQuery() {

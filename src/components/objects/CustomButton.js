@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function CTA(props) {
+export default function CustomButton(props) {
   return (
     <button
       className={props.classStyle}

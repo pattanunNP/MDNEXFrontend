@@ -1,7 +1,5 @@
 import React, { cloneElement } from "react";
 
-import { UserProfileProvider } from "./userDataProvider";
-
 import { StoreContextProvider } from "./store";
 
 function ProviderComposer({ contexts, children }) {
@@ -17,7 +15,7 @@ export default function ContextProvider({ children }) {
   return (
     <ProviderComposer
       // add providers to array of contexts
-      contexts={[<UserProfileProvider />, <StoreContextProvider />]}
+      contexts={[<StoreContextProvider />]}
     >
       {children}
     </ProviderComposer>

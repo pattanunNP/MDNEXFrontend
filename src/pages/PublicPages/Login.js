@@ -1,66 +1,33 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import CancelIcon from "@material-ui/icons/Cancel";
-import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Typography, TextField } from "@material-ui/core";
-import Modal from "../components/Modal";
-import Lottie from "react-lottie";
 import axios from "axios";
-import successAnimation from "../components/animation/confirm.json";
-import failedAnimation from "../components/animation/failed.json";
-import submitingAnimation from "../components/animation/loadingring.json";
-import CTA from "../components/CTA";
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import { StoreContext } from "../../context/store";
+import { Paper, Typography, TextField } from "@material-ui/core";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    "& > *": {
-      margin: "20px",
+import Lottie from "react-lottie";
 
-      width: "500px",
-      height: "400px",
-      borderRadius: "30px",
-    },
-  },
-}));
+import {
+  successAnimationObjects,
+  failedAnimationObjects,
+  loadingringAnimationObjects,
+} from "../../components/animation/animation";
+
+// Custom Import
+import ModalPop from "../../components/objects/Modal";
+import CustomButton from "../../components/objects/CustomButton";
+import Navbar from "../../components/objects/Navbar";
+import Footer from "../../components/objects/Footer";
 
 export default function Login() {
+  const { setOpenModal } = useContext(StoreContext);
   const [userdata, setUserData] = useState({});
   const [errors, setError] = useState({});
-  const classes = useStyles();
   const [success, setSuccess] = useState(false);
   const [success_text, setSuccessText] = useState({});
-  const [open, setOpen] = useState(false);
   let baseUrl = process.env.REACT_APP_API_URL;
   const [loadingFetch, setLoadingFetch] = useState(false);
   const history = useHistory();
 
-  const defaultOptions2 = {
-    loop: false,
-    autoplay: true,
-    animationData: successAnimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
-  const defaultOptions3 = {
-    loop: false,
-    autoplay: true,
-    animationData: failedAnimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
-  const defaultOptions4 = {
-    loop: false,
-    autoplay: true,
-    animationData: submitingAnimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
   function handleChange(e) {
     e.preventDefault();
     setUserData({ ...userdata, [e.target.name]: e.target.value });
@@ -75,10 +42,10 @@ export default function Login() {
 
     setTimeout(() => {
       setLoadingFetch(false);
-      setOpen(false);
+
       setTimeout(() => {
         setLoadingFetch(true);
-        setOpen(true);
+        setOpenModal(true);
         axios
           .post(`${baseUrl}/api/v1/login`, payload)
           .then((response) => {
@@ -90,6 +57,7 @@ export default function Login() {
               "refresh_token",
               response.data.refresh_token
             );
+            setOpenModal(false);
             history.push("/dashboard");
             setSuccess(true);
           })
@@ -106,96 +74,82 @@ export default function Login() {
   }
   const modalContent = (
     <div className="flex justify-center">
-      <Paper
-        style={{
-          margin: "50px",
-          width: "450px",
-          height: "450px",
-          borderRadius: "30px",
-        }}
-      >
-        {" "}
-        <button
-          className="p-3"
-          onClick={() => {
-            setOpen(false);
-          }}
-        >
-          <CancelIcon className="flex justify-end text-red-500 text-3xl hover:text-red-600" />
-        </button>
-        {loadingFetch ? (
-          <div>
-            <Typography className="flex justify-center">
-              <h1 className="title font-bold text-3xl">Processing ... </h1>
-            </Typography>
-            <Lottie
-              style={{
-                marginTop: "30px",
-              }}
-              options={defaultOptions4}
-              height={200}
-              width={200}
-            />
-          </div>
-        ) : (
-          <div>
-            {success ? (
-              <div className="p-1">
-                <Typography className="flex justify-center">
-                  <h1 className="title font-bold text-3xl">Success</h1>
-                </Typography>
+      {loadingFetch ? (
+        <div>
+          <Typography className="flex justify-center">
+            <h1 className="title font-bold text-3xl">Processing ... </h1>
+          </Typography>
+          <Lottie
+            style={{
+              marginTop: "30px",
+            }}
+            options={loadingringAnimationObjects}
+            height={200}
+            width={200}
+          />
+        </div>
+      ) : (
+        <div>
+          {success ? (
+            <div className="p-1">
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">Success</h1>
+              </Typography>
 
-                <Lottie
-                  style={{
-                    marginTop: "30px",
-                  }}
-                  options={defaultOptions2}
-                  height={270}
-                  width={270}
-                ></Lottie>
-                <Typography className="flex justify-center">
-                  <h1 className="title font-bold text-3xl">
-                    {success_text["message"]}
-                  </h1>
-                </Typography>
-              </div>
-            ) : (
-              <div className="p-1">
-                <Typography className="flex justify-center">
-                  <h1 className="title font-bold text-3xl"> Failed</h1>
-                </Typography>
+              <Lottie
+                style={{
+                  marginTop: "30px",
+                }}
+                options={successAnimationObjects}
+                height={270}
+                width={270}
+              ></Lottie>
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">
+                  {success_text["message"]}
+                </h1>
+              </Typography>
+            </div>
+          ) : (
+            <div className="p-1">
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl"> Failed</h1>
+              </Typography>
 
-                <Lottie
-                  style={{
-                    marginTop: "30px",
-                  }}
-                  options={defaultOptions3}
-                  height={200}
-                  width={200}
-                ></Lottie>
-                <Typography className="flex justify-center">
-                  <h1 className="title font-bold text-3xl">
-                    {errors["message"]}
-                  </h1>
-                </Typography>
-              </div>
-            )}
-          </div>
-        )}
-      </Paper>
+              <Lottie
+                style={{
+                  marginTop: "30px",
+                }}
+                options={failedAnimationObjects}
+                height={200}
+                width={200}
+              ></Lottie>
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">
+                  {errors["message"]}
+                </h1>
+              </Typography>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
   return (
     <div>
       <div className="bg-left-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 w-full h-screen">
         <Navbar btn_name={"Register"} btn_link={"/register"} />
-        <Modal open={open} content={modalContent} />
+        <ModalPop contents={modalContent} />
 
         <div className="bg-auto flex justify-center">
-          <div className={classes.root}>
+          <div>
             <Paper
+              style={{
+                height: "400px",
+                borderRadius: "30px",
+              }}
               variant="outlined"
-              className=" p-5 bg-white-300 bg-opacity-40 shadow-lg blur-lg"
+              className="mt-10 p-4 bg-white-300 bg-opacity-40 shadow-lg blur-lg"
             >
               <Typography className="flex justify-center">
                 <h1 className="title text-4xl font-bold">Login</h1>
@@ -231,7 +185,7 @@ export default function Login() {
                     onChange={handleChange}
                   />
 
-                  <CTA
+                  <CustomButton
                     name={"Login"}
                     type={"submit"}
                     classStyle={

@@ -12,7 +12,7 @@ const checkAuth = () => {
   try {
     // { exp: 12903819203 }
     const { exp } = decode(refreshToken);
-    console.log(exp);
+    // console.log(exp);
     if (exp < new Date().getTime() / 1000) {
       return false;
     }

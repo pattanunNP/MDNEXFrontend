@@ -1,38 +1,41 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import * as ROUTES from "./constants/routes";
-import { PrivateRoute } from "./components/PrivateRoute";
-import LoadingScreen from "./components/LoadingScreen";
+import { PrivateRoute } from "./components/Router/PrivateRoute";
+import LoadingScreen from "./components/objects/LoadingScreen";
 
 import "./App.css";
 
-const Home = lazy(() => import("./pages/Home"));
-const Terms = lazy(() => import("./pages/Terms"));
-const Login = lazy(() => import("./pages/Login"));
-const Register = lazy(() => import("./pages/Register"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const VerifyEmail = lazy(() => import("./pages/Verifyemail"));
-// const NotFound = lazy(() => import("./pages/NotFround"));
+const Home = lazy(() => import("./pages/PublicPages/Home"));
+const Terms = lazy(() => import("./pages/PublicPages/Terms"));
+const Login = lazy(() => import("./pages/PublicPages/Login"));
+const Register = lazy(() => import("./pages/PublicPages/Register"));
+const Dashboard = lazy(() => import("./pages/UserPages/Dashboard"));
+const Data = lazy(() => import("./pages/UserPages/Data"));
+const NewData = lazy(() => import("./pages/UserPages/NewDataset"));
+const VerifyEmail = lazy(() => import("./pages/UserPages/Verifyemail"));
+const NotFound = lazy(() => import("./pages/PublicPages/NotFround"));
 
 function App() {
   return (
-    <Router>
-      <Suspense fallback={<LoadingScreen />}>
-        <Switch>
-          <Route exact path={ROUTES.HOME} component={Home}></Route>
-          <Route exact path={ROUTES.TERMS} component={Terms}></Route>
-          <Route exact path={ROUTES.LOGIN} component={Login}></Route>
-          <Route exact path={ROUTES.REGISTER} component={Register}></Route>
-          {/* <Route exact path={ROUTES.NOT_FOUND} component={NotFound}></Route> */}
-          <Route
-            exact
-            path={ROUTES.VERIFY_EMAIL}
-            component={VerifyEmail}
-          ></Route>
-          <PrivateRoute exact path={ROUTES.DASHBOARD} component={Dashboard} />
-        </Switch>
-      </Suspense>
-    </Router>
+    <div style={{ fontFamily: "Kanit" }}>
+      <Router>
+        <Suspense fallback={<LoadingScreen />}>
+          <Switch>
+            <Route exact path={ROUTES.HOME} component={Home} />
+            <Route exact path={ROUTES.TERMS} component={Terms} />
+            <Route exact path={ROUTES.LOGIN} component={Login} />
+            <Route exact path={ROUTES.REGISTER} component={Register} />
+            <Route exact path={ROUTES.VERIFY_EMAIL} component={VerifyEmail} />
+            <PrivateRoute exact path={ROUTES.DASHBOARD} component={Dashboard} />
+            <PrivateRoute exact path={ROUTES.DATA} component={Data} />
+            <PrivateRoute exact path={ROUTES.NEW_DATA} component={NewData} />
+
+            <Route component={NotFound}></Route>
+          </Switch>
+        </Suspense>
+      </Router>
+    </div>
   );
 }
 

@@ -5,7 +5,7 @@ import { EmailOutlined } from "@material-ui/icons";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import { useLocation, Link } from "react-router-dom";
 import Lottie from "react-lottie";
-import loadingAnimation from "../components/animation/loading.json";
+import loadingAnimation from "../../components/animation/loading.json";
 
 export default function VerifyEmail() {
   function useQuery() {
