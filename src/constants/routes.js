@@ -1,6 +1,7 @@
 export const DASHBOARD = "/dashboard";
 export const DATA = "/dashboard/data";
 export const NEW_DATA = "/dashboard/data/newdata";
+export const NEW_PROJECTS = "/dashboard/projects/newproject";
 export const LOGIN = "/login";
 export const HOME = "/";
 export const TERMS = "/terms";

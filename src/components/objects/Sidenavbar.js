@@ -5,7 +5,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import BuildIcon from "@material-ui/icons/Build";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { IconButton } from "@material-ui/core";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
@@ -47,7 +47,7 @@ export default function Sidenavbar(props) {
                   <a href="/">
                     <img alt="logo" src="/favicon.ico" className="w-20" />
                   </a>
-                  <a href="/profile">
+                  <a href={`/profile/${props.uuid}`}>
                     <img
                       alt="user"
                       className=" my-5 hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
@@ -68,19 +68,20 @@ export default function Sidenavbar(props) {
                   <div>
                     <ul className="mt-2 leading-10">
                       <li className="relative px-2 py-8 ">
-                        <a
+                        <Link
                           className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                          href="/dashboard"
+                          to="/dashboard"
                         >
-                          <DashboardIcon />
-
-                          <span className="ml-6">DASHBOARD</span>
-                        </a>
+                          <button>
+                            <DashboardIcon />{" "}
+                            <span className="ml-6">DASHBOARD</span>
+                          </button>
+                        </Link>
                       </li>
                       <li className="relative px-2 py-8 ">
                         <a
                           className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                          href="/teams"
+                          href="/dashboard/teams"
                         >
                           <PeopleIcon />
 
@@ -108,7 +109,7 @@ export default function Sidenavbar(props) {
                       <li className="relative px-2 py-8">
                         <a
                           className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                          href="/setting"
+                          href="/dashboard/setting"
                         >
                           <SettingsIcon />
                           <span className="ml-6">SETTING</span>
@@ -154,7 +155,7 @@ export default function Sidenavbar(props) {
                     <img alt="logo" src="/favicon.ico" className="w-20" />
                   </a>
                   <div className="flex justify-center">
-                    <a href="/profile">
+                    <a href={`/profile/${props.uuid}`}>
                       <img
                         alt="user"
                         className=" my-5 hidden h-12 w-12 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
@@ -179,7 +180,7 @@ export default function Sidenavbar(props) {
                       <li className="relative px-2 py-8 ">
                         <a
                           className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                          href="/teams"
+                          href="/dashboard/teams"
                         >
                           <PeopleIcon />
                         </a>
@@ -187,7 +188,7 @@ export default function Sidenavbar(props) {
                       <li className="relative px-2 py-8 ">
                         <a
                           className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                          href="/tool"
+                          href="/dashboard/tool"
                         >
                           <BuildIcon />
                         </a>
@@ -203,7 +204,7 @@ export default function Sidenavbar(props) {
                       <li className="relative px-2 py-8 ">
                         <a
                           className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                          href="/setting"
+                          href="/dashboard/setting"
                         >
                           <SettingsIcon />
                         </a>

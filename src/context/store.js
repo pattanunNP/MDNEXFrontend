@@ -3,8 +3,9 @@ import React, { useState, createContext } from "react";
 export const StoreContext = createContext({});
 export const StoreContextProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
+  const [activeStep, setActiveStep] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-
+  const [userProjects, setUserProjects] = useState({});
   return (
     <StoreContext.Provider
       value={{
@@ -12,6 +13,10 @@ export const StoreContextProvider = ({ children }) => {
         setUserData,
         openModal,
         setOpenModal,
+        userProjects,
+        setUserProjects,
+        activeStep,
+        setActiveStep,
       }}
     >
       {children}

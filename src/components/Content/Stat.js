@@ -17,7 +17,7 @@ export default function Stat() {
       <div className="grid grid-cols-12 gap-6">
         <a
           className="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
-          href="/work"
+          href="/"
         >
           <div className="p-5">
             <div className="my-4 flex justify-center">
@@ -39,7 +39,7 @@ export default function Stat() {
 
         <a
           className="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
-          href="/work"
+          href="/dashboard/projects"
         >
           <div className="p-5">
             <div className="my-4 flex justify-center">
@@ -63,7 +63,7 @@ export default function Stat() {
         </a>
         <a
           className="transform hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
-          href="/work"
+          href="/dashboard/teams"
         >
           <div className="p-5">
             <div className="my-4 flex justify-center">

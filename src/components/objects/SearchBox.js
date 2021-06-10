@@ -62,12 +62,7 @@ export default function SearchBox(props) {
         placeholder="Search"
         name="search"
         onChange={handleSearch}
-        style={{
-          background: "rgba(0, 0, 0, 0.85 )",
-          backdropFilter: "blur( 5.0px )",
-          borderRadius: "5px 5px 0px 0px",
-        }}
-        className="form-input px-2 py-2 placeholder-green-300 text-green-400 relative bg-gray-200 rounded-lg text-sm shadow outline-none  focus:outline-none focus: w-full pr-10 rounded-b-lg"
+        className="my-2 form-input px-2 py-2  h-10 placeholder-green-300 text-green-400 relative bg-gray-200 rounded-lg text-sm shadow outline-none  focus:outline-none focus: w-full pr-10 rounded-b-lg"
       />
       <span className="h-full leading-snug font-normal  text-center text-gray-400 absolute bg-transparent rounded-lg text-base items-center justify-center w-8 right-0 pr-3 py-3">
         <SearchIcon />

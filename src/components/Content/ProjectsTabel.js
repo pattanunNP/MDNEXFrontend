@@ -1,15 +1,30 @@
-import CancelIcon from "@material-ui/icons/Cancel";
-
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 export default function ProjectsTabel(props) {
+  function ConvertTime(timestamp) {
+    const time = new Date(timestamp).toLocaleDateString("en-TH", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    return time;
+  }
+
   return (
     <div className="grid gap-2 grid-cols-1 lg:grid-cols-1">
       <div className=" p-4 rounded-lg">
         <h2 className="title text-green-400 font-bold">Projects</h2>
         <div className="mt-4">
           <div className="flex flex-col">
-            <div classNaem="-my-2 overflow-x-auto">
+            <div className="-my-2 overflow-x-auto">
               <div className="py-2 align-middle inline-block min-w-full">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white">
+                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg bg-white h-96 overflow-x-auto overflow-y-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead>
                       <tr>
@@ -35,289 +50,84 @@ export default function ProjectsTabel(props) {
                         </th>
                       </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>Bones Segmentation</p>
-                          <p class="text-xs text-gray-400">Ortholpredic</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>77</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex text-green-500">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="w-5 h-5 mr-1"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                            <p>Active 4 hours age</p>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex space-x-4">
-                            <a
-                              href="/edit?id=dw22"
-                              class="text-blue-500 hover:text-blue-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                />
-                              </svg>
-                              <p>Edit</p>
-                            </a>
-                            <a
-                              href="/delete?id=dw2222"
-                              class="text-red-500 hover:text-red-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1 ml-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                              <p>Delete</p>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>Lung Covid</p>
-                          <p class="text-xs text-gray-400">Respiratory</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>32</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex text-green-500">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="w-5 h-5 mr-1"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                            <p>Active 3 months age</p>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex space-x-4">
-                            <a
-                              href="/edit?id=dw22"
-                              class="text-blue-500 hover:text-blue-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                />
-                              </svg>
-                              <p>Edit</p>
-                            </a>
-                            <a
-                              href="/delete?id=dwee22"
-                              class="text-red-500 hover:text-red-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1 ml-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                              <p>Delete</p>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>Cancer Tissue Segement</p>
-                          <p class="text-xs text-gray-400">Tissue</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>77</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex text-red-500">
-                            <CancelIcon className="text-red-400" />
-                            <p>Deactived 4 hours ago</p>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex space-x-4">
-                            <a
-                              href="/edit?id=dw22"
-                              class="text-blue-500 hover:text-blue-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                />
-                              </svg>
-                              <p>Edit</p>
-                            </a>
-                            <a
-                              href="/delete?id=d12"
-                              class="text-red-500 hover:text-red-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1 ml-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                              <p>Delete</p>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>Brain</p>
-                          <p class="text-xs text-gray-400">Barin</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <p>77</p>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex text-green-500">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="w-5 h-5 mr-1"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-                            <p>Active 1 weeks ago</p>
-                          </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
-                          <div class="flex space-x-4">
-                            <a
-                              href="/edit?id=dw22"
-                              class="text-blue-500 hover:text-blue-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                />
-                              </svg>
-                              <p>Edit</p>
-                            </a>
-                            <a
-                              href="/delete?id=dw22"
-                              class="text-red-500 hover:text-red-600"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 mr-1 ml-3"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                              <p>Delete</p>
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
+                    {props.data !== undefined ? (
+                      <tbody class="bg-white divide-y divide-gray-200">
+                        {props.data.map((item) => (
+                          <tr key="project_uuid">
+                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
+                              <p>{item.project_name}</p>
+                              <p class="text-xs text-gray-400">
+                                ProjectDescription: {item.project_description}
+                              </p>
+                              <p class="text-xs text-gray-200">
+                                ProjectID: {item.project_uuid}
+                              </p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
+                              <p>77</p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
+                              {!item.isDeactive ? (
+                                <div class="flex text-green-500">
+                                  <CheckCircleOutlineIcon />
+                                  <p>
+                                    {ConvertTime(item.project_last_modified)}
+                                  </p>
+                                </div>
+                              ) : (
+                                <div class="flex text-red-500">
+                                  <RemoveCircleIcon />
+                                  <p>
+                                    {ConvertTime(item.project_last_modified)}
+                                  </p>
+                                </div>
+                              )}
+                            </td>
+                            <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
+                              <div class="flex space-x-4">
+                                <div class="flex justify-center">
+                                  <a
+                                    href="/edit?id=dw22"
+                                    class="text-blue-500 hover:text-blue-600"
+                                  >
+                                    <EditIcon />
+                                    <p>Edit</p>
+                                  </a>
+                                </div>
+                                <div class="flex justify-center">
+                                  {!item.isDeactive ? (
+                                    <a
+                                      href="/edit?id=dw22"
+                                      class="text-yellow-500 hover:text-yellow-600"
+                                    >
+                                      <RemoveCircleIcon />
+                                      <p>Deactive</p>
+                                    </a>
+                                  ) : (
+                                    <a
+                                      href="/edit?id=dw22"
+                                      class="text-gray-500 hover:text-gray-600"
+                                    >
+                                      <RemoveCircleIcon />
+                                      <p>Deactive</p>
+                                    </a>
+                                  )}
+                                </div>
+                                <div class="flex justify-center">
+                                  <a
+                                    href="/delete?id=dw2222"
+                                    class="text-red-500 hover:text-red-600"
+                                  >
+                                    <DeleteIcon />
+                                    <p>Delete</p>
+                                  </a>{" "}
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    ) : null}
                   </table>
                 </div>
               </div>
