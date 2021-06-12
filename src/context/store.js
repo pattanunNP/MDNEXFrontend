@@ -5,7 +5,9 @@ export const StoreContextProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
   const [activeStep, setActiveStep] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-  const [refresh, setRefersh] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(false);
+  const [toolType, setToolType] = useState(null);
+
   const [userProjects, setUserProjects] = useState({});
   return (
     <StoreContext.Provider
@@ -18,8 +20,10 @@ export const StoreContextProvider = ({ children }) => {
         setUserProjects,
         activeStep,
         setActiveStep,
-        refresh,
-        setRefersh,
+        openSidebar,
+        setOpenSidebar,
+        toolType,
+        setToolType,
       }}
     >
       {children}
