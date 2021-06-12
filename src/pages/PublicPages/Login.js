@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { StoreContext } from "../../context/store";
 import { Paper, Typography, TextField } from "@material-ui/core";
 
+import { useFormik } from "formik";
 import Lottie from "react-lottie";
 
 import {
@@ -17,61 +18,66 @@ import ModalPop from "../../components/objects/Modal";
 import CustomButton from "../../components/objects/CustomButton";
 import Navbar from "../../components/objects/Navbar";
 import Footer from "../../components/objects/Footer";
+import { LoginInfo } from "../../components/schema/validator";
 
 export default function Login() {
   const { setOpenModal } = useContext(StoreContext);
-  const [userdata, setUserData] = useState({});
-  const [errors, setError] = useState({});
+  const [error, setError] = useState({});
   const [success, setSuccess] = useState(false);
   const [success_text, setSuccessText] = useState({});
   let baseUrl = process.env.REACT_APP_API_URL;
   const [loadingFetch, setLoadingFetch] = useState(false);
   const history = useHistory();
 
-  function handleChange(e) {
-    e.preventDefault();
-    setUserData({ ...userdata, [e.target.name]: e.target.value });
-  }
+  const { handleSubmit, handleChange, values, touched, errors, handleBlur } =
+    useFormik({
+      initialValues: {
+        username: "",
+        password: "",
+      },
+      validationSchema: LoginInfo,
+      onSubmit: ({ username, password }) => {
+        let payload = {
+          username: values.username,
+          password: values.password,
+        };
+        setTimeout(() => {
+          setLoadingFetch(false);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    let payload = {
-      username: userdata.username,
-      password: userdata.password,
-    };
+          setTimeout(() => {
+            setLoadingFetch(true);
+            setOpenModal(true);
+            axios
+              .post(`${baseUrl}/api/v1/login`, payload)
+              .then((response) => {
+                setSuccess(true);
+                success_text["message"] = response.data.message;
+                setSuccessText(success_text);
+                sessionStorage.setItem(
+                  "access_token",
+                  response.data.access_token
+                );
+                sessionStorage.setItem(
+                  "refresh_token",
+                  response.data.refresh_token
+                );
+                setOpenModal(false);
+                history.push("/dashboard");
+                setSuccess(true);
+              })
+              .catch((error) => {
+                setSuccess(false);
+                setLoadingFetch(false);
+                let errors = {};
+                let error_detail = error.response.data.detail;
+                errors["message"] = error_detail;
+                setError(errors);
+              });
+          }, 2200);
+        }, 1000);
+      },
+    });
 
-    setTimeout(() => {
-      setLoadingFetch(false);
-
-      setTimeout(() => {
-        setLoadingFetch(true);
-        setOpenModal(true);
-        axios
-          .post(`${baseUrl}/api/v1/login`, payload)
-          .then((response) => {
-            setSuccess(true);
-            success_text["message"] = response.data.message;
-            setSuccessText(success_text);
-            sessionStorage.setItem("access_token", response.data.access_token);
-            sessionStorage.setItem(
-              "refresh_token",
-              response.data.refresh_token
-            );
-            setOpenModal(false);
-            history.push("/dashboard");
-            setSuccess(true);
-          })
-          .catch((error) => {
-            setSuccess(false);
-            setLoadingFetch(false);
-            let errors = {};
-            let error_detail = error.response.data.detail;
-            errors["message"] = error_detail;
-            setError(errors);
-          });
-      }, 2200);
-    }, 1000);
-  }
   const modalContent = (
     <div className="flex justify-center">
       {loadingFetch ? (
@@ -125,9 +131,7 @@ export default function Login() {
                 width={200}
               ></Lottie>
               <Typography className="flex justify-center">
-                <h1 className="title font-bold text-3xl">
-                  {errors["message"]}
-                </h1>
+                <h1 className="title font-bold text-3xl">{error["message"]}</h1>
               </Typography>
             </div>
           )}
@@ -145,7 +149,8 @@ export default function Login() {
           <div>
             <Paper
               style={{
-                height: "400px",
+                height: "450px",
+                width: "550px",
                 borderRadius: "30px",
               }}
               variant="outlined"
@@ -172,6 +177,9 @@ export default function Login() {
                     variant="outlined"
                     type="text"
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.username && errors.username}
+                    helperText={errors.username}
                   />
                   <TextField
                     style={{
@@ -183,6 +191,9 @@ export default function Login() {
                     variant="outlined"
                     type="password"
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.password && errors.password}
+                    helperText={errors.password}
                   />
 
                   <CustomButton
@@ -195,10 +206,10 @@ export default function Login() {
                 </form>
               </div>
 
-              <Typography>
+              <Typography className="mt-32">
                 <a
                   href="/forgotpassword"
-                  className="mt-5 title text-sm font-bold flex justify-self-stretch text-blue-300 hover:text-blue-400"
+                  className="mt-20 title text-sm font-bold flex justify-self-stretch text-blue-300 hover:text-blue-400"
                 >
                   {" "}
                   Forgot password ?

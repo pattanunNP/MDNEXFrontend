@@ -12,9 +12,11 @@ const Login = lazy(() => import("./pages/PublicPages/Login"));
 const Register = lazy(() => import("./pages/PublicPages/Register"));
 const Dashboard = lazy(() => import("./pages/UserPages/Dashboard"));
 const Data = lazy(() => import("./pages/UserPages/Data"));
+const Labeltool = lazy(() => import("./pages/UserPages/Labeltool"));
 const NewData = lazy(() => import("./pages/UserPages/NewDataset"));
 const NewProjects = lazy(() => import("./pages/UserPages/NewProjects"));
 const VerifyEmail = lazy(() => import("./pages/UserPages/Verifyemail"));
+
 const NotFound = lazy(() => import("./pages/PublicPages/NotFround"));
 
 function App() {
@@ -31,6 +33,11 @@ function App() {
             <PrivateRoute exact path={ROUTES.DASHBOARD} component={Dashboard} />
             <PrivateRoute exact path={ROUTES.DATA} component={Data} />
             <PrivateRoute exact path={ROUTES.NEW_DATA} component={NewData} />
+            <PrivateRoute
+              exact
+              path={ROUTES.LABEL_TOOL}
+              component={Labeltool}
+            />
             <PrivateRoute
               exact
               path={ROUTES.NEW_PROJECTS}

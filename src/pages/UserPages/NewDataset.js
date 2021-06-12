@@ -10,21 +10,33 @@ import {
   Paper,
   Typography,
   TextField,
+  TextareaAutosize,
   StepConnector,
 } from "@material-ui/core/";
+import Lottie from "react-lottie";
+import {
+  successAnimationObjects,
+  failedAnimationObjects,
+  loadingringAnimationObjects,
+} from "../../components/animation/animation";
+import ModalPop from "../../components/objects/Modal";
+import axios from "axios";
+import CustomButton from "../../components/objects/CustomButton";
 import PropTypes from "prop-types";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import Sidenavbar from "../../components/objects/Sidenavbar";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+//import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import { StoreContext } from "../../context/store";
 import Uppy from "@uppy/core";
 import XHRUpload from "@uppy/xhr-upload";
 import useDashboardFetch from "../../components/Hook/useDashboardFetch";
 import clsx from "clsx";
+import { useFormik } from "formik";
 import { Dashboard } from "@uppy/react";
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
+import { DatasetInfo } from "../../components/schema/validator";
 import AddToPhotosSharpIcon from "@material-ui/icons/AddToPhotosSharp";
 import InsertDriveFileSharpIcon from "@material-ui/icons/InsertDriveFileSharp";
 const ColorlibConnector = withStyles({
@@ -106,16 +118,127 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 export default function NewData(props) {
-  const [dataset, setDataset] = useState({});
-  const { userData, activeStep, setActiveStep } = useContext(StoreContext);
+  const { userData, activeStep, setActiveStep, setOpenModal } =
+    useContext(StoreContext);
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
+  const [error, setError] = useState({});
+  const [success_text, setSuccessText] = useState({});
+  const [loadingFetch, setLoadingFetch] = useState(false);
+  const [success, setSuccess] = useState(false);
   useDashboardFetch(url, access_token);
+  const modalContent = (
+    <div className="flex justify-center">
+      {loadingFetch ? (
+        <div>
+          <Typography className="flex justify-center">
+            <h1 className="title font-bold text-3xl">Processing ... </h1>
+          </Typography>
+          <Lottie
+            style={{
+              marginTop: "30px",
+            }}
+            options={loadingringAnimationObjects}
+            height={200}
+            width={200}
+          />
+        </div>
+      ) : (
+        <div>
+          {!success ? (
+            <div className="p-1">
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl"> Failed</h1>
+              </Typography>
 
-  function handleChange(e) {
-    e.preventDefault();
-    setDataset({ ...dataset, name: e.target.value });
-  }
+              <Lottie
+                style={{
+                  marginTop: "30px",
+                }}
+                options={failedAnimationObjects}
+                height={200}
+                width={200}
+              ></Lottie>
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">{error["message"]}</h1>
+              </Typography>
+            </div>
+          ) : (
+            <div className="p-1">
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">Success</h1>
+              </Typography>
+
+              <Lottie
+                style={{
+                  marginTop: "30px",
+                }}
+                options={successAnimationObjects}
+                height={270}
+                width={270}
+              ></Lottie>
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">
+                  {success_text["message"]}
+                </h1>
+              </Typography>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+  const { handleSubmit, handleChange, values, touched, errors, handleBlur } =
+    useFormik({
+      initialValues: {
+        name: "",
+        description: "",
+      },
+      validationSchema: DatasetInfo,
+      onSubmit: ({ name }) => {
+        const payload = {
+          dataset_name: values.name,
+          dataset_description: values.description,
+        };
+        console.log(payload);
+
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        };
+
+        setTimeout(() => {
+          setOpenModal(true);
+          setLoadingFetch(true);
+          setTimeout(() => {
+            axios
+              .post(`${url}/api/v1/dataset/newdata`, payload, {
+                headers: headers,
+              })
+              .then((response) => {
+                console.log(response.data);
+
+                success_text["message"] = response.data.message;
+                setSuccess(true);
+                setSuccessText(success_text);
+                setLoadingFetch(false);
+                setTimeout(() => {
+                  setActiveStep(activeStep + 1);
+                }, 2500);
+              })
+              .catch((error) => {
+                setSuccess(false);
+                setLoadingFetch(false);
+                let errors = {};
+                let error_detail = error.response.data.detail;
+                errors["message"] = error_detail;
+                setError(errors);
+              });
+          }, 3000);
+        }, 1000);
+      },
+    });
+
   function getStep() {
     return [
       "Name Your Dataset",
@@ -133,25 +256,51 @@ export default function NewData(props) {
             <Typography className="flex justify-center">
               <h1 className="mt-10 font-bold text-xl text-green-500">
                 Your dataset name : &nbsp;
-                {dataset.name !== undefined ? `${dataset.name}` : null}
+                {values.name !== undefined ? `${values.name}` : null}
               </h1>
             </Typography>
 
             <div className="mt-5 flex justify-center">
-              <TextField
-                style={{
-                  marginTop: "30px",
-                  width: "260px",
-                }}
-                className="w-full"
-                autoComplete="off"
-                label="Name your dataset"
-                name="name"
-                variant="outlined"
-                type="text"
-                value={dataset.name}
-                onChange={handleChange}
-              />
+              <form onSubmit={handleSubmit}>
+                <div className="mt-5 flex justify-center">
+                  <TextField
+                    style={{
+                      marginTop: "30px",
+                      width: "260px",
+                    }}
+                    className="w-full"
+                    autoComplete="off"
+                    label="Name your dataset"
+                    name="name"
+                    variant="outlined"
+                    type="text"
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={touched.name && errors.name}
+                    helperText={errors.name}
+                  />
+                </div>
+                <div className="mt-5 flex justify-center">
+                  <TextareaAutosize
+                    name="description"
+                    value={values.description}
+                    onChange={handleChange}
+                    className="p-2 w-96 border-4 border-green-400"
+                    rowsMin={5}
+                    placeholder="Your Dataset Description (optional)"
+                  ></TextareaAutosize>
+                </div>
+                <div className="mt-5 flex justify-center">
+                  <CustomButton
+                    name={"Create Dataset"}
+                    type={"submit"}
+                    classStyle={
+                      "fixed mt-10 relative p-3 title text-sm font-bold transition duration-500 ease-in-out bg-green-400 text-white font-bold w-full rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
+                    }
+                  />
+                </div>
+              </form>
             </div>
           </div>
         );
@@ -162,7 +311,12 @@ export default function NewData(props) {
               uppy={uppy}
               plugins={["XHRUpload"]}
               {...props}
-              width={"750px"}
+              theme={"auto"}
+              note={
+                "maximum 1000 files; Per 1 upload Your can add more data after "
+              }
+              width={"700px"}
+              showProgressDetails={true}
               height={"450px"}
             />
           </div>
@@ -179,7 +333,7 @@ export default function NewData(props) {
       autoProceed: false,
     }).use(XHRUpload, {
       id: "XHRUpload",
-      endpoint: `${url}/api/v1/upload`,
+      endpoint: `${url}/api/v1/dataset/upload`,
       formData: true,
       fieldName: "files",
       headers: {
@@ -201,6 +355,7 @@ export default function NewData(props) {
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16"></header>
 
         <main>
+          <ModalPop contents={modalContent} width={"450px"} height={"450px"} />
           <div className="z-10 col-span-12 mt-5">
             <Paper
               className="m-10 w-sceen h-full"
@@ -260,35 +415,7 @@ export default function NewData(props) {
                   })}
                 </Stepper>
               </div>
-              <div className="mt-5  flex justify-center">
-                <button
-                  style={{
-                    backgroundColor: "#F171B4",
-                    borderRadius: "30px",
-                    color: "white",
-                  }}
-                  className="p-3 w-24 bg-red-300 mx-3"
-                  onClick={() => {
-                    setActiveStep(activeStep - 1);
-                  }}
-                >
-                  <KeyboardArrowLeftIcon />
-                  Back
-                </button>
-                <button
-                  style={{
-                    borderRadius: "30px",
-                    backgroundColor: "#00D09A",
-                    color: "white",
-                  }}
-                  className="p-3 w-24 mx-3"
-                  onClick={() => {
-                    setActiveStep(activeStep + 1);
-                  }}
-                >
-                  Next <KeyboardArrowRightIcon />
-                </button>
-              </div>
+
               <div> {getStepContent(activeStep)}</div>
             </Paper>
           </div>

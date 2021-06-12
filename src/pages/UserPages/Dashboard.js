@@ -3,22 +3,39 @@ import { Link } from "react-router-dom";
 import Stat from "../../components/Content/Stat";
 import ProjectsTabel from "../../components/Content/ProjectsTabel";
 import ActivitysTabel from "../../components/Content/ActivitysTabel";
-
+// import RefreshIcon from "@material-ui/icons/Refresh";
 import Sidenavbar from "../../components/objects/Sidenavbar";
-
+import useSWR from "swr";
 import SearchBox from "../../components/objects/SearchBox";
-
+import axios from "axios";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 import { StoreContext } from "../../context/store";
 
-import useDashboardFetch from "../../components/Hook/useDashboardFetch";
+// import useDashboardFetch from "../../components/Hook/useDashboardFetch";
 
 export default function Dashboard() {
-  const { userData, userProjects } = useContext(StoreContext);
+  const { userData, userProjects, setUserData } = useContext(StoreContext);
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
-  useDashboardFetch(url, access_token);
+  const options = {};
+  async function fetchData(path) {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    };
+    await axios
+      .get(`${url}${path}`, { headers: headers })
+      .then((response) => {
+        setUserData(response.json());
+        console.log(response.json());
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }
+
+  useSWR("/api/v1/dashboard", fetchData, options);
 
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">

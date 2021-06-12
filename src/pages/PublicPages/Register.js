@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { StoreContext } from "../../context/store";
-
+import { useFormik } from "formik";
 import {
   Paper,
   MenuItem,
@@ -12,7 +12,7 @@ import {
   FormControl,
 } from "@material-ui/core";
 import Lottie from "react-lottie";
-
+import { RegisterInfo } from "../../components/schema/validator";
 import ModalPop from "../../components/objects/Modal";
 import Navbar from "../../components/objects/Navbar";
 import CustomButton from "../../components/objects/CustomButton";
@@ -25,15 +25,7 @@ import {
 } from "../../components/animation/animation";
 
 export default function Register() {
-  const [info, setInfo] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "",
-  });
-  const [errorState, setErrorState] = useState({});
-  const [errors, setError] = useState({});
+  const [error, setError] = useState({});
   const history = useHistory();
   const [success, setSuccess] = useState(false);
   const [success_text, setSuccessText] = useState({});
@@ -42,119 +34,55 @@ export default function Register() {
 
   const [loadingFetch, setLoadingFetch] = useState(false);
 
-  const handleChange = (e) => {
-    e.preventDefault();
-    setInfo({ ...info, [e.target.name]: e.target.value });
-    validate();
-  };
+  const { handleSubmit, handleChange, values, touched, errors, handleBlur } =
+    useFormik({
+      initialValues: {
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "",
+      },
+      validationSchema: RegisterInfo,
+      onSubmit: ({ username, email, password, confirmPassword, role }) => {
+        let success_text = {};
 
-  function validate() {
-    let errors = {};
-    let errorsState = {};
-
-    let isValid = true;
-
-    if (!info.username) {
-      isValid = false;
-      errors["username"] = "Please enter your username.";
-      errorsState["username"] = true;
-    }
-
-    if (!info.email) {
-      isValid = false;
-      errors["email"] = "Please enter your email Address.";
-      errorsState["email"] = true;
-    }
-    if (typeof info.email !== "undefined") {
-      var pattern = new RegExp("^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$");
-      if (!pattern.test(info.email)) {
-        isValid = false;
-        errors["email"] = "Please enter valid email address.";
-        errorsState["email"] = true;
-      }
-    }
-    if (info.password.length <= 8) {
-      isValid = false;
-      errors["password"] = "Password must be equal 8 or more charecter";
-      errorsState["password"] = true;
-    }
-    if (!info.password) {
-      isValid = false;
-      errors["password"] = "Please enter your password.";
-      errorsState["password"] = true;
-    }
-    if (!info.role) {
-      isValid = false;
-      errors["role"] = "Please select your role.";
-      errorsState["role"] = true;
-    }
-    if (!info.confirmPassword) {
-      isValid = false;
-      errors["confirm_password"] = "Please enter your confirm password.";
-      errorsState["confirm_password"] = true;
-    }
-    if (
-      typeof info.password !== "undefined" &&
-      typeof info.confirmPassword !== "undefined"
-    ) {
-      if (info.password !== info.confirmPassword) {
-        isValid = false;
-        errors["password"] = "Passwords don't match.";
-        errorsState["password"] = true;
-      }
-    }
-    setErrorState(errorsState);
-    setError(errors);
-
-    return isValid;
-  }
-  function handleSubmit(e) {
-    let success_text = {};
-    e.preventDefault();
-    if (validate()) {
-      const payload = {
-        username: info.username,
-        email: info.email,
-        password: info.password,
-        role: info.role,
-      };
-
-      setTimeout(() => {
-        setLoadingFetch(false);
-        setOpenModal(false);
+        const payload = {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          role: values.role,
+        };
 
         setTimeout(() => {
-          setOpenModal(true);
-          setLoadingFetch(true);
-          axios
-            .post(`${baseUrl}/api/v1/register`, payload)
-            .then((response) => {
-              setSuccess(true);
-              success_text["message"] = response.data.message;
-              setSuccessText(success_text);
-              setTimeout(() => {
-                history.push(`/verify/email?uuid=${response.data.uuid}`);
-                setInfo({
-                  username: "",
-                  email: "",
-                  password: "",
-                  confirmPassword: "",
-                  role: "",
-                });
-              }, 5000);
-            })
-            .catch((error) => {
-              setSuccess(false);
-              setLoadingFetch(false);
-              let errors = {};
-              let error_detail = error.response.data.detail;
-              errors["message"] = error_detail;
-              setError(errors);
-            });
-        }, 3000);
-      }, 1000);
-    }
-  }
+          setLoadingFetch(false);
+          setOpenModal(false);
+
+          setTimeout(() => {
+            setOpenModal(true);
+            setLoadingFetch(true);
+            axios
+              .post(`${baseUrl}/api/v1/register`, payload)
+              .then((response) => {
+                setSuccess(true);
+                success_text["message"] = response.data.message;
+                setSuccessText(success_text);
+                setTimeout(() => {
+                  history.push(`/verify/email?uuid=${response.data.uuid}`);
+                }, 5000);
+              })
+              .catch((error) => {
+                setSuccess(false);
+                setLoadingFetch(false);
+                let errors = {};
+                let error_detail = error.response.data.detail;
+                errors["message"] = error_detail;
+                setError(errors);
+              });
+          }, 3000);
+        }, 1000);
+      },
+    });
 
   const modalContent = (
     <div className="flex justify-center">
@@ -189,9 +117,7 @@ export default function Register() {
                 width={200}
               ></Lottie>
               <Typography className="flex justify-center">
-                <h1 className="title font-bold text-3xl">
-                  {errors["message"]}
-                </h1>
+                <h1 className="title font-bold text-3xl">{error["message"]}</h1>
               </Typography>
             </div>
           ) : (
@@ -241,7 +167,7 @@ export default function Register() {
                   <h1 className="title text-4xl font-bold">Register</h1>
                 </Typography>
                 <FormControl>
-                  <form onSubmit={handleSubmit} autoComplete="off">
+                  <form onSubmit={handleSubmit}>
                     <div
                       style={{
                         marginTop: "30px",
@@ -258,11 +184,13 @@ export default function Register() {
                         name="username"
                         variant="outlined"
                         type="text"
-                        value={info.userName}
-                        error={errorState["username"]}
-                        helperText={errors["username"]}
+                        value={values.username}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.username && errors.username}
+                        helperText={errors.username}
                       />
+
                       <TextField
                         style={{
                           marginTop: "30px",
@@ -273,10 +201,11 @@ export default function Register() {
                         name="email"
                         variant="outlined"
                         type="email"
-                        value={info.email}
-                        error={errorState["email"]}
-                        helperText={errors["email"]}
+                        value={values.email}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.email && errors.email}
+                        helperText={errors.email}
                       />
                       <TextField
                         style={{
@@ -288,10 +217,11 @@ export default function Register() {
                         variant="outlined"
                         name="password"
                         type="password"
-                        value={info.password}
-                        error={errorState["password"]}
-                        helperText={errors["password"]}
+                        value={values.password}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.password && errors.password}
+                        helperText={errors.password}
                       />
                       <TextField
                         style={{
@@ -303,21 +233,26 @@ export default function Register() {
                         variant="outlined"
                         name="confirmPassword"
                         type="password"
-                        value={info.confirmPassword}
-                        error={errorState["confrim password"]}
-                        helperText={errors["confrim password"]}
+                        value={values.confirmPassword}
                         onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={
+                          touched.confirmPassword && errors.confirmPassword
+                        }
+                        helperText={errors.confirmPassword}
                       />
+
                       <p className="mt-5 w-full text-black">Select Role</p>
                       <Select
-                        error={errorState["role"]}
                         className="mt-5 w-full text-black"
                         name="role"
                         variant="filled"
                         label="Select Role"
-                        value={info.role}
+                        value={values.role}
                         onChange={handleChange}
-                        helperText={errors["role"]}
+                        onBlur={handleBlur}
+                        error={touched.role && errors.role}
+                        helperText={errors.role}
                       >
                         <MenuItem value="" disabled>
                           <em>Select Role</em>

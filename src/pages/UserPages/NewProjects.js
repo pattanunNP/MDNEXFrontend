@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import Sidenavbar from "../../components/objects/Sidenavbar";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import "@uppy/core/dist/style.css";
@@ -23,6 +24,7 @@ import {
 } from "../../components/animation/animation";
 
 export default function NewData() {
+  const history = useHistory();
   const [project, setProject] = useState({});
   const [errors, setErrors] = useState({});
   const [loadingFetch, setLoadingFetch] = useState(false);
@@ -30,6 +32,7 @@ export default function NewData() {
   const [success, setSuccess] = useState(false);
   const { userData, setOpenModal } = useContext(StoreContext);
   const [success_text, setSuccessText] = useState({});
+
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
   useDashboardFetch(url, access_token);
@@ -66,18 +69,16 @@ export default function NewData() {
       project_name: project.name,
       project_description: project.description,
     };
-    console.log(payload);
+    // console.log(payload);
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     };
     if (validate()) {
       setTimeout(() => {
-        setOpenModal(false);
-        setLoadingFetch(false);
+        setOpenModal(true);
+        setLoadingFetch(true);
         setTimeout(() => {
-          setOpenModal(true);
-          setLoadingFetch(true);
           axios
             .post(`${url}/api/v1/create/project`, payload, {
               headers: headers,
@@ -86,8 +87,12 @@ export default function NewData() {
               console.log(response.data);
 
               success_text["message"] = response.data.message;
+              setSuccess(true);
               setSuccessText(success_text);
               setLoadingFetch(false);
+              setTimeout(() => {
+                history.push("/dashboard/data");
+              }, 2500);
             })
             .catch((error) => {
               setSuccess(false);
