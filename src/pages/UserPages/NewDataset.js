@@ -26,18 +26,19 @@ import PropTypes from "prop-types";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import Sidenavbar from "../../components/objects/Sidenavbar";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
-//import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import { StoreContext } from "../../context/store";
 import Uppy from "@uppy/core";
 import XHRUpload from "@uppy/xhr-upload";
-import useDashboardFetch from "../../components/Hook/useDashboardFetch";
+
 import clsx from "clsx";
 import { useFormik } from "formik";
 import { Dashboard } from "@uppy/react";
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
 import { DatasetInfo } from "../../components/schema/validator";
-import AddToPhotosSharpIcon from "@material-ui/icons/AddToPhotosSharp";
+
 import InsertDriveFileSharpIcon from "@material-ui/icons/InsertDriveFileSharp";
 const ColorlibConnector = withStyles({
   alternativeLabel: {
@@ -95,7 +96,6 @@ function ColorlibStepIcon(props) {
   const icons = {
     1: <TextFieldsIcon />,
     2: <InsertDriveFileSharpIcon />,
-    3: <AddToPhotosSharpIcon />,
   };
 
   return (
@@ -126,7 +126,9 @@ export default function NewData(props) {
   const [success_text, setSuccessText] = useState({});
   const [loadingFetch, setLoadingFetch] = useState(false);
   const [success, setSuccess] = useState(false);
-  useDashboardFetch(url, access_token);
+  const [dataset_name, setDatasetname] = useState(null);
+  const [dataset_uuid, setDatasetuuid] = useState(null);
+
   const modalContent = (
     <div className="flex justify-center">
       {loadingFetch ? (
@@ -195,7 +197,7 @@ export default function NewData(props) {
         description: "",
       },
       validationSchema: DatasetInfo,
-      onSubmit: ({ name }) => {
+      onSubmit: ({ name, description }) => {
         const payload = {
           dataset_name: values.name,
           dataset_description: values.description,
@@ -222,6 +224,8 @@ export default function NewData(props) {
                 setSuccess(true);
                 setSuccessText(success_text);
                 setLoadingFetch(false);
+                setDatasetname(response.data.dataset_name);
+                setDatasetuuid(response.data.dataset_uuid);
                 setTimeout(() => {
                   setActiveStep(activeStep + 1);
                 }, 2500);
@@ -240,11 +244,7 @@ export default function NewData(props) {
     });
 
   function getStep() {
-    return [
-      "Name Your Dataset",
-      "Upload Your Data",
-      "Attach dataset to projects",
-    ];
+    return ["Name Your Dataset", "Upload Your Data"];
   }
 
   const step = getStep();
@@ -307,6 +307,21 @@ export default function NewData(props) {
       case 1:
         return (
           <div className="mt-5 flex justify-center ">
+            <Tooltip title="Back Last step">
+              <IconButton
+                onClick={() => {
+                  setActiveStep(activeStep - 1);
+                }}
+              >
+                <KeyboardArrowLeftIcon
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                  }}
+                  className="text-green-400 text-xl hover:text-green-500"
+                />
+              </IconButton>
+            </Tooltip>
             <Dashboard
               uppy={uppy}
               plugins={["XHRUpload"]}
@@ -319,28 +334,49 @@ export default function NewData(props) {
               showProgressDetails={true}
               height={"450px"}
             />
+            <Tooltip title="Go next step">
+              <IconButton
+                onClick={() => {
+                  setActiveStep(activeStep + 1);
+                }}
+              >
+                <KeyboardArrowRightIcon
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                  }}
+                  className="text-green-400 text-xl hover:text-green-500"
+                />
+              </IconButton>
+            </Tooltip>
           </div>
         );
-      case 2:
-        return <div>3</div>;
+
       default:
         return "Unknown step";
     }
   }
+
   const uppy = useMemo(() => {
     return Uppy({
       debug: true,
       autoProceed: false,
-    }).use(XHRUpload, {
-      id: "XHRUpload",
-      endpoint: `${url}/api/v1/dataset/upload`,
-      formData: true,
-      fieldName: "files",
-      headers: {
-        authorization: `Bearer ${access_token}`,
-      },
-    });
-  }, [url, access_token]);
+    })
+      .use(XHRUpload, {
+        id: "XHRUpload",
+
+        endpoint: `${url}/api/v1/dataset/upload?dataset_name=${dataset_name}&dataset_uuid=${dataset_uuid}`,
+        formData: true,
+        fieldName: "files",
+        headers: {
+          authorization: `Bearer ${access_token}`,
+        },
+      })
+      .on("upload-success", (response) => {
+        console.log(response.status);
+        console.log(response.body);
+      });
+  }, [url, access_token, dataset_name, dataset_uuid]);
 
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
@@ -360,7 +396,7 @@ export default function NewData(props) {
             <Paper
               className="m-10 w-sceen h-full"
               style={{
-                padding: "2rem",
+                padding: "3rem",
                 background: "rgba(255, 255, 255, 0.5 )",
                 boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
                 backdropFilter: "blur( 5.0px )",
@@ -416,7 +452,10 @@ export default function NewData(props) {
                 </Stepper>
               </div>
 
-              <div> {getStepContent(activeStep)}</div>
+              <div className="overflow-y-auto h-full">
+                {" "}
+                {getStepContent(activeStep)}
+              </div>
             </Paper>
           </div>
         </main>

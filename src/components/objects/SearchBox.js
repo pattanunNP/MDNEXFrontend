@@ -62,7 +62,7 @@ export default function SearchBox(props) {
         placeholder="Search"
         name="search"
         onChange={handleSearch}
-        className="my-2 form-input px-2 py-2  h-10 placeholder-green-300 text-green-400 relative bg-gray-200 rounded-lg text-sm shadow outline-none  focus:outline-none focus: w-full pr-10 rounded-b-lg"
+        className="my-2 form-input px-2 py-2  h-10 placeholder-gray-700 text-gray-800 relative bg-gray-200 rounded-lg text-sm shadow outline-none  focus:outline-none focus: w-full pr-10 rounded-b-lg"
       />
       <span className="h-full leading-snug font-normal  text-center text-gray-400 absolute bg-transparent rounded-lg text-base items-center justify-center w-8 right-0 pr-3 py-3">
         <SearchIcon />

@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import ModalPop from "../../components/objects/Modal";
 import { StoreContext } from "../../context/store";
-import useDashboardFetch from "../../components/Hook/useDashboardFetch";
+import { mutate } from "swr";
 import CustomButton from "../../components/objects/CustomButton";
 import Lottie from "react-lottie";
 import {
@@ -23,7 +23,7 @@ import {
   loadingringAnimationObjects,
 } from "../../components/animation/animation";
 
-export default function NewData() {
+export default function New0Data() {
   const history = useHistory();
   const [project, setProject] = useState({});
   const [errors, setErrors] = useState({});
@@ -35,7 +35,6 @@ export default function NewData() {
 
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
-  useDashboardFetch(url, access_token);
 
   function validate() {
     let errors = {};
@@ -85,13 +84,14 @@ export default function NewData() {
             })
             .then((response) => {
               console.log(response.data);
-
+              mutate("/api/v1/dashboard");
+              mutate("/api/v1/userprojects");
               success_text["message"] = response.data.message;
               setSuccess(true);
               setSuccessText(success_text);
               setLoadingFetch(false);
               setTimeout(() => {
-                history.push("/dashboard/data");
+                history.push("/dashboard/dataset/manage");
               }, 2500);
             })
             .catch((error) => {

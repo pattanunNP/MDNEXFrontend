@@ -7,13 +7,9 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Sidenavbar from "../../components/objects/Sidenavbar";
 
 import { Paper, Typography } from "@material-ui/core";
-import useDashboardFetch from "../../components/Hook/useDashboardFetch";
 
 export default function Data() {
   const { userData } = useContext(StoreContext);
-  const url = process.env.REACT_APP_API_URL;
-  const access_token = sessionStorage.getItem("access_token");
-  useDashboardFetch(url, access_token);
 
   const history = useHistory();
 

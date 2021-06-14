@@ -65,7 +65,7 @@ export default function ProjectsTabel(props) {
                         </th>
                       </tr>
                     </thead>
-                    {props.data ? (
+                    {props.data.length > 0 ? (
                       <tbody class="bg-white divide-y divide-gray-200">
                         {props.data.map((item) => (
                           <tr key="project_uuid">

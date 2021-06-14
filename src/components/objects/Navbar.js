@@ -10,9 +10,7 @@ export default function Navbar(props) {
               className="w-10 rounded-2xl"
             />
           </a>
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         <button className="block lg:hidden cursor-pointer ml-auto relative w-12 h-12 p-4">
           <svg

@@ -68,6 +68,7 @@ export default function Login() {
               .catch((error) => {
                 setSuccess(false);
                 setLoadingFetch(false);
+                //console.log(error);
                 let errors = {};
                 let error_detail = error.response.data.detail;
                 errors["message"] = error_detail;
@@ -145,12 +146,12 @@ export default function Login() {
         <Navbar btn_name={"Register"} btn_link={"/register"} />
         <ModalPop contents={modalContent} />
 
-        <div className="bg-auto flex justify-center">
+        <div className="flex justify-center item-center">
           <div>
             <Paper
               style={{
                 height: "450px",
-                width: "550px",
+                width: "530px",
                 borderRadius: "30px",
               }}
               variant="outlined"
@@ -163,7 +164,7 @@ export default function Login() {
                 style={{
                   marginTop: "20px",
                 }}
-                className="h-56
+                className=" 
           flex flex-wrap content-start content-between"
               >
                 <form onSubmit={handleSubmit}>

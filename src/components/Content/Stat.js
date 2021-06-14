@@ -1,15 +1,14 @@
 import React, { useContext } from "react";
-
 import PeopleIcon from "@material-ui/icons/People";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { StoreContext } from "../../context/store";
-import useDashboardFetch from "../../components/Hook/useDashboardFetch";
+
 export default function Stat() {
-  let access_token = sessionStorage.getItem("access_token");
-  let url = process.env.REACT_APP_API_URL;
-  useDashboardFetch(url, access_token);
+  // let access_token = sessionStorage.getItem("access_token");
+  // let url = process.env.REACT_APP_API_URL;
+
   const { userData } = useContext(StoreContext);
 
   return (
@@ -39,7 +38,7 @@ export default function Stat() {
 
         <a
           className="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
-          href="/dashboard/projects"
+          href="/dashboard/projects/manage"
         >
           <div className="p-5">
             <div className="my-4 flex justify-center">
@@ -72,7 +71,7 @@ export default function Stat() {
 
             <div className="flex justify-center">
               <div className="mt-3 text-3xl font-bold">
-                {userData.count_teams === undefined
+                {userData.count_projects === undefined
                   ? "Null"
                   : userData.count_teams}
               </div>

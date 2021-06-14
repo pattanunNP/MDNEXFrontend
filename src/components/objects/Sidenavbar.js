@@ -7,6 +7,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
 import { useHistory, Link } from "react-router-dom";
 import { IconButton } from "@material-ui/core";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import FadeIn from "react-fade-in";
@@ -84,7 +85,18 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 py-8 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/teams"
+                            to="/dashboard"
+                          >
+                            <button>
+                              <AssignmentIcon />{" "}
+                              <span className="ml-6">MANAGE PROJECTS</span>
+                            </button>
+                          </Link>
+                        </li>
+                        <li className="relative px-2 py-8 ">
+                          <Link
+                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                            to="dashboard/projects/manage"
                           >
                             <PeopleIcon />
 
@@ -103,7 +115,7 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 py-8 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/data"
+                            to="/dashboard/dataset/manage"
                           >
                             <StorageIcon />
                             <span className="ml-6">DATA</span>
@@ -187,6 +199,16 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 py-8 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                            to="/dashboard/projects/manage"
+                          >
+                            <IconButton>
+                              <AssignmentIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                            </IconButton>
+                          </Link>
+                        </li>
+                        <li className="relative px-2 py-8 ">
+                          <Link
+                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
                             to="/dashboard/teams"
                           >
                             <IconButton>
@@ -207,7 +229,7 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 py-8 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/data"
+                            to="/dashboard/dataset/manage"
                           >
                             <IconButton>
                               {" "}

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Stat from "../../components/Content/Stat";
 import ProjectsTabel from "../../components/Content/ProjectsTabel";
 import ActivitysTabel from "../../components/Content/ActivitysTabel";
-// import RefreshIcon from "@material-ui/icons/Refresh";
 import Sidenavbar from "../../components/objects/Sidenavbar";
 import useSWR from "swr";
 import SearchBox from "../../components/objects/SearchBox";
@@ -12,38 +11,64 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 
 import { StoreContext } from "../../context/store";
 
-// import useDashboardFetch from "../../components/Hook/useDashboardFetch";
+async function FetchData(path) {
+  const url = process.env.REACT_APP_API_URL;
+  const { setUserData } = useContext(StoreContext);
+  const access_token = sessionStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+  console.log(response);
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
+  }
+  setUserData(response.data);
+  return response.data;
+}
 
-export default function Dashboard() {
-  const { userData, userProjects, setUserData } = useContext(StoreContext);
+async function FetchProjects(path) {
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
-  const options = {};
-  async function fetchData(path) {
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${access_token}`,
-    };
-    await axios
-      .get(`${url}${path}`, { headers: headers })
-      .then((response) => {
-        setUserData(response.json());
-        console.log(response.json());
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
+  const { setUserProjects } = useContext(StoreContext);
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+  console.log(response);
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
   }
+  setUserProjects(response.data.match);
+  return response.data;
+}
+export default function Dashboard() {
+  const options = { suspense: true };
 
-  useSWR("/api/v1/dashboard", fetchData, options);
+  const { data: user } = useSWR("/api/v1/dashboard", FetchData, options);
+  const { data: projects } = useSWR(
+    "/api/v1/userprojects",
+    FetchProjects,
+    options
+  );
 
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
       <Sidenavbar
-        username={userData.username}
-        role={userData.role}
-        uuid={userData.uuid}
-        profileImage={userData.profileImage}
+        username={user.username}
+        role={user.role}
+        uuid={user.uuid}
+        profileImage={user.profileImage}
       />
 
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
@@ -68,7 +93,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="z-10 col-span-12 mt-5">
-            <ProjectsTabel data={userProjects.match} />
+            <ProjectsTabel data={projects} />
           </div>
           <div className="z-10 col-span-12 mt-5">
             <ActivitysTabel data />
