@@ -1,16 +1,35 @@
-import React, { useContext } from "react";
+import React from "react";
 import PeopleIcon from "@material-ui/icons/People";
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import { StoreContext } from "../../context/store";
+import axios from "axios";
+import useSWR from "swr";
 
+async function FetchData(path) {
+  const url = process.env.REACT_APP_API_URL;
+  const access_token = sessionStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+  console.log(response);
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
+  }
+  return response.data;
+}
 export default function Stat() {
-  // let access_token = sessionStorage.getItem("access_token");
-  // let url = process.env.REACT_APP_API_URL;
+  const options = { suspense: true };
 
-  const { userData } = useContext(StoreContext);
+  const { data: user } = useSWR("/api/v1/dashboard", FetchData, options);
 
+  console.log(user);
   return (
     <div className="z-10 static">
       <div className="grid grid-cols-12 gap-6">
@@ -25,9 +44,7 @@ export default function Stat() {
 
             <div className="flex justify-center">
               <div className="mt-3 text-3xl font-bold">
-                {userData.count_images === undefined
-                  ? "Null"
-                  : userData.count_images}
+                {user.count_images === undefined ? "Null" : user.count_images}
               </div>
             </div>
             <div className="flex justify-center">
@@ -48,9 +65,9 @@ export default function Stat() {
             <div className="flex justify-center">
               <div className="mt-3 text-3xl font-bold">
                 {" "}
-                {userData.count_projects === undefined
+                {user.count_projects === undefined
                   ? "Null"
-                  : userData.count_projects}
+                  : user.count_projects}
               </div>
             </div>
             <div className="flex justify-center">
@@ -71,9 +88,7 @@ export default function Stat() {
 
             <div className="flex justify-center">
               <div className="mt-3 text-3xl font-bold">
-                {userData.count_projects === undefined
-                  ? "Null"
-                  : userData.count_teams}
+                {user.count_projects === undefined ? "Null" : user.count_teams}
               </div>
             </div>
             <div className="flex justify-center">
@@ -96,9 +111,9 @@ export default function Stat() {
             </div>
             <div className="flex justify-center">
               <div className="mt-1 text-base text-gray-600">
-                {userData.last_edit_projects === undefined
+                {user.last_edit_projects === undefined
                   ? "Not Fround"
-                  : userData.last_edit_projects}
+                  : user.last_edit_projects}
               </div>
             </div>
           </div>

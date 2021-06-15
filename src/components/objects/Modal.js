@@ -14,7 +14,7 @@ export default function ModalPop(props) {
           style={{
             marginTop: "80px",
             width: props.width !== undefined ? props.width : "500px",
-            height: props.height !== undefined ? props.width : "500px",
+            height: props.height !== undefined ? props.height : "500px",
             padding: "1rem",
             borderRadius: "30px",
           }}

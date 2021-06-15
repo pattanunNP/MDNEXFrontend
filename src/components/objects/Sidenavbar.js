@@ -9,17 +9,42 @@ import { useHistory, Link } from "react-router-dom";
 import { IconButton } from "@material-ui/core";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import axios from "axios";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import FadeIn from "react-fade-in";
 
+import useSWR from "swr";
+
+async function FetchData(path) {
+  const url = process.env.REACT_APP_API_URL;
+  const access_token = sessionStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+  console.log(response);
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
+  }
+  return response.data;
+}
 export default function Sidenavbar(props) {
   const history = useHistory();
   const [opensidebar, setOpenSidebar] = useState(false);
+
   function handleLogout() {
     sessionStorage.removeItem("access_token");
     sessionStorage.removeItem("refresh_token");
     history.push("/login");
   }
+  const options = { suspense: true };
+
+  const { data: user } = useSWR("/api/v1/dashboard", FetchData, options);
 
   return (
     <div>
@@ -55,18 +80,18 @@ export default function Sidenavbar(props) {
                         alt="user"
                         className=" my-5 hidden h-24 w-24 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
                         src={
-                          props.profileImage !== undefined
-                            ? props.profileImage
+                          user.profileImage !== undefined
+                            ? user.profileImage
                             : "https://image.flaticon.com/icons/png/512/149/149071.png"
                         }
                       />
                     </Link>
 
                     <p className="font-bold text-green-500 pt-2 text-center w-24">
-                      {props.username}
+                      {user.username}
                     </p>
                     <p className="font-normal  text-gray-200 pt-2 text-center w-24">
-                      {props.role}
+                      {user.role}
                     </p>
 
                     <div>
@@ -172,13 +197,13 @@ export default function Sidenavbar(props) {
                       <img alt="logo" src="/favicon.ico" className="w-20" />
                     </Link>
                     <div className="flex justify-center">
-                      <Link to={`/profile/${props.uuid}`}>
+                      <Link to={`/profile/${user.uuid}`}>
                         <img
                           alt="user"
                           className=" my-5 hidden h-12 w-12 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
                           src={
-                            props.profileImage !== undefined
-                              ? props.profileImage
+                            user.profileImage !== undefined
+                              ? user.profileImage
                               : "https://image.flaticon.com/icons/png/512/149/149071.png"
                           }
                         />

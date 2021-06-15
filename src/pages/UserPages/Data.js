@@ -1,26 +1,45 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import { useHistory } from "react-router-dom";
-import { StoreContext } from "../../context/store";
+import { useHistory, Link } from "react-router-dom";
+import axios from "axios";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-
+import useSWR from "swr";
 import Sidenavbar from "../../components/objects/Sidenavbar";
 
 import { Paper, Typography } from "@material-ui/core";
 
-export default function Data() {
-  const { userData } = useContext(StoreContext);
+async function FetchDatasets(path) {
+  const url = process.env.REACT_APP_API_URL;
+  const access_token = sessionStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
 
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
+  }
+  console.log(response.data);
+  return response.data.match;
+}
+export default function Data() {
   const history = useHistory();
 
+  const options = { suspense: true };
+  const { data: datasets } = useSWR(
+    "/api/v1/userdatasets",
+    FetchDatasets,
+    options
+  );
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
-      <Sidenavbar
-        uuid={userData.uuid}
-        username={userData.username}
-        role={userData.role}
-        profileImage={userData.profileImage}
-      />
+      <Sidenavbar />
 
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16"></header>
@@ -53,6 +72,67 @@ export default function Data() {
                   <AddCircleIcon />
                   Create New Dataset
                 </button>
+              </div>
+              <div className="mt-10 flex justify-center">
+                <Typography>
+                  <h1 className="text-3xl font-semibold">OR</h1>
+                </Typography>
+              </div>
+              <div className="mt-10 flex justify-center">
+                <Typography>
+                  <h1 className="text-xl font-semibold text-gray-500">
+                    Select Below
+                  </h1>
+                </Typography>
+              </div>
+              <div className="mt-20 flex justify-center container mx-auto overflow-y-auto h-96">
+                <div className="grid grid-cols-3 gap-8">
+                  {datasets.length > 0 ? (
+                    datasets.map((dataset) => (
+                      <div
+                        className="shadow-md bg-white w-64 h-80 rounded-xl hover:shadow-xl"
+                        key={dataset.dataset_uuid}
+                      >
+                        <img
+                          alt="thumbnail"
+                          src={dataset.dataset_thumbnail}
+                          className="h-40 object-cover rounded-t-xl "
+                        />
+                        <p className="mt-3 flex justify-between text-green-500 text-sm p-1 font-bold">
+                          <h1 className="orders-frist">
+                            {" "}
+                            {dataset.dataset_name}
+                          </h1>
+                        </p>{" "}
+                        <div className="mt-5 flex justify-start  text-sm">
+                          <h1 className="text-blue-500 font-bold">
+                            Total Image: {dataset.dataset_number_of_images}{" "}
+                            Images
+                          </h1>
+                        </div>
+                        <div className="mt-3 flex justify-center text-gray-400 text-sm">
+                          <Link to={`/dataset/${dataset.dataset_uuid}`}>
+                            <button className="mx-3 p-1 bg-green-500 text-white rounded-xl text-sm w-16 shadow-sm">
+                              Veiw
+                            </button>
+                          </Link>
+                        </div>
+                        <p className="mt-3 flex justify-center text-gray-400 text-sm">
+                          Owner:
+                          <a href={`/profile/${dataset.dataset_owner_uuid}`}>
+                            {dataset.dataset_owner_name}
+                          </a>
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div>
+                      <h1 className="text-xl font-semibold text-gray-500">
+                        Your don't have any datasets
+                      </h1>
+                    </div>
+                  )}
+                </div>
               </div>
             </Paper>
           </div>

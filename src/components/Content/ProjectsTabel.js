@@ -3,6 +3,29 @@ import axios from "axios";
 import EditIcon from "@material-ui/icons/Edit";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import useSWR, { mutate } from "swr";
+import { Link } from "react-router-dom";
+
+async function FetchProjects(path) {
+  const url = process.env.REACT_APP_API_URL;
+  const access_token = sessionStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
+
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
+  }
+  console.log(response.data);
+  return response.data.match;
+}
 export default function ProjectsTabel(props) {
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
@@ -18,7 +41,6 @@ export default function ProjectsTabel(props) {
     });
     return time;
   }
-
   async function handleDelete(uuid) {
     let payload = {
       project_uuid: uuid,
@@ -27,10 +49,21 @@ export default function ProjectsTabel(props) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     };
-    axios.post(`${url}/api/v1/delete/project`, payload, {
-      headers: headers,
-    });
+    axios
+      .post(`${url}/api/v1/delete/project`, payload, { headers: headers })
+      .then((res) => {
+        mutate("/api/v1/userprojects");
+        mutate("/api/v1/dashboard");
+      });
   }
+  const options = { suspense: true };
+
+  const { data: projects } = useSWR(
+    "/api/v1/userprojects",
+    FetchProjects,
+    options
+  );
+
   return (
     <div className="grid gap-2 grid-cols-1 lg:grid-cols-1">
       <div className=" p-4 rounded-lg">
@@ -65,9 +98,9 @@ export default function ProjectsTabel(props) {
                         </th>
                       </tr>
                     </thead>
-                    {props.data.length > 0 ? (
+                    {projects.length > 0 ? (
                       <tbody class="bg-white divide-y divide-gray-200">
-                        {props.data.map((item) => (
+                        {projects.map((item) => (
                           <tr key="project_uuid">
                             <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
                               <p>{item.project_name}</p>
@@ -113,36 +146,20 @@ export default function ProjectsTabel(props) {
                             <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
                               <div class="flex space-x-4">
                                 <div class="flex justify-center">
-                                  <a
-                                    href="/edit?id=dw22"
+                                  <Link
+                                    to={`/project/${item.project_uuid}`}
                                     class="text-blue-500 hover:text-blue-600"
                                   >
                                     <EditIcon />
                                     <p>Edit</p>
-                                  </a>
+                                  </Link>
                                 </div>
-                                <div className="flex justify-center">
-                                  {!item.isDeactive ? (
-                                    <a
-                                      href="/edit?id=dw22"
-                                      className="text-yellow-500 hover:text-yellow-600"
-                                    >
-                                      <RemoveCircleIcon />
-                                      <p>Deactive</p>
-                                    </a>
-                                  ) : (
-                                    <a
-                                      href="/edit?id=dw22"
-                                      className="text-gray-500 hover:text-gray-600"
-                                    >
-                                      <RemoveCircleIcon />
-                                      <p>Deactive</p>
-                                    </a>
-                                  )}
-                                </div>
+
                                 <div className="flex justify-center">
                                   <button
-                                    onClick={handleDelete(item.project_uuid)}
+                                    onClick={() => {
+                                      handleDelete(item.project_uuid);
+                                    }}
                                     className="text-red-500 hover:text-red-600"
                                   >
                                     <DeleteIcon />

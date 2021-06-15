@@ -322,6 +322,7 @@ export default function NewData(props) {
                 />
               </IconButton>
             </Tooltip>
+
             <Dashboard
               uppy={uppy}
               plugins={["XHRUpload"]}
@@ -372,9 +373,22 @@ export default function NewData(props) {
           authorization: `Bearer ${access_token}`,
         },
       })
-      .on("upload-success", (response) => {
+      .on("upload-success", (file, response) => {
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        };
         console.log(response.status);
         console.log(response.body);
+        const payload = {
+          datasetfiles: response.body.content,
+          action_type: "UPDATE_FILES",
+        };
+        axios.post(
+          `${url}/api/v1/dataset/update?dataset_name=${dataset_name}&dataset_uuid=${dataset_uuid}`,
+          payload,
+          { headers: headers }
+        );
       });
   }, [url, access_token, dataset_name, dataset_uuid]);
 

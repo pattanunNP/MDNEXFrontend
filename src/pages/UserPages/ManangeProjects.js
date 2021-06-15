@@ -1,26 +1,43 @@
-import React, { useContext } from "react";
-
+import React from "react";
 import { useHistory, Link } from "react-router-dom";
-import { StoreContext } from "../../context/store";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
-
+import axios from "axios";
 import Sidenavbar from "../../components/objects/Sidenavbar";
-
+import useSWR from "swr";
 import { Paper, Typography } from "@material-ui/core";
 
-export default function ManangeProjects() {
-  const { userData, userProjects } = useContext(StoreContext);
+async function FetchProjects(path) {
+  const url = process.env.REACT_APP_API_URL;
+  const access_token = sessionStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
 
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
+  }
+  console.log(response.data);
+  return response.data.match;
+}
+export default function ManangeProjects() {
   const history = useHistory();
 
+  const options = { suspense: true };
+  const { data: projects } = useSWR(
+    "/api/v1/userprojects",
+    FetchProjects,
+    options
+  );
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
-      <Sidenavbar
-        uuid={userData.uuid}
-        username={userData.username}
-        role={userData.role}
-        profileImage={userData.profileImage}
-      />
+      <Sidenavbar />
 
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16"></header>
@@ -68,9 +85,12 @@ export default function ManangeProjects() {
               </div>
               <div className="mt-20 flex justify-center container mx-auto overflow-y-auto h-96">
                 <div className="grid grid-cols-3 gap-8">
-                  {userProjects.length > 0 ? (
-                    userProjects.map((project) => (
-                      <div className="shadow-md bg-white w-64 h-80 rounded-xl hover:shadow-xl">
+                  {projects.length > 0 ? (
+                    projects.map((project) => (
+                      <div
+                        className="shadow-md bg-white w-64 h-80 rounded-xl hover:shadow-xl"
+                        key={project.project_uuid}
+                      >
                         <img
                           alt="thumbnail"
                           src={project.project_thumbnail}
@@ -82,16 +102,13 @@ export default function ManangeProjects() {
                             {project.project_name}
                           </h1>
                         </p>{" "}
-                        <p className="flex justify-start text-gray-500 text-sm p-2 ">
-                          {project.project_description !== null
-                            ? project.project_description
-                            : "no description"}
-                        </p>
-                        <Link to={`/project/${project.project_uuid}`}>
-                          <button className="mx-3 p-1 bg-blue-500 text-white rounded-xl text-sm w-16 shadow-sm">
-                            Veiw
-                          </button>
-                        </Link>
+                        <div className="flex justify-center text-gray-400 text-sm">
+                          <Link to={`/project/${project.project_uuid}`}>
+                            <button className="mx-3 p-1 bg-blue-500 text-white rounded-xl text-sm w-16 shadow-sm">
+                              Veiw
+                            </button>
+                          </Link>
+                        </div>
                         <p className="flex justify-center text-gray-400 text-sm">
                           Owner:
                           <a href={`/profile/${project.project_owner_uuid}`}>

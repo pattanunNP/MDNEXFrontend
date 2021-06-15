@@ -90,9 +90,6 @@ export default function New0Data() {
               setSuccess(true);
               setSuccessText(success_text);
               setLoadingFetch(false);
-              setTimeout(() => {
-                history.push("/dashboard/dataset/manage");
-              }, 2500);
             })
             .catch((error) => {
               setSuccess(false);
@@ -163,6 +160,24 @@ export default function New0Data() {
                   {success_text["message"]}
                 </h1>
               </Typography>
+              <div className="mt-5 flex justify-center">
+                {" "}
+                <Typography>
+                  <h1 className="font-bold">
+                    Next step add or create new dataset
+                  </h1>
+                </Typography>
+              </div>
+              <div className="mt-5 flex justify-center">
+                <button
+                  className="p-2 bg-green-400 text-white w-24 rounded-3xl font-bold shadow-xl"
+                  onClick={() => {
+                    history.push("/dashboard/dataset/manage");
+                  }}
+                >
+                  GO
+                </button>{" "}
+              </div>
             </div>
           )}
         </div>
@@ -182,7 +197,7 @@ export default function New0Data() {
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16"></header>
 
         <main>
-          <ModalPop contents={modalContent} width={"450px"} height={"450px"} />
+          <ModalPop contents={modalContent} width={"450px"} height={"550px"} />
           <div className="z-10 col-span-12 mt-5">
             <Paper
               className="m-10 w-sceen h-full"
