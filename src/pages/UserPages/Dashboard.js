@@ -27,7 +27,7 @@ export default function Dashboard() {
             <div className="grid gap-2 grid-cols-4 lg:grid-cols-4">
               <Link to="/dashboard/projects/newproject">
                 <button className="p-1 transition duration-500 ease-in-out bg-green-400 text-white w-48 font-bold rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10">
-                  <AddCircleIcon />
+                  <AddCircleIcon className="mr-2" />
                   Create New Project
                 </button>
               </Link>

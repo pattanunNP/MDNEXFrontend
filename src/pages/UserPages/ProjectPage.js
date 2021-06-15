@@ -4,7 +4,7 @@ import { Paper } from "@material-ui/core";
 
 import { useParams } from "react-router-dom";
 import SearchBox from "../../components/objects/SearchBox";
-// import Sidenavbar from "../../components/objects/Sidenavbar";
+import Sidenavbar from "../../components/objects/Sidenavbar";
 
 // import { StoreContext } from "../../context/store";
 export default function ProjectPage() {
@@ -42,39 +42,39 @@ export default function ProjectPage() {
     return time;
   }
   return (
-    <div className="w-full h-screen">
-      <div className="z-10 flex flex-col flex-1 w-full overflow-y-auto">
+    <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
+      <Sidenavbar />
+
+      <div className="flex flex-col flex-1 w-full overflow-y-auto">
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16">
           <div className="flex justify-center">
             <SearchBox />
           </div>
         </header>
-      </div>
-      <div className="flex justify-center">
-        <Paper className="mt-32 ml-32 mr-64 w-full flex justify-center shadow-md">
-          <div className="w-full h-64 bg-red-100 relative">
-            <div
-              className="absolute inset-0 bg-cover bg-center z-0"
-              style={{
-                backgroundImage: `url(${info.project_thumbnail})`,
-              }}
-            ></div>
-            <div className="p-5 opacity-100 absolute inset-0 z-10 flex justify-start items-center text-6xl text-white font-semibold">
-              {info.project_name}
-            </div>
-            <div className="p-5 opacity-80 absolute inset-50 z-10 flex justify-start items-start text-xl text-white font-semibold">
-              Created : {ConvertTime(info.project_created_time)}
-            </div>
-            <div className="p-5 opacity-80 absolute inset-40 z-10 flex justify-start items-start text-xl text-white font-semibold">
-              {info.project_description}
-            </div>
-            <nav className="flex justify-between">
-              <ul>
-                <li>Dataset</li>
-              </ul>
-            </nav>
+
+        <main>
+          <div className="mt-10 pb-10 px-8 mx-4 rounded-3xl">
+            <Paper className="w-full flex justify-center shadow-md">
+              <div className="w-full h-64 bg-red-100 relative">
+                <div
+                  className="absolute inset-0 bg-cover bg-center z-0"
+                  style={{
+                    backgroundImage: `url(${info.project_thumbnail})`,
+                  }}
+                ></div>
+                <div className="p-5 opacity-100 absolute inset-0 z-10 flex justify-start items-center text-6xl text-white font-semibold">
+                  {info.project_name}
+                </div>
+                <div className="p-5 opacity-80 absolute inset-50 z-10 flex justify-start items-start text-xl text-white font-semibold">
+                  Created : {ConvertTime(info.project_created_time)}
+                </div>
+                <div class="absolute bottom-5 left-5 h-16 w-full text-white text-2xl font-semibold opacity-90 ">
+                  {info.project_description}
+                </div>
+              </div>
+            </Paper>
           </div>
-        </Paper>
+        </main>
       </div>
     </div>
   );

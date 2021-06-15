@@ -16,7 +16,7 @@ export default function Home() {
           <div className="justify-content-center">
             <img
               alt="logo"
-              src="MDNEX_LOGO_250_SM.png"
+              src="https://res.cloudinary.com/image-chatbot/image/upload/v1623756618/MD_NEX/Purple_Event_Styling_Logo_7_ixrzkq.png"
               className="rounded-3xl w-32"
             />
             <h3

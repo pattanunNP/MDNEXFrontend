@@ -173,7 +173,10 @@ export default function Register() {
                       className="h-56 flex flex-wrap content-start content-between"
                     >
                       <TextField
-                        className="mt-5 w-full"
+                        style={{
+                          marginTop: "30px",
+                        }}
+                        className=" w-full"
                         autoComplete="off"
                         label="Username*"
                         name="username"
@@ -187,7 +190,10 @@ export default function Register() {
                       />
 
                       <TextField
-                        className="mt-5 w-full"
+                        style={{
+                          marginTop: "30px",
+                        }}
+                        className="w-full"
                         autoComplete="off"
                         label="Email*"
                         name="email"
@@ -200,7 +206,10 @@ export default function Register() {
                         helperText={errors.email}
                       />
                       <TextField
-                        className="mt-5w-full"
+                        style={{
+                          marginTop: "30px",
+                        }}
+                        className=" w-full"
                         autoComplete="off"
                         label="Password*"
                         variant="outlined"
@@ -216,7 +225,7 @@ export default function Register() {
                         style={{
                           marginTop: "30px",
                         }}
-                        className=" my-10 w-full"
+                        className="w-full"
                         autoComplete="off"
                         label="Confrim password*"
                         variant="outlined"
@@ -266,7 +275,11 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <Footer />
+      <Footer
+        style={{
+          marginTop: "30px",
+        }}
+      />
     </div>
   );
 }

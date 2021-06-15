@@ -5,6 +5,7 @@ export const VERIFY_EMAIL = "/verify/email";
 export const REGISTER = "/register";
 export const PROFILE = "/profile/:uuid";
 export const PROJECT = "/project/:uuid";
+export const DATA_PAGE = "/dataset/:uuid";
 
 export const DASHBOARD = "/dashboard";
 export const DATA = "/dashboard/dataset/manage";

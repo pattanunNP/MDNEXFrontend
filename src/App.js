@@ -15,6 +15,8 @@ const NotFound = lazy(() => import("./pages/PublicPages/NotFround"));
 //Private Page
 const Dashboard = lazy(() => import("./pages/UserPages/Dashboard"));
 const ProjectPage = lazy(() => import("./pages/UserPages/ProjectPage"));
+
+const DatasetPage = lazy(() => import("./pages/UserPages/DatasetPage"));
 const Data = lazy(() => import("./pages/UserPages/Data"));
 const Labeltool = lazy(() => import("./pages/UserPages/Labeltool"));
 const NewData = lazy(() => import("./pages/UserPages/NewDataset"));
@@ -36,6 +38,11 @@ function App() {
             <PrivateRoute exact path={ROUTES.DASHBOARD} component={Dashboard} />
 
             <PrivateRoute exact path={ROUTES.PROJECT} component={ProjectPage} />
+            <PrivateRoute
+              exact
+              path={ROUTES.DATA_PAGE}
+              component={DatasetPage}
+            />
             <PrivateRoute exact path={ROUTES.DATA} component={Data} />
             <PrivateRoute exact path={ROUTES.NEW_DATA} component={NewData} />
             <PrivateRoute
