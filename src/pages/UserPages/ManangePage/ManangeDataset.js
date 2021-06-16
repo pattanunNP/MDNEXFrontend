@@ -1,12 +1,11 @@
 import React from "react";
-
-import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
+import { useHistory, Link } from "react-router-dom";
 import useSWR from "swr";
-import Sidenavbar from "../../components/objects/Sidenavbar";
-
+import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { Paper, Typography } from "@material-ui/core";
+
+import Sidenavbar from "../../../components/objects/Sidenavbar";
 
 async function FetchDatasets(path) {
   const url = process.env.REACT_APP_API_URL;
@@ -65,7 +64,7 @@ export default function Data() {
               <div className="mt-5 flex justify-center">
                 <button
                   onClick={() => {
-                    history.push("/dashboard/data/newdata");
+                    history.push("/dashboard/datasets/newdata");
                   }}
                   className="p-2 transition duration-500 ease-in-out bg-green-400 text-white w-48 font-bold rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
                 >
@@ -86,7 +85,7 @@ export default function Data() {
                 </Typography>
               </div>
               <div className="mt-20 flex justify-center container mx-auto overflow-y-auto h-96">
-                <div className="grid grid-cols-3 gap-20">
+                <div className="grid sm:grid-cols-1 lg: grid-cols-4 gap-5 md:grid-cols-3">
                   {datasets.length > 0 ? (
                     datasets.map((dataset) => (
                       <div

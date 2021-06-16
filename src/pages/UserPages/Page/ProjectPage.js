@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { Paper } from "@material-ui/core";
 
-import { useParams } from "react-router-dom";
-import SearchBox from "../../components/objects/SearchBox";
-import Sidenavbar from "../../components/objects/Sidenavbar";
+import SearchBox from "../../../components/objects/SearchBox";
+import Sidenavbar from "../../../components/objects/Sidenavbar";
 
 // import { StoreContext } from "../../context/store";
 export default function ProjectPage() {

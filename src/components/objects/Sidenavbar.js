@@ -95,12 +95,22 @@ export default function Sidenavbar(props) {
                       </Link>
                     </div>
                     <div className="flex justify-center">
-                      <p className="font-normal text-green-500 pt-2 text-center w-48">
+                      <p
+                        style={{
+                          textTransform: "capitalize",
+                        }}
+                        className="font-normal text-green-500 pt-2 text-center w-48"
+                      >
                         {user.username}
                       </p>
                     </div>
                     <div className="flex justify-center">
-                      <p className="font-thin  text-gray-400 pt-2 text-center text-sm w-24">
+                      <p
+                        style={{
+                          textTransform: "capitalize",
+                        }}
+                        className="font-thin  text-gray-400 pt-2 text-center text-sm w-24"
+                      >
                         {user.role}
                       </p>
                     </div>
@@ -131,7 +141,7 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 my-7 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/dataset/manage"
+                            to="/dashboard/datasets/manage"
                           >
                             <StorageIcon />
                             <span className="ml-6">DATA</span>
@@ -140,7 +150,7 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 my-7 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="dashboard/projects/manage"
+                            to="/dashboard/teams/manage"
                           >
                             <PeopleIcon />
 
@@ -251,7 +261,7 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 my-7 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/dataset/manage"
+                            to="/dashboard/datasets/manage"
                           >
                             <IconButton>
                               {" "}
@@ -262,7 +272,7 @@ export default function Sidenavbar(props) {
                         <li className="relative px-2 my-7 ">
                           <Link
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/teams"
+                            to="/dashboard/teams/manage"
                           >
                             <IconButton>
                               <PeopleIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />

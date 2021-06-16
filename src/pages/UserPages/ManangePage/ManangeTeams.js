@@ -1,10 +1,12 @@
 import React from "react";
-import { useHistory, Link } from "react-router-dom";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import axios from "axios";
-import Sidenavbar from "../../components/objects/Sidenavbar";
 import useSWR from "swr";
+
+import { useHistory, Link } from "react-router-dom";
 import { Paper, Typography } from "@material-ui/core";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+
+import Sidenavbar from "../../../components/objects/Sidenavbar";
 
 async function FetchProjects(path) {
   const url = process.env.REACT_APP_API_URL;
@@ -26,7 +28,7 @@ async function FetchProjects(path) {
   console.log(response.data);
   return response.data.match;
 }
-export default function ManangeProjects() {
+export default function ManangeTeams() {
   const history = useHistory();
 
   const options = { suspense: true };
@@ -57,18 +59,18 @@ export default function ManangeProjects() {
               <Typography className="flex justify-center">
                 <h1 className="mt-10 font-bold text-3xl text-gray-500">
                   {" "}
-                  Projects Manager
+                  Teams Manager
                 </h1>
               </Typography>
               <div className="mt-5 flex justify-center">
                 <button
                   onClick={() => {
-                    history.push("/dashboard/projects/newproject");
+                    history.push("/dashboard/teams/newteam");
                   }}
                   className="p-2 transition duration-500 ease-in-out bg-green-400 text-white w-48 font-bold rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
                 >
                   <AddCircleIcon />
-                  Create New Projects
+                  Create New Teams
                 </button>
               </div>
               <div className="mt-10 flex justify-center">
@@ -120,7 +122,7 @@ export default function ManangeProjects() {
                   ) : (
                     <div>
                       <h1 className="text-xl font-semibold text-gray-500">
-                        Your don't have any projects
+                        Your don't have any teams
                       </h1>
                     </div>
                   )}

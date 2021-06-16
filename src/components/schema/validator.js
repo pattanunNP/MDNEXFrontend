@@ -35,3 +35,9 @@ export const DatasetInfo = Yup.object({
     .min(4, "Dataset name must be at least 4 charaters")
     .required("Dataset name is required"),
 });
+
+export const TeamInfo = Yup.object({
+  name: Yup.string()
+    .min(4, "Team name must be at least 4 charaters")
+    .required("Team name is required"),
+});

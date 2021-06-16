@@ -1,10 +1,10 @@
 import React from "react";
 
-import LabelBrowser from "../../components/objects/LabelBrowser";
-import TopBar from "../../components/objects/TopBar";
-import ToolBar from "../../components/objects/ToolBar";
-import DrawableArea from "../../components/objects/DrawableArea";
-import Panel from "../../components/objects/Panel/Panel";
+import LabelBrowser from "../../../components/objects/LabelBrowser";
+import TopBar from "../../../components/objects/TopBar";
+import ToolBar from "../../../components/objects/ToolBar";
+import DrawableArea from "../../../components/objects/DrawableArea";
+import Panel from "../../../components/objects/Panel/Panel";
 
 export default function Labeltool() {
   const image_url =

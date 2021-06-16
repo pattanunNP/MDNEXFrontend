@@ -14,21 +14,23 @@ import {
   StepConnector,
 } from "@material-ui/core/";
 import Lottie from "react-lottie";
+import GroupAddIcon from "@material-ui/icons/GroupAdd";
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import {
   successAnimationObjects,
   failedAnimationObjects,
   loadingringAnimationObjects,
-} from "../../components/animation/animation";
-import ModalPop from "../../components/objects/Modal";
+} from "../../../components/animation/animation";
+
+import ModalPop from "../../../components/objects/Modal";
 import axios from "axios";
-import CustomButton from "../../components/objects/CustomButton";
+import CustomButton from "../../../components/objects/CustomButton";
 import PropTypes from "prop-types";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
-import Sidenavbar from "../../components/objects/Sidenavbar";
+import Sidenavbar from "../../../components/objects/Sidenavbar";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
-import { StoreContext } from "../../context/store";
+import { StoreContext } from "../../../context/store";
 import Uppy from "@uppy/core";
 import XHRUpload from "@uppy/xhr-upload";
 
@@ -37,9 +39,8 @@ import { useFormik } from "formik";
 import { Dashboard } from "@uppy/react";
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
-import { DatasetInfo } from "../../components/schema/validator";
+import { TeamInfo } from "../../../components/schema/validator";
 
-import InsertDriveFileSharpIcon from "@material-ui/icons/InsertDriveFileSharp";
 const ColorlibConnector = withStyles({
   alternativeLabel: {
     top: 22,
@@ -95,7 +96,7 @@ function ColorlibStepIcon(props) {
 
   const icons = {
     1: <TextFieldsIcon />,
-    2: <InsertDriveFileSharpIcon />,
+    2: <GroupAddIcon />,
   };
 
   return (
@@ -117,8 +118,8 @@ ColorlibStepIcon.propTypes = {
 
   icon: PropTypes.node,
 };
-export default function NewData(props) {
-  const { userData, activeStep, setActiveStep, setOpenModal } =
+export default function NewTeam(props) {
+  const { userData, activeTeamStep, setActiveTeamStep, setOpenModal } =
     useContext(StoreContext);
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
@@ -196,11 +197,11 @@ export default function NewData(props) {
         name: "",
         description: "",
       },
-      validationSchema: DatasetInfo,
+      validationSchema: TeamInfo,
       onSubmit: ({ name, description }) => {
         const payload = {
-          dataset_name: values.name,
-          dataset_description: values.description,
+          team_name: values.name,
+          team_description: values.description,
         };
         console.log(payload);
 
@@ -214,7 +215,7 @@ export default function NewData(props) {
           setLoadingFetch(true);
           setTimeout(() => {
             axios
-              .post(`${url}/api/v1/dataset/newdata`, payload, {
+              .post(`${url}/api/v1/create/team`, payload, {
                 headers: headers,
               })
               .then((response) => {
@@ -227,7 +228,7 @@ export default function NewData(props) {
                 setDatasetname(response.data.dataset_name);
                 setDatasetuuid(response.data.dataset_uuid);
                 setTimeout(() => {
-                  setActiveStep(activeStep + 1);
+                  setActiveTeamStep(activeTeamStep + 1);
                 }, 2500);
               })
               .catch((error) => {
@@ -244,7 +245,7 @@ export default function NewData(props) {
     });
 
   function getStep() {
-    return ["Name Your Dataset", "Upload Your Data"];
+    return ["Name Your Team", "Add team members"];
   }
 
   const step = getStep();
@@ -255,7 +256,7 @@ export default function NewData(props) {
           <div>
             <Typography className="flex justify-center">
               <h1 className="mt-10 font-bold text-xl text-green-500">
-                Your dataset name : &nbsp;
+                Your team name : &nbsp;
                 {values.name !== undefined ? `${values.name}` : null}
               </h1>
             </Typography>
@@ -270,7 +271,7 @@ export default function NewData(props) {
                     }}
                     className="w-full"
                     autoComplete="off"
-                    label="Name your dataset"
+                    label="Name your team"
                     name="name"
                     variant="outlined"
                     type="text"
@@ -288,12 +289,12 @@ export default function NewData(props) {
                     onChange={handleChange}
                     className="p-2 w-96 border-4 border-green-400"
                     rowsMin={5}
-                    placeholder="Your Dataset Description (optional)"
+                    placeholder="Your team description (optional)"
                   ></TextareaAutosize>
                 </div>
                 <div className="mt-5 flex justify-center">
                   <CustomButton
-                    name={"Create Dataset"}
+                    name={"Create Team"}
                     type={"submit"}
                     classStyle={
                       "fixed mt-10 relative p-3 title text-sm font-bold transition duration-500 ease-in-out bg-green-400 text-white font-bold w-full rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
@@ -310,7 +311,7 @@ export default function NewData(props) {
             <Tooltip title="Back Last step">
               <IconButton
                 onClick={() => {
-                  setActiveStep(activeStep - 1);
+                  setActiveTeamStep(activeTeamStep - 1);
                 }}
               >
                 <KeyboardArrowLeftIcon
@@ -338,7 +339,7 @@ export default function NewData(props) {
             <Tooltip title="Go next step">
               <IconButton
                 onClick={() => {
-                  setActiveStep(activeStep + 1);
+                  setActiveTeamStep(activeTeamStep + 1);
                 }}
               >
                 <KeyboardArrowRightIcon
@@ -439,12 +440,12 @@ export default function NewData(props) {
               <Typography className="flex justify-center">
                 <h1 className="mt-10 font-bold text-3xl text-gray-500">
                   {" "}
-                  Create Dataset
+                  Create Team
                 </h1>
               </Typography>
               <div>
                 <Stepper
-                  activeStep={activeStep}
+                  activeStep={activeTeamStep}
                   alternativeLabel
                   connector={<ColorlibConnector />}
                 >
@@ -468,7 +469,7 @@ export default function NewData(props) {
 
               <div className="overflow-y-auto h-full">
                 {" "}
-                {getStepContent(activeStep)}
+                {getStepContent(activeTeamStep)}
               </div>
             </Paper>
           </div>

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import Sidenavbar from "../../components/objects/Sidenavbar";
+import Sidenavbar from "../../../components/objects/Sidenavbar";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import "@uppy/core/dist/style.css";
 import "@uppy/dashboard/dist/style.css";
@@ -12,18 +12,19 @@ import {
   TextField,
   TextareaAutosize,
 } from "@material-ui/core";
-import ModalPop from "../../components/objects/Modal";
-import { StoreContext } from "../../context/store";
 import { mutate } from "swr";
-import CustomButton from "../../components/objects/CustomButton";
+import ModalPop from "../../../components/objects/Modal";
+import { StoreContext } from "../../../context/store";
+
+import CustomButton from "../../../components/objects/CustomButton";
 import Lottie from "react-lottie";
 import {
   successAnimationObjects,
   failedAnimationObjects,
   loadingringAnimationObjects,
-} from "../../components/animation/animation";
+} from "../../../components/animation/animation";
 
-export default function New0Data() {
+export default function NewProject() {
   const history = useHistory();
   const [project, setProject] = useState({});
   const [errors, setErrors] = useState({});
@@ -172,7 +173,7 @@ export default function New0Data() {
                 <button
                   className="p-2 bg-green-400 text-white w-24 rounded-3xl font-bold shadow-xl"
                   onClick={() => {
-                    history.push("/dashboard/dataset/manage");
+                    history.push("/dashboard/datasets/manage");
                   }}
                 >
                   GO
