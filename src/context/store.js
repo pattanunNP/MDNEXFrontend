@@ -10,6 +10,9 @@ export const StoreContextProvider = ({ children }) => {
   const [toolType, setToolType] = useState(null);
   const [AuthState, AuthDispatch] = useReducer(reducer, null);
 
+  const [filter_brightness, setBrightness] = useState(100);
+  const [filter_contrast, setContrast] = useState(100);
+  const [opacity, setOpacity] = useState(100);
   const [userProjects, setUserProjects] = useState({});
   return (
     <StoreContext.Provider
@@ -30,6 +33,12 @@ export const StoreContextProvider = ({ children }) => {
         setToolType,
         AuthState,
         AuthDispatch,
+        filter_brightness,
+        setBrightness,
+        filter_contrast,
+        setContrast,
+        opacity,
+        setOpacity,
       }}
     >
       {children}

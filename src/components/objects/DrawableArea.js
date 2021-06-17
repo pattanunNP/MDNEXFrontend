@@ -1,10 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
+import { StoreContext } from "../../context/store";
 export default function DrawableArea(props) {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isPressing, setIsPressing] = useState(false);
+  const { filter_brightness, filter_contrast } = useContext(StoreContext);
   // const [strokeHistory, setStrokeHistory] = useState([]);
 
   // const [isInteface, setIsInteface] = useState(false);
@@ -28,6 +35,12 @@ export default function DrawableArea(props) {
   //   },
   //   [props.hideInterface]
   // );
+
+  // const FiltersImage = useCallback((canvas)=>{
+  //   return canvas.getImageData(0,0,canvas.width,canvas.height);
+
+  // },[])
+
   const drawImg = useCallback(() => {
     if (!props.LabelImage) {
       return;
@@ -126,7 +139,6 @@ export default function DrawableArea(props) {
   // };
   return (
     <canvas
-      className="z-10 bg-white"
       onMouseDown={startDrawing}
       onMouseUp={finishDrawing}
       onMouseMove={draw}
@@ -134,6 +146,9 @@ export default function DrawableArea(props) {
       onTouchMove={draw}
       onTouchEnd={finishDrawing}
       ref={canvasRef}
+      style={{
+        filter: `brightness(${filter_brightness}%) contrast(${filter_contrast}%)`,
+      }}
     />
   );
 }

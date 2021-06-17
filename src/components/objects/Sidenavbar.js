@@ -12,7 +12,7 @@ import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import axios from "axios";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import FadeIn from "react-fade-in";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import useSWR from "swr";
 
 async function FetchData(path) {
@@ -176,6 +176,15 @@ export default function Sidenavbar(props) {
                             <span className="ml-6">SETTING</span>
                           </Link>
                         </li>
+                        <li className="relative px-2 my-7">
+                          <a
+                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                            href="https://docs.mdnex.standupcode.co/"
+                          >
+                            <i className="fas fa-book text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"></i>
+                            <span className="ml-6">DOCUMENTS</span>
+                          </a>
+                        </li>
                       </ul>
                       <div className="flex justify-center">
                         <button
@@ -239,74 +248,102 @@ export default function Sidenavbar(props) {
                     <div className="flex justify-center">
                       <ul className="mt-2 leading-10">
                         <li className="relative px-2 my-7 ">
-                          <Link
-                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard"
-                          >
-                            <IconButton>
-                              <DashboardIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
-                            </IconButton>
-                          </Link>
+                          <Tooltip title="Dashboard">
+                            <Link
+                              className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                              to="/dashboard"
+                            >
+                              <IconButton>
+                                <DashboardIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
                         </li>
                         <li className="relative px-2 my-7 ">
-                          <Link
-                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/projects/manage"
-                          >
-                            <IconButton>
-                              <AssignmentIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
-                            </IconButton>
-                          </Link>
+                          <Tooltip title="ManangeProjects">
+                            <Link
+                              className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                              to="/dashboard/projects/manage"
+                            >
+                              <IconButton>
+                                <AssignmentIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
+                        </li>
+
+                        <li className="relative px-2 my-7 ">
+                          {" "}
+                          <Tooltip title="ManangeDatasets">
+                            <Link
+                              className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                              to="/dashboard/datasets/manage"
+                            >
+                              <IconButton>
+                                {" "}
+                                <StorageIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
                         </li>
                         <li className="relative px-2 my-7 ">
-                          <Link
-                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/datasets/manage"
-                          >
-                            <IconButton>
-                              {" "}
-                              <StorageIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
-                            </IconButton>
-                          </Link>
-                        </li>
-                        <li className="relative px-2 my-7 ">
-                          <Link
-                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/teams/manage"
-                          >
-                            <IconButton>
-                              <PeopleIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
-                            </IconButton>
-                          </Link>
+                          <Tooltip title="ManangeTeams">
+                            <Link
+                              className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                              to="/dashboard/teams/manage"
+                            >
+                              <IconButton>
+                                <PeopleIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
                         </li>
                         <li className="relative px-2 my-7">
-                          <Link
-                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/labeltool"
-                          >
-                            <IconButton>
-                              <BuildIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
-                            </IconButton>
-                          </Link>
+                          <Tooltip title="LabelTool">
+                            <Link
+                              className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
+                              to="/dashboard/labeltool"
+                            >
+                              <IconButton>
+                                <BuildIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
                         </li>
 
                         <li className="relative px-2 my-7">
-                          <Link
-                            className="inline-flex items-center w-full text-sm font-semibold "
-                            href="/dashboard/setting"
-                          >
-                            {" "}
-                            <IconButton>
-                              <SettingsIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
-                            </IconButton>
-                          </Link>
+                          <Tooltip title="Setting">
+                            <Link
+                              className="inline-flex items-center w-full text-sm font-semibold "
+                              to="/dashboard/setting"
+                            >
+                              <IconButton>
+                                <SettingsIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
+                        </li>
+                        <li className="relative px-2 my-7">
+                          <Tooltip title="Documents">
+                            <a
+                              className="inline-flex items-center w-full text-sm font-semibold "
+                              href="https://docs.mdnex.standupcode.co/"
+                            >
+                              <IconButton>
+                                <i class="fas fa-book text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"></i>
+                              </IconButton>
+                            </a>
+                          </Tooltip>
                         </li>
                       </ul>
                     </div>
                     <div className="flex justify-center">
-                      <IconButton onClick={handleLogout}>
-                        <ExitToAppIcon className="inline-flex items-center w-full text-sm font-semibold text-red-400 transition-colors duration-150 cursor-pointer hover:text-red-700" />
-                      </IconButton>
+                      {" "}
+                      <Tooltip title="Logout">
+                        <IconButton onClick={handleLogout}>
+                          <ExitToAppIcon className="inline-flex items-center w-full text-sm font-semibold text-red-400 transition-colors duration-150 cursor-pointer hover:text-red-700" />{" "}
+                        </IconButton>
+                      </Tooltip>
                     </div>
                   </div>
                 </div>

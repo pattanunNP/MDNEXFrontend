@@ -85,7 +85,7 @@ export default function ManangeProjects() {
                 </Typography>
               </div>
               <div className="mt-20 flex justify-center container mx-auto overflow-y-auto h-96">
-                <div className="grid grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-3 gap-8 sm:grid-cols-1">
                   {projects.length > 0 ? (
                     projects.map((project) => (
                       <div
@@ -109,6 +109,18 @@ export default function ManangeProjects() {
                               Veiw
                             </button>
                           </Link>
+                        </div>
+                        <div className="mt-5 flex justify-center">
+                          <button
+                            className="p-1 bg-red-400 text-white w-32 rounded-3xl font-bold shadow-xl text-sm"
+                            onClick={() => {
+                              history.push(
+                                `/dashboard/datasets/manage?projectuuid=${project.project_uuid}`
+                              );
+                            }}
+                          >
+                            Attach Dataset
+                          </button>
                         </div>
                         <p className="flex justify-center text-gray-400 text-sm">
                           Owner:

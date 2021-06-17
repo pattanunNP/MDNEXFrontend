@@ -23,6 +23,7 @@ import {
   failedAnimationObjects,
   loadingringAnimationObjects,
 } from "../../../components/animation/animation";
+// import { set } from "lodash-es";
 
 export default function NewProject() {
   const history = useHistory();
@@ -30,6 +31,7 @@ export default function NewProject() {
   const [errors, setErrors] = useState({});
   const [loadingFetch, setLoadingFetch] = useState(false);
   const [errorsState, setErrorState] = useState({});
+  const [project_uuid, setProjectUUID] = useState(null);
   const [success, setSuccess] = useState(false);
   const { userData, setOpenModal } = useContext(StoreContext);
   const [success_text, setSuccessText] = useState({});
@@ -88,6 +90,7 @@ export default function NewProject() {
               mutate("/api/v1/dashboard");
               mutate("/api/v1/userprojects");
               success_text["message"] = response.data.message;
+              setProjectUUID(response.data.project_uuid);
               setSuccess(true);
               setSuccessText(success_text);
               setLoadingFetch(false);
@@ -169,15 +172,18 @@ export default function NewProject() {
                   </h1>
                 </Typography>
               </div>
+
               <div className="mt-5 flex justify-center">
                 <button
-                  className="p-2 bg-green-400 text-white w-24 rounded-3xl font-bold shadow-xl"
+                  className="p-2 bg-red-400 text-white w-24 rounded-3xl font-bold shadow-xl"
                   onClick={() => {
-                    history.push("/dashboard/datasets/manage");
+                    history.push(
+                      `/dashboard/datasets/manage?projectuuid=${project_uuid}`
+                    );
                   }}
                 >
-                  GO
-                </button>{" "}
+                  Add
+                </button>
               </div>
             </div>
           )}
@@ -198,7 +204,7 @@ export default function NewProject() {
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16"></header>
 
         <main>
-          <ModalPop contents={modalContent} width={"450px"} height={"550px"} />
+          <ModalPop contents={modalContent} width={"450px"} height={"650px"} />
           <div className="z-10 col-span-12 mt-5">
             <Paper
               className="m-10 w-sceen h-full"

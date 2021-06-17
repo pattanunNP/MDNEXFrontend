@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
-import { useHistory, Link } from "react-router-dom";
-import useSWR from "swr";
+import { useHistory, Link, useLocation } from "react-router-dom";
+import useSWR, { mutate } from "swr";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { Paper, Typography } from "@material-ui/core";
-
+import { StoreContext } from "../../../context/store";
 import Sidenavbar from "../../../components/objects/Sidenavbar";
+import ModalPop from "../../../components/objects/Modal";
+import Lottie from "react-lottie";
+
+import {
+  successAnimationObjects,
+  failedAnimationObjects,
+  loadingringAnimationObjects,
+} from "../../../components/animation/animation";
 
 async function FetchDatasets(path) {
   const url = process.env.REACT_APP_API_URL;
@@ -28,18 +36,170 @@ async function FetchDatasets(path) {
   return response.data.match;
 }
 export default function Data() {
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  let query = useQuery();
+  const { setOpenModal } = useContext(StoreContext);
+  let project_uuid = query.get("projectuuid");
+  const [error, setError] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [success_text, setSuccessText] = useState({});
+  const [loadingFetch, setLoadingFetch] = useState(false);
   const history = useHistory();
-
   const options = { suspense: true };
   const { data: datasets } = useSWR(
     "/api/v1/userdatasets",
     FetchDatasets,
     options
   );
+
+  function addDatasetToproject(project_uuid, dataset_uuid) {
+    const url = process.env.REACT_APP_API_URL;
+    const access_token = sessionStorage.getItem("access_token");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    };
+    const payload = {
+      project_uuid: project_uuid,
+      dataset_uuid: dataset_uuid,
+    };
+
+    setTimeout(() => {
+      setLoadingFetch(false);
+      setTimeout(() => {
+        setLoadingFetch(true);
+        setOpenModal(true);
+        axios
+          .post(`${url}/api/v1/dataset/add-to-project`, payload, {
+            headers: headers,
+          })
+          .then((response) => {
+            setLoadingFetch(false);
+            setSuccess(true);
+            success_text["message"] = response.data.message;
+            setSuccessText(success_text);
+            mutate("/api/v1/userdatasets");
+          })
+          .catch((error) => {
+            setSuccess(false);
+            setLoadingFetch(false);
+            //console.log(error);
+            let errors = {};
+            let error_detail = error.response.data.detail;
+            errors["message"] = error_detail;
+            setError(errors);
+          });
+      }, 2000);
+    }, 1000);
+  }
+
+  function removeDatasetToproject(project_uuid, dataset_uuid) {
+    const url = process.env.REACT_APP_API_URL;
+    const access_token = sessionStorage.getItem("access_token");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${access_token}`,
+    };
+    const payload = {
+      project_uuid: project_uuid,
+      dataset_uuid: dataset_uuid,
+    };
+
+    setTimeout(() => {
+      setLoadingFetch(false);
+      setTimeout(() => {
+        setLoadingFetch(true);
+        setOpenModal(true);
+        axios
+          .post(`${url}/api/v1/dataset/remove-from-project`, payload, {
+            headers: headers,
+          })
+          .then((response) => {
+            setLoadingFetch(false);
+            setSuccess(true);
+            success_text["message"] = response.data.message;
+            setSuccessText(success_text);
+            mutate("/api/v1/userdatasets");
+          })
+          .catch((error) => {
+            setSuccess(false);
+            setLoadingFetch(false);
+            //console.log(error);
+            let errors = {};
+            let error_detail = error.response.data.detail;
+            errors["message"] = error_detail;
+            setError(errors);
+          });
+      }, 2000);
+    }, 500);
+  }
+  const modalContent = (
+    <div className="flex justify-center">
+      {loadingFetch ? (
+        <div>
+          <Typography className="flex justify-center">
+            <h1 className="title font-bold text-3xl">Processing ... </h1>
+          </Typography>
+          <Lottie
+            style={{
+              marginTop: "30px",
+            }}
+            options={loadingringAnimationObjects}
+            height={200}
+            width={200}
+          />
+        </div>
+      ) : (
+        <div>
+          {success ? (
+            <div className="p-1">
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">Success</h1>
+              </Typography>
+
+              <Lottie
+                style={{
+                  marginTop: "30px",
+                }}
+                options={successAnimationObjects}
+                height={270}
+                width={270}
+              ></Lottie>
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">
+                  {success_text["message"]}
+                </h1>
+              </Typography>
+            </div>
+          ) : (
+            <div className="p-1">
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl"> Failed</h1>
+              </Typography>
+
+              <Lottie
+                style={{
+                  marginTop: "30px",
+                }}
+                options={failedAnimationObjects}
+                height={200}
+                width={200}
+              ></Lottie>
+              <Typography className="flex justify-center">
+                <h1 className="title font-bold text-3xl">{error["message"]}</h1>
+              </Typography>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
       <Sidenavbar />
-
+      <ModalPop contents={modalContent} />
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16"></header>
 
@@ -89,7 +249,7 @@ export default function Data() {
                   {datasets.length > 0 ? (
                     datasets.map((dataset) => (
                       <div
-                        className="shadow-md bg-white w-64 h-80 rounded-xl hover:shadow-xl"
+                        className="shadow-md bg-white w-64 h-full rounded-xl hover:shadow-xl"
                         key={dataset.dataset_uuid}
                       >
                         <img
@@ -116,6 +276,37 @@ export default function Data() {
                             </button>
                           </Link>
                         </div>
+                        {project_uuid ? (
+                          <div className="mt-3 flex justify-center text-gray-400 text-sm">
+                            {!dataset.dataset_atteched_project.includes(
+                              project_uuid
+                            ) ? (
+                              <button
+                                className="mx-3 p-1 bg-red-400 text-white rounded-xl text-sm w-32 shadow-sm "
+                                onClick={() => {
+                                  addDatasetToproject(
+                                    project_uuid,
+                                    dataset.dataset_uuid
+                                  );
+                                }}
+                              >
+                                Attach
+                              </button>
+                            ) : (
+                              <button
+                                className="mx-3 p-1 bg-blue-400 text-white rounded-xl text-sm w-32 shadow-sm "
+                                onClick={() => {
+                                  removeDatasetToproject(
+                                    project_uuid,
+                                    dataset.dataset_uuid
+                                  );
+                                }}
+                              >
+                                Detach
+                              </button>
+                            )}
+                          </div>
+                        ) : null}
                         <p className="mt-3 flex justify-center text-gray-400 text-sm">
                           Owner:
                           <a href={`/profile/${dataset.dataset_owner_uuid}`}>

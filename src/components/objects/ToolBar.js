@@ -121,7 +121,7 @@ export default function ToolBar(props) {
     },
   ];
   return (
-    <aside className="z-40 w-72 bg-gray-800  shadow-xl">
+    <nav className="z-40 w-72 bg-gray-800  shadow-xl">
       <div className="flex flex-col ">
         {" "}
         <div className="flex justify-start ">
@@ -187,6 +187,6 @@ export default function ToolBar(props) {
           ))}
         </div>
       </div>
-    </aside>
+    </nav>
   );
 }

@@ -33,7 +33,6 @@ import TextFieldsIcon from "@material-ui/icons/TextFields";
 import Sidenavbar from "../../../components/objects/Sidenavbar";
 import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import InsertDriveFileSharpIcon from "@material-ui/icons/InsertDriveFileSharp";
-import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import { StoreContext } from "../../../context/store";
 import Uppy from "@uppy/core";
 import XHRUpload from "@uppy/xhr-upload";
@@ -335,21 +334,6 @@ export default function NewData(props) {
               showProgressDetails={true}
               height={"450px"}
             />
-            <Tooltip title="Go next step">
-              <IconButton
-                onClick={() => {
-                  setActiveStep(activeStep + 1);
-                }}
-              >
-                <KeyboardArrowRightIcon
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                  }}
-                  className="text-green-400 text-xl hover:text-green-500"
-                />
-              </IconButton>
-            </Tooltip>
           </div>
         );
 
@@ -360,6 +344,7 @@ export default function NewData(props) {
 
   const uppy = useMemo(() => {
     return Uppy({
+      limit: 1000,
       debug: true,
       autoProceed: false,
     })

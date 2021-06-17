@@ -25,8 +25,9 @@ export default function Login() {
   const [error, setError] = useState({});
   const [success, setSuccess] = useState(false);
   const [success_text, setSuccessText] = useState({});
-  let baseUrl = process.env.REACT_APP_API_URL;
   const [loadingFetch, setLoadingFetch] = useState(false);
+  let baseUrl = process.env.REACT_APP_API_URL;
+
   const history = useHistory();
 
   const { handleSubmit, handleChange, values, touched, errors, handleBlur } =
@@ -50,7 +51,6 @@ export default function Login() {
             axios
               .post(`${baseUrl}/api/v1/login`, payload)
               .then((response) => {
-                setSuccess(true);
                 success_text["message"] = response.data.message;
                 setSuccessText(success_text);
                 sessionStorage.setItem(

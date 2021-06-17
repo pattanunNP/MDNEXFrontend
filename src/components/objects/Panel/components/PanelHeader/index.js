@@ -29,7 +29,7 @@ const PanelHeader = ({ onDrag }) => {
 
   const handleMouseDown = () => setMouseDown(true);
 
-  return <div className="p-5" onMouseDown={handleMouseDown}></div>;
+  return <div className="p-20" onMouseDown={handleMouseDown}></div>;
 };
 
 export default PanelHeader;
