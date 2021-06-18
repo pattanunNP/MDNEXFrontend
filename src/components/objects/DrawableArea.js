@@ -1,154 +1,98 @@
 import React, {
-  useState,
-  useEffect,
+
+
   useRef,
-  useCallback,
+
   useContext,
 } from "react";
+
 import { StoreContext } from "../../context/store";
+
+import { Stage, Layer, Line, Image } from 'react-konva';
+import useImage from 'use-image';
+
+
 export default function DrawableArea(props) {
-  const canvasRef = useRef(null);
-  const contextRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [isPressing, setIsPressing] = useState(false);
-  const { filter_brightness, filter_contrast } = useContext(StoreContext);
-  // const [strokeHistory, setStrokeHistory] = useState([]);
+  // const canvasRef = useRef(null);
+  // const contextRef = useRef(null);
+  const { lines, setLines } = useContext(StoreContext)
+  const isDrawing = useRef(false);
+  const isClosed = useRef(false)
 
-  // const [isInteface, setIsInteface] = useState(false);
+  const image_url =
+    "https://res.cloudinary.com/image-chatbot/image/upload/v1623427911/MD_NEX/image2_htrtd9.png";
 
-  // const drawInterface = useCallback(
-  //   (pointer, brush) => {
-  //     if (props.hideInterface) return;
 
-  //     setIsInteface(true);
-  //     // Draw brush preview
-  //     contextRef.current.beginPath();
-  //     contextRef.current.fillStyle = "#2941E5";
-  //     contextRef.current.arc(brush.x, brush.y, 2, 0, Math.PI * 2, true);
-  //     contextRef.current.fill();
+  const [image] = useImage(image_url);
 
-  //     // Draw mouse point (the one directly at the cursor)
-  //     contextRef.current.beginPath();
-  //     contextRef.current.fillStyle = "#FFCA28";
-  //     contextRef.current.arc(pointer.x, pointer.y, 4, 0, Math.PI * 2, true);
-  //     contextRef.current.fill();
-  //   },
-  //   [props.hideInterface]
-  // );
+  // const [isPressing, setIsPressing] = useState(false);
+  const { opacity, toolmode } = useContext(StoreContext);
 
-  // const FiltersImage = useCallback((canvas)=>{
-  //   return canvas.getImageData(0,0,canvas.width,canvas.height);
+  // const { filter_brightness, filter_contrast, opacity, toolmode } = useContext(StoreContext);
 
-  // },[])
 
-  const drawImg = useCallback(() => {
-    if (!props.LabelImage) {
-      return;
-    }
-    const Label = new Image();
 
-    Label.onload = () => {
-      var canvas = canvasRef.current;
-      var hRatio = canvas.width / Label.width;
-      var vRatio = canvas.height / Label.height;
-      var ratio = Math.min(hRatio, vRatio);
-      var centerShift_x = (canvas.width - Label.width * ratio) / 2;
-      var centerShift_y = (canvas.height - Label.height * ratio) / 2;
-      contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
-      console.log(canvas.height);
-      contextRef.current.drawImage(
-        Label,
-        0,
-        0,
-        Label.width,
-        Label.height,
-        centerShift_x,
-        centerShift_y,
-        Label.width * ratio,
-        Label.height * ratio
-      );
-    };
-    Label.src = props.LabelImage;
-  }, [props.LabelImage]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
 
-    canvas.width = 400;
-    canvas.height = 500;
+  const handleMouseDown = (e) => {
+    isDrawing.current = true;
+    const pos = e.target.getStage().getPointerPosition();
 
-    canvas.style.width = `${400}px`;
-    canvas.style.height = `${500}px`;
-
-    const context = canvas.getContext("2d");
-
-    context.lineCap = "round";
-    context.strokeStyle = "#FFCA28";
-    context.lineWidth = 2;
-    contextRef.current = context;
-    // drawInterface();
-    drawImg();
-  }, [drawImg]);
-
-  const startDrawing = ({ nativeEvent }) => {
-    const { offsetX, offsetY } = nativeEvent;
-
-    console.log(`X: ${offsetX}, Y:${offsetY}`);
-
-    contextRef.current.beginPath();
-    contextRef.current.moveTo(offsetX, offsetY);
-    setIsDrawing(true);
-    setIsPressing(true);
+    setLines([...lines, { toolmode, points: [pos.x, pos.y] }]);
+    console.log(lines)
   };
 
-  const finishDrawing = () => {
-    contextRef.current.closePath();
-    setIsDrawing(false);
-    setIsPressing(false);
-  };
-
-  const draw = ({ nativeEvent }) => {
-    if (!isDrawing) {
-      return;
-    }
-    if (!isPressing) {
+  const handleMouseMove = (e) => {
+    // no drawing - skipping
+    if (!isDrawing.current) {
       return;
     }
 
-    const { offsetX, offsetY } = nativeEvent;
-    console.log(`X: ${offsetX}, Y:${offsetY}`);
+    const stage = e.target.getStage();
+    const point = stage.getPointerPosition();
+    let lastLine = lines[lines.length - 1];
+    // add point
+    lastLine.points = lastLine.points.concat([point.x, point.y]);
 
-    contextRef.current.lineTo(offsetX, offsetY);
-    contextRef.current.stroke();
+    // replace last
+    lines.splice(lines.length - 1, 1, lastLine);
+    setLines(lines.concat());
   };
 
-  // const undoDraw = () => {
-  //   var canvas = canvasRef.current;
-  //   contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
-  //   strokeHistory.map((stroke) => {
-  //     if (strokeHistory.length === 0) {
-  //       return;
-  //     }
-  //     contextRef.current.beginPath();
-  //     let strokePath = [];
-  //     stroke.map((point) => {
-  //       strokePath.push(point);
-  //       console.log(point);
-  //     });
-  //   });
-  // };
+  const handleMouseUp = () => {
+
+    isDrawing.current = false;
+    isClosed.current = true
+  };
+
   return (
-    <canvas
-      onMouseDown={startDrawing}
-      onMouseUp={finishDrawing}
-      onMouseMove={draw}
-      onTouchStart={startDrawing}
-      onTouchMove={draw}
-      onTouchEnd={finishDrawing}
-      ref={canvasRef}
-      style={{
-        filter: `brightness(${filter_brightness}%) contrast(${filter_contrast}%)`,
-      }}
-    />
+
+    <Stage
+      width={window.innerWidth}
+      height={window.innerHeight}
+      onMouseDown={handleMouseDown}
+      onMousemove={handleMouseMove}
+      onMouseup={handleMouseUp}
+    >
+      <Layer>
+        <Image image={image} />
+
+        {lines.map((line, i) => (
+          <Line
+            key={i}
+            points={line.points}
+            stroke={`rgba(255,25,255,${(opacity / 200) + 0.1})`}
+            strokeWidth={3}
+            tension={0.1}
+            closed={isClosed}
+            lineCap="round"
+            fill={`rgba(255,25,255,${opacity / 200})`}
+            globalCompositeOperation={
+              line.toolmode === 'eraser' ? 'destination-out' : 'source-over'
+            }
+          />
+        ))}
+      </Layer>
+    </Stage>
   );
 }

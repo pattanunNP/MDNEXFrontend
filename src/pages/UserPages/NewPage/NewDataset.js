@@ -25,7 +25,6 @@ import {
   failedAnimationObjects,
   loadingringAnimationObjects,
 } from "../../../components/animation/animation";
-
 import ModalPop from "../../../components/objects/Modal";
 import CustomButton from "../../../components/objects/CustomButton";
 import PropTypes from "prop-types";
@@ -117,7 +116,8 @@ ColorlibStepIcon.propTypes = {
   icon: PropTypes.node,
 };
 export default function NewData(props) {
-  const { userData, activeStep, setActiveStep, setOpenModal } =
+  const { userData, activeStep, setActiveStep, dataset_name, dataset_uuid,
+    setOpenModal, setDatasetname, setDatasetuuid } =
     useContext(StoreContext);
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
@@ -125,8 +125,10 @@ export default function NewData(props) {
   const [success_text, setSuccessText] = useState({});
   const [loadingFetch, setLoadingFetch] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [dataset_name, setDatasetname] = useState(null);
-  const [dataset_uuid, setDatasetuuid] = useState(null);
+
+
+
+
 
   const modalContent = (
     <div className="flex justify-center">
@@ -328,7 +330,7 @@ export default function NewData(props) {
               {...props}
               theme={"auto"}
               note={
-                "maximum 1000 files; Per 1 upload Your can add more data after "
+                "Maximum 1000 files; Per 1 upload Your can add more data later"
               }
               width={"700px"}
               showProgressDetails={true}
@@ -424,7 +426,7 @@ export default function NewData(props) {
               <Typography className="flex justify-center">
                 <h1 className="mt-10 font-bold text-3xl text-gray-500">
                   {" "}
-                  Create Dataset
+                  {dataset_name ? `Add data to ${dataset_name}` : "Create Dataset"}
                 </h1>
               </Typography>
               <div>

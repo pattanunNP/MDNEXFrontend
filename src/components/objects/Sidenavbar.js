@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import StorageIcon from "@material-ui/icons/Storage";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -14,7 +14,7 @@ import KeyboardArrowLeftIcon from "@material-ui/icons/KeyboardArrowLeft";
 import FadeIn from "react-fade-in";
 import Tooltip from "@material-ui/core/Tooltip";
 import useSWR from "swr";
-
+import { StoreContext } from "../../context/store";
 async function FetchData(path) {
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
@@ -36,7 +36,8 @@ async function FetchData(path) {
 export default function Sidenavbar(props) {
   const history = useHistory();
   const [opensidebar, setOpenSidebar] = useState(false);
-
+  const { setDatasetname, setDatasetuuid } =
+    useContext(StoreContext);
   function handleLogout() {
     sessionStorage.removeItem("access_token");
     sessionStorage.removeItem("refresh_token");
@@ -134,7 +135,7 @@ export default function Sidenavbar(props) {
                           >
                             <button>
                               <AssignmentIcon />{" "}
-                              <span className="ml-6">MANAGE PROJECTS</span>
+                              <span className="ml-6">MANANGE PROJECTS</span>
                             </button>
                           </Link>
                         </li>
@@ -143,8 +144,11 @@ export default function Sidenavbar(props) {
                             className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
                             to="/dashboard/datasets/manage"
                           >
-                            <StorageIcon />
-                            <span className="ml-6">DATA</span>
+                            <StorageIcon onClick={() => {
+                              setDatasetname(null)
+                              setDatasetuuid(null)
+                            }} />
+                            <span className="ml-6">MANAGE DATASET</span>
                           </Link>
                         </li>
                         <li className="relative px-2 my-7 ">
@@ -279,9 +283,12 @@ export default function Sidenavbar(props) {
                               className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
                               to="/dashboard/datasets/manage"
                             >
-                              <IconButton>
-                                {" "}
-                                <StorageIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
+                              <IconButton onClick={() => {
+                                setDatasetname(null)
+                                setDatasetuuid(null)
+                              }}
+                              >
+                                < StorageIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
                               </IconButton>
                             </Link>
                           </Tooltip>

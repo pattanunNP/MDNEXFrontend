@@ -1,9 +1,12 @@
-// import { IconButton } from "@material-ui/core";
+import React, { useContext } from "react"
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import EditIcon from "@material-ui/icons/Edit";
 import TimelineIcon from "@material-ui/icons/Timeline";
+import { StoreContext } from "../../context/store";
+
 
 export default function ToolBar(props) {
+  const { setToolMode, setLines } = useContext(StoreContext)
   // const mocktool = [
   //   {
   //     id: "1",
@@ -121,7 +124,7 @@ export default function ToolBar(props) {
     },
   ];
   return (
-    <nav className="z-40 w-72 bg-gray-800  shadow-xl">
+    <aside className="z-40 w-48 bg-gray-800  shadow-xl">
       <div className="flex flex-col ">
         {" "}
         <div className="flex justify-start ">
@@ -131,14 +134,25 @@ export default function ToolBar(props) {
           {mockObject.map((object, id) => (
             <button
               key={id}
-              className="mt-1 shadow-xl p-3 bg-gray-800 w-72 h-16 text-white hover:bg-gray-700"
+              onclick={
+                () => {
+                  setToolMode(object.toolname)
+
+                }
+
+              }
+              className="shadow-xl p-3 bg-gray-800 w-72 h-14 text-white text-sm hover:bg-gray-700"
             >
               <div className="grid grid-cols-4 gap-1">
-                <div className=""> {object.icon}</div>
+                <div className="text-sm"> {object.icon}</div>
 
-                <div className="text-sm">
+                <div style={{
+                  fontSize: "10px"
+                }} className="text-sm">
                   {object.name}
-                  <h1 className="text-gray-400 text-sm">{object.toolname}</h1>
+                  <h1 style={{
+                    fontSize: "10px"
+                  }} className="text-gray-400 text-sm">{object.toolname}</h1>
                 </div>
                 <div className=" rounded-xl">
                   <svg width="20" height="20">
@@ -162,14 +176,19 @@ export default function ToolBar(props) {
           {mockObject.map((object, id) => (
             <button
               key={id}
-              className="mt-1 shadow-xl p-3 bg-gray-800 w-72 h-16 text-white hover:bg-gray-700"
+
+              className="shadow-xl p-3 bg-gray-800 w-72 h-14 text-white hover:bg-gray-700"
             >
               <div className="grid grid-cols-4 gap-1">
                 <div className=""> {object.icon}</div>
 
-                <div className="text-sm">
+                <div style={{
+                  fontSize: "10px"
+                }} className="text-sm">
                   {object.name}
-                  <h1 className="text-gray-400 text-sm">{object.toolname}</h1>
+                  <h1 style={{
+                    fontSize: "10px"
+                  }} className="text-gray-400 text-sm">{object.toolname}</h1>
                 </div>
                 <div className=" rounded-xl">
                   <svg width="20" height="20">
@@ -186,7 +205,18 @@ export default function ToolBar(props) {
             </button>
           ))}
         </div>
+        <div className="m-10 grid grid-rows-1 gap-5">
+          <button className="m-2 p-2 text-white bg-red-400 ring-2 ring-red-300 w-24 rounded-2xl hover:bg-red-500"
+            onClick={
+              () => {
+                setLines([])
+
+              }
+            }>RESET</button>
+          <button className="m-2 p-2 text-white bg-green-400 ring-2 ring-green-300 w-24 rounded-2xl hover:bg-green-500">SUBMIT</button>
+        </div>
+
       </div>
-    </nav>
+    </aside>
   );
 }

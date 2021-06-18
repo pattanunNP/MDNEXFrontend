@@ -14,11 +14,20 @@ export const StoreContextProvider = ({ children }) => {
   const [filter_contrast, setContrast] = useState(100);
   const [opacity, setOpacity] = useState(100);
   const [userProjects, setUserProjects] = useState({});
+  const [dataset_name, setDatasetname] = useState(null);
+  const [dataset_uuid, setDatasetuuid] = useState(null);
+  const [reset, setReset] = useState(false)
+  const [toolmode, setToolMode] = useState("freehand")
+  const [lines, setLines] = useState([]);
   return (
     <StoreContext.Provider
       value={{
         userData,
         setUserData,
+        dataset_name,
+        setDatasetname,
+        dataset_uuid,
+        setDatasetuuid,
         openModal,
         setOpenModal,
         userProjects,
@@ -39,6 +48,13 @@ export const StoreContextProvider = ({ children }) => {
         setContrast,
         opacity,
         setOpacity,
+        toolmode,
+        setToolMode,
+        reset,
+        setReset,
+        lines,
+        setLines
+
       }}
     >
       {children}

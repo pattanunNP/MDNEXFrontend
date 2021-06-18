@@ -11,6 +11,7 @@ export default function TopBar(props) {
     setContrast,
     setBrightness,
     setOpacity,
+    setToolMode
   } = useContext(StoreContext);
 
   const [openFilterTab, setOpenFilterTab] = useState(false);
@@ -34,6 +35,13 @@ export default function TopBar(props) {
       <div className="w-full h-16 flex justify-center">
         <div className=" grid grid-rows-1 gap-5">
           <div className="fixed">
+            <IconButton onClick={
+              () => {
+                setToolMode("eraser")
+              }
+            }>
+              <i className="fas fa-eraser text-white w-8 h-8"></i>
+            </IconButton>
             <IconButton
               className="my-5"
               onClick={() => {

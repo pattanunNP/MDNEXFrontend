@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, } from "react";
 import axios from "axios";
 import {
   Paper,
@@ -13,8 +13,8 @@ import {
 } from "@material-ui/core";
 import useSWR from "swr";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
-
+import { useParams, useHistory } from "react-router-dom";
+import { StoreContext } from "../../../context/store";
 import LockIcon from "@material-ui/icons/Lock";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PublicIcon from "@material-ui/icons/Public";
@@ -99,7 +99,10 @@ export default function DatasetPage() {
 
   const [value, setValue] = useState(0);
   const [veiwGrid, setVeiwGrid] = useState(true);
+  const history = useHistory();
 
+  const { setDatasetname, setDatasetuuid, setActiveStep } =
+    useContext(StoreContext);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -180,6 +183,12 @@ export default function DatasetPage() {
                     Dataset description:&nbsp;
                     {dataset.dataset_description}
                   </h1>
+                  <h1
+                    style={{ textTransform: "Capitalize" }}
+                    className="mt-10 text-xl"
+                  >
+                    Total Image:&nbsp; <span className="font-semibold">{dataset.dataset_number_of_images}</span> Images
+                  </h1>
 
                   <h1
                     style={{ textTransform: "Capitalize" }}
@@ -190,6 +199,7 @@ export default function DatasetPage() {
                   <h1 className="mt-10 text-xl">
                     Dataset UUID:&nbsp;{dataset.dataset_uuid}
                   </h1>
+
                 </Typography>
               </div>
             </Paper>
@@ -204,6 +214,20 @@ export default function DatasetPage() {
                 </div>
                 <div className="flex justify-end">
                   <div>
+                    <Tooltip title="Add Dataset">
+                      <IconButton
+                        className="text-grey-300 hover:text-green-400"
+                        onClick={() => {
+                          setActiveStep(1)
+                          setDatasetname(dataset.dataset_name)
+                          setDatasetuuid(dataset.dataset_uuid)
+
+                          history.push(`/dashboard/datasets/newdata`)
+                        }}
+                      >
+                        <i className="fas fa-plus-square"></i>
+                      </IconButton>
+                    </Tooltip>
                     <Tooltip title="Grid Veiw">
                       <IconButton
                         className="text-grey-300 hover:text-green-400"

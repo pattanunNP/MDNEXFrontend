@@ -8,17 +8,21 @@ import Sidenavbar from "../../../components/objects/Sidenavbar";
 import SearchBox from "../../../components/objects/SearchBox";
 
 export default function Dashboard() {
+
+
   return (
+
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
       <Sidenavbar />
 
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
-        <header className="grid justify-items-stretch py-1 bg-gray-800 h-16">
-          <div className="flex justify-center">
-            <SearchBox />
-          </div>
-        </header>
+        <header className="bg-gray-800 h-16 w-full">
+          <div className="flex justify-center"> <SearchBox className="order-first" /></div>
 
+
+
+
+        </header>
         <main>
           <div className="mt-40 pb-10 px-8 mx-4 rounded-3xl">
             <Stat />
@@ -45,6 +49,6 @@ export default function Dashboard() {
           </div>
         </main>
       </div>
-    </div>
+    </div >
   );
 }

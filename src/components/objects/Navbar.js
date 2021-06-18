@@ -36,7 +36,12 @@ export default function Navbar(props) {
           >
             {props.btn_name}
           </a>
-
+          <a
+            href="https://docs.mdnex.standupcode.co"
+            className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-green-500 no-underline flex items-center hover:bg-grey-dark font-bold"
+          >
+            Documents
+          </a>
           <a
             href="/dashboard"
             className="flex-no-grow flex-no-shrink relative py-2 px-4 leading-normal text-green-500 no-underline flex items-center hover:bg-grey-dark font-bold"

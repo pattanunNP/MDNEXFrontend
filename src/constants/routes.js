@@ -19,3 +19,4 @@ export const PROFILE = "/profile/:uuid";
 export const PROJECT = "/project/:uuid";
 export const DATA_PAGE = "/dataset/:uuid";
 export const TEAM_PAGE = "/team/:uuid";
+export const LABEL_TOOL_PAGE = "/project/:uuid/"
