@@ -17,7 +17,7 @@ export default function DrawableArea(props) {
   // const contextRef = useRef(null);
   const { lines, setLines } = useContext(StoreContext)
   const isDrawing = useRef(false);
-  const isClosed = useRef(false)
+
 
   const image_url =
     "https://res.cloudinary.com/image-chatbot/image/upload/v1623427911/MD_NEX/image2_htrtd9.png";
@@ -36,10 +36,11 @@ export default function DrawableArea(props) {
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
+    ;
     const pos = e.target.getStage().getPointerPosition();
 
     setLines([...lines, { toolmode, points: [pos.x, pos.y] }]);
-    console.log(lines)
+    // console.log(lines)
   };
 
   const handleMouseMove = (e) => {
@@ -57,12 +58,14 @@ export default function DrawableArea(props) {
     // replace last
     lines.splice(lines.length - 1, 1, lastLine);
     setLines(lines.concat());
+
   };
 
   const handleMouseUp = () => {
 
     isDrawing.current = false;
-    isClosed.current = true
+
+
   };
 
   return (
@@ -73,6 +76,9 @@ export default function DrawableArea(props) {
       onMouseDown={handleMouseDown}
       onMousemove={handleMouseMove}
       onMouseup={handleMouseUp}
+      onTouchMove={handleMouseMove}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
     >
       <Layer>
         <Image image={image} />
@@ -84,7 +90,7 @@ export default function DrawableArea(props) {
             stroke={`rgba(255,25,255,${(opacity / 200) + 0.1})`}
             strokeWidth={3}
             tension={0.1}
-            closed={isClosed}
+
             lineCap="round"
             fill={`rgba(255,25,255,${opacity / 200})`}
             globalCompositeOperation={
