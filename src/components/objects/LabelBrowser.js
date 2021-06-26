@@ -115,16 +115,22 @@ export default function LabelBrowser() {
   ];
   return (
     <aside
-      className={`${
-        openSidebar === true
-          ? `z-40 bg-gray-800 h-screen shadow-xl overflow-y-auto overflow-x-hidden w-96 transition delay-300 ease-in-out`
-          : `z-40 bg-gray-800 h-screen shadow-xl overflow-y-auto overflow-x-hidden w-16 transition delay-300 ease-in-out `
-      }`}
+      className={`${openSidebar === true
+        ? `z-40 bg-gray-800 h-screen shadow-xl overflow-y-auto overflow-x-hidden w-96 transition delay-300 ease-in-out`
+        : `z-40 bg-gray-800 h-screen shadow-xl overflow-y-auto overflow-x-hidden w-16 transition delay-300 ease-in-out `
+        }`}
     >
       {" "}
       <FadeIn>
         <div className="flex flex-col">
+          <div className="flex justify-start"> <a href="/dashboard" className="w-16"> <img
+            alt="logo"
+            src="https://res.cloudinary.com/image-chatbot/image/upload/v1623756618/MD_NEX/Purple_Event_Styling_Logo_7_ixrzkq.png"
+
+          /></a></div>
           <div className="flex justify-start">
+
+
             <IconButton
               className="w-16 h-16"
               onClick={() => {

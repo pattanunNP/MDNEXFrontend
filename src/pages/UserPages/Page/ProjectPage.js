@@ -12,7 +12,6 @@ export default function ProjectPage() {
 
   let baseUrl = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
-  // const { userData } = useContext(StoreContext);
   const [info, setInfo] = useState({});
 
   useEffect(() => {

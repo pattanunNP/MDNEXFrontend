@@ -18,7 +18,6 @@ import { StoreContext } from "../../../context/store";
 import LockIcon from "@material-ui/icons/Lock";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PublicIcon from "@material-ui/icons/Public";
-
 import SearchBox from "../../../components/objects/SearchBox";
 import Sidenavbar from "../../../components/objects/Sidenavbar";
 async function FetchDataset(path) {

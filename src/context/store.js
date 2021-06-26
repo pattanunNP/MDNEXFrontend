@@ -17,7 +17,9 @@ export const StoreContextProvider = ({ children }) => {
   const [dataset_name, setDatasetname] = useState(null);
   const [dataset_uuid, setDatasetuuid] = useState(null);
   const [reset, setReset] = useState(false)
-  const [toolmode, setToolMode] = useState("freehand")
+  const [toolmode, setToolMode] = useState("bbox")
+  const [toolColor, setToolColor] = useState(
+    { r: 255, g: 255, b: 255, a: 0.6 })
   const [lines, setLines] = useState([]);
   return (
     <StoreContext.Provider
@@ -53,7 +55,9 @@ export const StoreContextProvider = ({ children }) => {
         reset,
         setReset,
         lines,
-        setLines
+        setLines,
+        toolColor,
+        setToolColor
 
       }}
     >
