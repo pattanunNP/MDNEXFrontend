@@ -6,7 +6,7 @@ import { StoreContext } from "../../context/store";
 
 
 export default function ToolBar(props) {
-  const { toolmode, setToolMode, setLines } = useContext(StoreContext)
+  const { setLines } = useContext(StoreContext)
 
   const mockObject = [
     {

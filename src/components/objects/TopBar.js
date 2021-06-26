@@ -22,7 +22,6 @@ export default function TopBar(props) {
 
   const [openFilterTab, setOpenFilterTab] = useState(false);
   const [openColorPicker, setOpenColorPicker] = useState(false);
-  const [openToolTab, setOpenToolTab] = useState(false);
   const [color, setColor] = useState({ r: 255, g: 255, b: 255, a: 0.5 });
 
   const handleChange = (event, newValue) => {
@@ -117,42 +116,58 @@ export default function TopBar(props) {
 
   };
   return (
-    <header className="z-30 absolute h-16 w-screen  bg-gray-800">
+    <header className="z-30 absolute h-24 w-screen  bg-gray-800">
       <div className="w-full h-16 flex justify-center">
-        <div className=" grid grid-rows-1 gap-5">
+        <div className="flex justify-center">
           <div className="fixed">
 
-            <Tooltip title="Toolbar">
-              <IconButton className="my-5" onClick={
-                () => {
-                  setOpenToolTab(!openToolTab)
-                }
-              }>
-                <i className="fas fa-wrench text-white w-8 h-8"></i>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Light Adjustment">
-              <IconButton
-                className="my-5"
-                onClick={() => {
-                  setOpenFilterTab(!openFilterTab);
-                }}
-              >
-                <i className="fas fa-sun text-white w-8 h-8"></i>{" "}
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Color Picker">
-              <IconButton onClick={() => {
-                setOpenColorPicker(!openColorPicker)
-              }}>
-                <i style={{
-                  color: `rgba(${color['r']},${color['g']},${color['b']},${color['a']})`
-                }} className="fas fa-palette e w-8 h-8"></i>
+            <div className="m-2 grid grid-cols-8 grap-1">
+              {Tools.map((Tool) => (
+                <div key={Tool.id}>
+                  <button className={toolmode === Tool.toolname ? `p-2 w-20 h-20  bg-green-300` : `p-2 w-20 h-20 border-none`} onClick={() => {
+                    setToolMode(Tool.toolname)
+
+
+                  }}>
+                    <div className="grid-cols-1 grap-1">
+
+                      <div className="my-2"> {Tool.icon}</div>
+                      <div className="text-white">{Tool.toolname}</div>
+
+                    </div>
+
+                  </button>
+
+
+                </div>
+              ))}
+
+              <Tooltip title="Light Adjustment">
+                <IconButton
+                  className="my-5"
+                  onClick={() => {
+                    setOpenFilterTab(!openFilterTab);
+                  }}
+                >
+                  <i className="fas fa-sun text-white w-8 h-8"></i>{" "}
+
+                </IconButton>
+
+              </Tooltip>
+              <Tooltip title="Color Picker">
+                <IconButton onClick={() => {
+                  setOpenColorPicker(!openColorPicker)
+                }}>
+                  <i style={{
+                    color: `rgba(${color['r']},${color['g']},${color['b']},${color['a']})`
+                  }} className="fas fa-palette e w-8 h-8"></i>
 
 
 
-              </IconButton>
-            </Tooltip>
+                </IconButton>
+              </Tooltip>
+            </div>
+
 
             {openFilterTab ? (
               <FadeIn>
@@ -231,46 +246,11 @@ export default function TopBar(props) {
                 </div>
               </FadeIn>
             ) : null}
-            {openToolTab ? (
-              <FadeIn>
-                <div
-                  className="my-10 w-72 h-full p-5 rounded-xl"
-                  style={{
-                    backgroundColor: "rgba(20, 20, 20, 0.4 )",
-                    backdropFilter: "blur( 5.0px )",
-                  }}
-                >
-                  <h1 className="text-white my-5"> Toolbar</h1>
-                  <div className="grid grid-cols-3 grap-1">
-                    {Tools.map((Tool) => (
-                      <div key={Tool.id}>
-                        <button className={toolmode === Tool.toolname ? `p-2 w-20 h-20  bg-green-300` : `p-2 w-20 h-20 border-none`} onClick={() => {
-                          setToolMode(Tool.toolname)
 
-
-                        }}>
-                          <div className="grid-cols-1 grap-1">
-
-                            <div className="my-2"> {Tool.icon}</div>
-                            <div className="text-white">{Tool.toolname}</div>
-
-                          </div>
-
-                        </button>
-
-
-                      </div>
-                    ))}
-
-
-                  </div>
-
-                </div>
-              </FadeIn>
-            ) : null}
             {openColorPicker ? <FadeIn>
               <TwitterPicker
                 color={color}
+                onChange={handleChangeColor}
                 onChangeComplete={handleChangeComplete} triangle="hide" />    </FadeIn> : null}
           </div>
         </div>

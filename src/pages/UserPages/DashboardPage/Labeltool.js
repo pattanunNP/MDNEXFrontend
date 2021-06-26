@@ -5,16 +5,16 @@ import DrawableArea from "../../../components/objects/DrawableArea";
 import LabelBrowser from "../../../components/objects/LabelBrowser"
 import TopBar from "../../../components/objects/TopBar";
 import ToolBar from "../../../components/objects/ToolBar";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 export default function Labeltool() {
 
   const image_url =
     "https://res.cloudinary.com/image-chatbot/image/upload/v1623427911/MD_NEX/image4_wdnlm0.png";
 
-  let { project } = useParams();
+  // let { project } = useParams();
 
-  let { dataset } = useParams();
+  // let { dataset } = useParams();
 
   const { filter_brightness, filter_contrast } = useContext(StoreContext);
 
