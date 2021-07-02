@@ -42,6 +42,7 @@ const ManangeData = lazy(() =>
 
 function App() {
   return (
+
     <Sentry.ErrorBoundary fallback={"An error has occurred"}>
       <div style={{ fontFamily: "Kanit" }}>
         <Router>
@@ -102,6 +103,7 @@ function App() {
         </Router>
       </div>
     </Sentry.ErrorBoundary>
+
   );
 }
 

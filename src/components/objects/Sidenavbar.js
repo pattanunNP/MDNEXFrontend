@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import StorageIcon from "@material-ui/icons/Storage";
 import SettingsIcon from "@material-ui/icons/Settings";
-import BuildIcon from "@material-ui/icons/Build";
+// import BuildIcon from "@material-ui/icons/Build";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PeopleIcon from "@material-ui/icons/People";
 import { useHistory, Link } from "react-router-dom";
@@ -161,15 +161,7 @@ export default function Sidenavbar(props) {
                             <span className="ml-6">TEAMS</span>
                           </Link>
                         </li>
-                        <li className="relative px-2 my-7 ">
-                          <Link
-                            className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                            to="/dashboard/labeltool"
-                          >
-                            <BuildIcon />
-                            <span className="ml-6">TOOLS</span>
-                          </Link>
-                        </li>
+
 
                         <li className="relative px-2 my-7">
                           <Link
@@ -305,18 +297,7 @@ export default function Sidenavbar(props) {
                             </Link>
                           </Tooltip>
                         </li>
-                        <li className="relative px-2 my-7">
-                          <Tooltip title="LabelTool">
-                            <Link
-                              className="inline-flex items-center w-full text-sm font-semibold text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700"
-                              to="/dashboard/labeltool"
-                            >
-                              <IconButton>
-                                <BuildIcon className="text-green-400 transition-colors duration-150 cursor-pointer hover:text-green-700" />
-                              </IconButton>
-                            </Link>
-                          </Tooltip>
-                        </li>
+
 
                         <li className="relative px-2 my-7">
                           <Tooltip title="Setting">

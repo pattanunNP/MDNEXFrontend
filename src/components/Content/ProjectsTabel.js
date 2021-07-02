@@ -101,7 +101,7 @@ export default function ProjectsTabel(props) {
                     {projects.length > 0 ? (
                       <tbody class="bg-white divide-y divide-gray-200">
                         {projects.map((item) => (
-                          <tr key="project_uuid">
+                          <tr key={item.project_uuid}>
                             <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
                               <p>{item.project_name}</p>
                               <div>

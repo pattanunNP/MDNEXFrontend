@@ -7,15 +7,19 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import ContextProvider from "./context/providerComprosser";
 
-Sentry.init({
-  dsn: "https://eb976290a369425d971e1e2e4135663d@o854058.ingest.sentry.io/5819170",
-  integrations: [new Integrations.BrowserTracing()],
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
+if (!process.env.NODE_ENV === "development") {
+  Sentry.init({
+    dsn: "https://eb976290a369425d971e1e2e4135663d@o854058.ingest.sentry.io/5819170",
+    integrations: [new Integrations.BrowserTracing()],
+
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+  });
+}
+
 ReactDOM.render(
   <ContextProvider>
     <App />

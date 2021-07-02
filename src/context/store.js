@@ -9,14 +9,15 @@ export const StoreContextProvider = ({ children }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
   const [toolType, setToolType] = useState(null);
   const [AuthState, AuthDispatch] = useReducer(reducer, null);
-
   const [filter_brightness, setBrightness] = useState(100);
   const [filter_contrast, setContrast] = useState(100);
   const [opacity, setOpacity] = useState(100);
   const [userProjects, setUserProjects] = useState({});
   const [dataset_name, setDatasetname] = useState(null);
   const [dataset_uuid, setDatasetuuid] = useState(null);
+  const [selectedElement, setSelectedElement] = useState(null);
   const [reset, setReset] = useState(false)
+  const [elements, setElements] = useState([]);
   const [toolmode, setToolMode] = useState("bbox")
   const [toolColor, setToolColor] = useState(
     { r: 255, g: 255, b: 255, a: 0.6 })
@@ -57,7 +58,10 @@ export const StoreContextProvider = ({ children }) => {
         lines,
         setLines,
         toolColor,
-        setToolColor
+        setToolColor,
+        elements,
+        setElements,
+        selectedElement, setSelectedElement
 
       }}
     >
