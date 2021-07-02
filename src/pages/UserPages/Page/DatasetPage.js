@@ -20,6 +20,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import PublicIcon from "@material-ui/icons/Public";
 import SearchBox from "../../../components/objects/SearchBox";
 import Sidenavbar from "../../../components/objects/Sidenavbar";
+
 async function FetchDataset(path) {
   const url = process.env.REACT_APP_API_URL;
   const access_token = sessionStorage.getItem("access_token");
@@ -52,7 +53,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
+        <Box p={5}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -105,6 +106,9 @@ export default function DatasetPage() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+
+
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
       <Sidenavbar />
@@ -158,7 +162,14 @@ export default function DatasetPage() {
             </AppBar>
           </div>
           <TabPanel value={value} index={0}>
-            <Paper className="w-full shadow-3xl h-screen p-10">
+            <Paper className="w-full shadow-3xl h-screen p-10"
+              style={{
+                background: "rgba(255, 255, 255, 0.5 )",
+                boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
+                backdropFilter: "blur( 5.0px )",
+                borderRadius: "20px",
+                border: "1px solid rgba( 255, 255, 255, 0.18 )",
+              }}>
               <div>
                 {" "}
                 <div className="bg-gray-200 p-2 w-full">
@@ -189,12 +200,7 @@ export default function DatasetPage() {
                     Total Image:&nbsp; <span className="font-semibold">{dataset.dataset_number_of_images}</span> Images
                   </h1>
 
-                  <h1
-                    style={{ textTransform: "Capitalize" }}
-                    className="mt-10 text-xl"
-                  >
-                    dataset Owner:&nbsp;{dataset.dataset_owner_name}
-                  </h1>
+
                   <h1 className="mt-10 text-xl">
                     Dataset UUID:&nbsp;{dataset.dataset_uuid}
                   </h1>
@@ -205,7 +211,14 @@ export default function DatasetPage() {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <div className="pb-10 px-8  rounded-3xl ">
-              <Paper className="w-full shadow-3xl h-full p-10">
+              <Paper className="w-full shadow-3xl h-screen p-12 overflow-y-auto"
+                style={{
+                  background: "rgba(255, 255, 255, 0.5 )",
+                  boxShadow: "0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
+                  backdropFilter: "blur( 5.0px )",
+                  borderRadius: "20px",
+                  border: "1px solid rgba( 255, 255, 255, 0.18 )",
+                }}>
                 <div className="bg-gray-200 p-2 w-full">
                   <Typography>
                     <h1 className="text-xl font-extrabold">Dataset</h1>
@@ -255,15 +268,17 @@ export default function DatasetPage() {
                     <div className="mt-10 grid sm:grid-cols-3 gap-1 md:grid-cols-5">
                       {dataset.dataset_files.length > 0 ? (
                         dataset.dataset_files.map((image) => (
-                          <div key={image[0].file_uuid}>
+                          <div key={image[0].file_uuid}
+                          >
+
                             <div
-                              className="p-2 opacity-100 hover:opacity-80 h-48 w-48 text-white"
+                              className="p-2 opacity-100 h-48 w-48 text-white"
                               style={{
-                                backgroundImage: `url(${image[0].files_url})`,
+                                backgroundImage: `url(${image[0].file_url})`,
                               }}
                             >
                               <a
-                                href={`${image[0].files_url}`}
+                                href={`${image[0].file_url}`}
                                 className="relative bottom-0"
                               >
                                 <p
@@ -293,9 +308,10 @@ export default function DatasetPage() {
                       <table className="table-fixed">
                         <thead>
                           <tr>
-                            <th className="w-1/2">Image</th>
-                            <th className="w-1/2">Filename</th>
-                            <th className="w-1/2">UUID</th>
+                            <th className="w-1/8">Image</th>
+                            <th className="w-1/4">Filename</th>
+                            <th className="w-1/8">Metadata</th>
+                            {/* <th className="w-1/2">UUID</th> */}
                             <th className="w-1/2">Url</th>
                           </tr>
                         </thead>
@@ -309,18 +325,19 @@ export default function DatasetPage() {
                                 <td>
                                   <img
                                     alt="mini"
-                                    src={image[0].files_url}
-                                    className="w-10 h-10"
+                                    src={image[0].file_url}
+                                    className="w-16 h-16 object-contain object-center"
                                   />
                                 </td>{" "}
-                                <td>{image[0].filename}</td>{" "}
-                                <td>{image[0].file_uuid}</td>{" "}
+                                <td>{image[0].filename}<br></br>{image[0].file_uuid}</td>{" "}
+                                <td>Width:&nbsp;{image[0].file_metadata.width}px<br></br>Height:&nbsp;{image[0].file_metadata.height}px</td>{" "}
+                                {/* <td>{image[0].file_uuid}</td>{" "} */}
                                 <td>
                                   <a
-                                    href={image[0].files_url}
-                                    className="text-grey-200 hover:text-blue-300"
+                                    href={image[0].file_url}
+                                    className="text-grey-200 hover:text-blue-300 "
                                   >
-                                    {image[0].files_url}
+                                    {image[0].file_url}
                                   </a>
                                 </td>
                               </tr>
@@ -378,7 +395,7 @@ export default function DatasetPage() {
                   <img
                     alt="banner"
                     src={dataset.dataset_thumbnail}
-                    className="w-96 h-48"
+                    className="w-96 h-48 object-contain object-center"
                   />
                 </div>
                 <h1

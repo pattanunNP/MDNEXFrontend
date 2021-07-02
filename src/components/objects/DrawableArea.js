@@ -1,33 +1,46 @@
 import React, {
-  useState,
   useRef,
   useContext,
 } from "react";
+import uuid from 'react-uuid'
 // import { Paper, Typography, TextField } from "@material-ui/core";
 import { StoreContext } from "../../context/store";
-import { Stage, Layer, Image, Rect, Text, Group } from 'react-konva';
+import { Stage, Layer, Image, Rect, Text, Group, Line } from 'react-konva';
 import useImage from "use-image";
 // import { Html } from "react-konva-utils"
 
-function CreateElement(id, clientX1, clientY1, clientX2, clientY2, toolmode, toolColor, opacity) {
-  let objectname = `${toolmode}#${id}`
+function CreateElement(id, uuid_key, Objects, toolmode, toolColor, opacity) {
+  let objectname = `${toolmode}`
 
 
-  return {
-    id,
-    clientX1,
-    clientY1,
-    clientX2,
-    clientY2,
-    toolmode,
-    objectname,
-    toolColor,
-    opacity
+  if (toolmode === "bbox") {
+
+
+    let clientX1 = Objects.x1;
+    let clientY1 = Objects.y1;
+    let clientX2 = Objects.x2;
+    let clientY2 = Objects.y2;
+
+
+    return {
+      id,
+      uuid_key,
+      clientX1,
+      clientY1,
+      clientX2,
+      clientY2,
+      toolmode,
+      objectname,
+      toolColor,
+      opacity
+    }
   }
 
 
 
 }
+
+
 
 
 // const useHistory = initialState => {
@@ -55,10 +68,10 @@ function CreateElement(id, clientX1, clientY1, clientX2, clientY2, toolmode, too
 
 export default function DrawableArea(props) {
 
-  // const { lines, setLines } = useContext(StoreContext)
+  const { elements, setElements } = useContext(StoreContext)
+
+
   const isDrawing = useRef(false);
-  const [elements, setElements] = useState([]);
-  // const [selectedElement, setSelectedElement] = useState(null);
 
   const [image] = useImage(props.image_url)
 
@@ -66,9 +79,21 @@ export default function DrawableArea(props) {
 
 
 
+  // function DrawLine(id, clientX1, clientY1, toolColor, opacity) {
+  //   let lines = []
+  //   // setLines([...lines, { points: [clientX1, clientY1] }]);
+  //   lines.push(...lines, { points: [clientX1, clientY1] })
+  //   return lines
+  // }
 
-  const updateElement = (id, x1, y1, x2, y2, toolmode) => {
-    const updatedElement = CreateElement(id, x1, y1, x2, y2, toolmode, toolColor, opacity);
+  const updateElement = (id, uuid_key, x1, y1, x2, y2, toolmode) => {
+    let Objects = {
+      x1: x1,
+      y1: y1,
+      x2: x2,
+      y2: y2
+    }
+    const updatedElement = CreateElement(id, uuid_key, Objects, toolmode, toolColor, opacity);
 
     const elementsCopy = [...elements];
     elementsCopy[id] = updatedElement;
@@ -91,11 +116,27 @@ export default function DrawableArea(props) {
     isDrawing.current = true;
     const id = elements.length;
     const pos = event.target.getStage().getPointerPosition();
-    if (toolmode === "selection") {
+    // if (toolmode === "selection") {
 
+    // }
+    // if (toolmode === "freehand") {
+    //   const line = DrawLine(id, pos.x, pos.y)
+    //   const element = CreateElement(id, line, toolmode, toolColor, opacity)
+    //   setElements(prevState => [...prevState, element])
+
+    // }
+    if (toolmode === "bbox") {
+      let Objects = {
+        x1: pos.x,
+        y1: pos.y,
+        x2: pos.x,
+        y2: pos.y
+      }
+      let uuid_key = uuid();
+      const element = CreateElement(id, uuid_key, Objects, toolmode, toolColor, opacity)
+      // console.log(element)
+      setElements(prevState => [...prevState, element])
     }
-    const element = CreateElement(id, pos.x, pos.y, pos.x, pos.y, toolmode, toolColor, opacity)
-    setElements(prevState => [...prevState, element])
 
   };
 
@@ -105,8 +146,9 @@ export default function DrawableArea(props) {
     if (!isDrawing.current === true) return;
     const index = elements.length - 1;
     // console.log(elements[index])
-    const { clientX1, clientY1 } = elements[index];
-    updateElement(index, clientX1, clientY1, pos.x, pos.y, toolmode, opacity);
+    const { clientX1, clientY1, uuid_key } = elements[index];
+    updateElement(index, uuid_key, clientX1, clientY1, pos.x, pos.y, toolmode, opacity);
+
 
 
 
@@ -129,7 +171,7 @@ export default function DrawableArea(props) {
   // };
 
 
-  //  console.log(toolmode)
+
 
   return (
 
@@ -149,71 +191,69 @@ export default function DrawableArea(props) {
       }}
     >
 
-
       <Layer>
         <Image image={image} />
       </Layer>
 
-
-
       <Layer>
 
-        {elements.map(element => {
-          const tool_mode = element.toolmode
-          if (tool_mode === "bbox") {
-            return (
-              <Group key={element.id}>
-                {/* {selectedElement === element.id ? <Html>
-                  <div className="m-5 p-2 bg-white rounded-4xl">
-                    <Paper className="">
-                      <Typography>
-                        <h1>Name Class</h1>
-                      </Typography>
-                      <TextField></TextField>
-                    </Paper>
-                  </div>
-                </Html> : null} */}
+        {elements.length > 0 ?
+          elements.map((element) => {
+            const tool_mode = element.toolmode
+            if (tool_mode === "bbox") {
+              return (
+                <Group key={element.uuid}>
 
-                <Text
-                  text={`${element.objectname}`}
-                  x={element.clientX1 - 20}
-                  y={element.clientY1 - 20}
-                  fill={
-                    `rgba(${element.toolColor['r']},
+
+                  <Text
+                    text={`${element.objectname}`}
+                    x={element.clientX1 - 20}
+                    y={element.clientY1 - 20}
+                    fill={
+                      `rgba(${element.toolColor['r']},
                     ${element.toolColor['g']},
                     ${element.toolColor['b']},
                     ${1})`} />
 
-                <Rect
+                  <Rect
 
-                  x={element.clientX1}
-                  y={element.clientY1}
-                  width={element.clientX2 - element.clientX1}
-                  height={element.clientY2 - element.clientY1}
-                  scaleX={1}
-                  scaleY={1}
-                  fill={`rgba(${element.toolColor['r']},
+                    x={element.clientX1}
+                    y={element.clientY1}
+                    width={element.clientX2 - element.clientX1}
+                    height={element.clientY2 - element.clientY1}
+                    scaleX={1}
+                    scaleY={1}
+                    fill={`rgba(${element.toolColor['r']},
                       ${element.toolColor['g']},
                       ${element.toolColor['b']},
                       ${element.opacity / 200})`}
-                  stroke={`rgba(${element.toolColor['r']},
+                    stroke={`rgba(${element.toolColor['r']},
                         ${element.toolColor['g']},
                         ${element.toolColor['b']},
                         ${element.opacity / 200})`}
-                  strokeWidth={4}
+                    strokeWidth={4}
 
-                />
+                  />
 
-              </Group>
+                </Group>
 
 
-            )
-          } else {
-            return null;
+              )
+            } else if (tool_mode === "freehand") {
+              return (
+                <Group>
+                  <Line
+                    points={element.Line}
+                  />
+                </Group>
+              )
+            } else {
+              return null
+            }
           }
-        }
-        )
-        }
+          )
+
+          : null}
 
       </Layer>
     </Stage >

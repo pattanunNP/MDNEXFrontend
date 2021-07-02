@@ -3,7 +3,7 @@ export const LOGIN = "/login";
 export const REGISTER = "/register";
 export const TERMS = "/terms";
 export const DASHBOARD = "/dashboard";
-export const LABEL_TOOL = "/dashboard/labeltool";
+export const LABEL_TOOL = "/dashboard/labeltool/:project_id/:dataset_id/:file_id";
 
 export const VERIFY_EMAIL = "/verify/email";
 
