@@ -249,17 +249,17 @@ export default function Data() {
                   {datasets.length > 0 ? (
                     datasets.map((dataset) => (
                       <div
-                        className="shadow-md bg-white w-64 h-80 rounded-xl hover:shadow-xl"
+                        className="shadow-md bg-white w-64 h-72 rounded-xl hover:shadow-xl"
                         key={dataset.dataset_uuid}
                       >
-                        <Link to={`/dataset/${dataset.dataset_uuid}`}>
 
-                          <img
-                            alt="thumbnail"
-                            src={dataset.dataset_thumbnail}
-                            className="h-40 object-cover rounded-t-xl "
-                          />
-                        </Link>
+
+                        <img
+                          alt="thumbnail"
+                          src={dataset.dataset_thumbnail}
+                          className="h-40 object-cover rounded-t-xl "
+                        />
+
                         <p className="px-5 mt-3 flex justify-between text-green-500 text-sm p-1 font-bold">
                           <h1 className="orders-frist">
                             {" "}
@@ -272,7 +272,13 @@ export default function Data() {
                             Images
                           </h1>
                         </div>
-
+                        <div className="flex justify-center text-gray-400 text-sm">
+                          <Link to={`/dataset/${dataset.dataset_uuid}`}>
+                            <button className="my-3 mx-3 p-1 bg-blue-500 text-white rounded-xl text-sm w-16 shadow-sm">
+                              Veiw
+                            </button>
+                          </Link>
+                        </div>
                         {project_uuid ? (
                           <div className="mt-1 flex justify-center text-gray-400 text-sm">
                             {!dataset.dataset_atteched_project.includes(
@@ -304,13 +310,6 @@ export default function Data() {
                             )}
                           </div>
                         ) : null}
-                        {/* <p className="mt-3 flex justify-center text-gray-400 text-sm">
-                          Owner:
-                          <a href={`/profile/${dataset.dataset_owner_uuid}`}>
-                            {dataset.dataset_owner_name}
-                          </a>
-                        </p> */}
-
                       </div>
                     ))
                   ) : (

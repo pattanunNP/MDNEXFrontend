@@ -1,5 +1,6 @@
-import React, { useState, useContext, } from "react";
+import React, { Fragment, useState, useContext, } from "react";
 import axios from "axios";
+import { Dialog, Switch, Transition } from '@headlessui/react'
 import {
   Paper,
   AppBar,
@@ -11,6 +12,7 @@ import {
   TextField,
   IconButton,
 } from "@material-ui/core";
+
 import useSWR from "swr";
 import PropTypes from "prop-types";
 import { useParams, useHistory } from "react-router-dom";
@@ -44,6 +46,7 @@ async function FetchDataset(path) {
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
+
   return (
     <div
       role="tabpanel"
@@ -76,6 +79,8 @@ function a11yProps(index) {
 
 export default function DatasetPage() {
   let { uuid } = useParams();
+  const [enabled, setEnabled] = useState(false)
+  let [isOpen, setIsOpen] = useState(false)
 
   const options = { suspense: true };
 
@@ -112,7 +117,65 @@ export default function DatasetPage() {
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
       <Sidenavbar />
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={() => {
+            setIsOpen(false)
+          }}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0" />
+            </Transition.Child>
 
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-900"
+                >
+                  Transfer Owner?
+                </Dialog.Title>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                    Your need to select members that you wan't to transfer owner
+                  </p>
+
+                </div>
+
+                <div className="mt-4">
+
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
         <header className="grid justify-items-stretch py-1 bg-gray-800 h-16">
           <div className="flex justify-center">
@@ -359,6 +422,7 @@ export default function DatasetPage() {
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Paper className="w-full shadow-3xl h-full p-10">
+
               <div className="bg-gray-200 p-2 w-full">
                 <Typography>
                   <h1 className="text-xl font-extrabold">Settings</h1>
@@ -413,39 +477,49 @@ export default function DatasetPage() {
                 </Typography>
               </div>
               <div>
-                <h1 className="my-10 text-md font-extrabold text-red-600">
-                  {dataset.private === true ? (
-                    <div>
-                      {" "}
-                      Made Public:&nbsp;&nbsp;&nbsp;
-                      <button className="p-1 w-32 text-md  bg-red-500 text-white ring-2 ring-red-300 rounded-3xl">
-                        <PublicIcon className="mx-2" /> Public
-                      </button>
-                    </div>
-                  ) : (
-                    <div>
-                      {" "}
-                      Made Private:&nbsp;&nbsp;&nbsp;
-                      <button className="p-1 w-32  text-md bg-red-500 text-white ring-2 ring-red-300 rounded-3xl">
-                        <LockIcon className="mx-2" /> Private
-                      </button>
-                    </div>
-                  )}
-                </h1>
-                <h1 className="my-10 text-xl font-extrabold text-red-600">
-                  Transfer Owner:&nbsp;&nbsp;&nbsp;
-                  <button className="p-1 text-md  w-48 bg-red-500 text-white ring-2 ring-red-300 rounded-3xl">
+                <div className="grid grid-rows-2 gap-2">
+                  {enabled === true ? <PublicIcon style={{
+                    color: "green"
+                  }} /> : <LockIcon />}
+                  <h1 className="title text-2xl font-bold">{enabled === true ? `Public` : `Private`}</h1>
+                  <Switch
+                    checked={enabled}
+                    onChange={() => {
+                      setEnabled(!enabled)
+                    }}
+                    className={`${enabled ? 'bg-green-600' : 'bg-gray-200'
+                      } relative inline-flex items-center h-6 rounded-full w-11`}
+                  >
+                    <span className="sr-only">Enable notifications</span>
+                    <span
+                      className={`${enabled ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block w-4 h-4 transform bg-white rounded-full`}
+                    />
+                  </Switch>
+                </div>
+                <div className="grid grid-rows-2 gap-1">
+                  <h1 className="mt-5 text-xl font-extrabold text-red-600">
+                    Transfer Owner:&nbsp;&nbsp;&nbsp;
+
+                  </h1>
+                  <button onClick={() => {
+                    setIsOpen(true)
+                  }} className="p-1 text-md h-8 w-32 bg-red-500 text-white ring-2 ring-red-300 rounded-3xl">
                     <i className="fas fa-exchange-alt mx-2" />
                     Transfer
                   </button>
-                </h1>
-                <h1 className="my-10 text-xl font-extrabold text-red-600">
-                  Delete this Dataset:&nbsp;&nbsp;&nbsp;
-                  <button className="p-1  text-md w-32 bg-red-500 text-white ring-2 ring-red-300 rounded-3xl">
+                </div>
+                <div className="grid grid-rows-2 gap-1">
+                  <h1 className="mt-5 text-xl font-extrabold text-red-600">
+                    Delete this Dataset:&nbsp;&nbsp;&nbsp;
+
+                  </h1>
+                  <button className="p-1  text-md h-8 w-32 bg-red-500 text-white ring-2 ring-red-300 rounded-3xl">
                     <DeleteIcon className="mx-2" />
                     Delete
                   </button>
-                </h1>
+                </div>
+
               </div>
             </Paper>
           </TabPanel>

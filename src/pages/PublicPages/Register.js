@@ -155,11 +155,11 @@ export default function Register() {
             <div>
               <Paper
                 style={{
-                  height: "710px",
+                  height: "700px",
                   borderRadius: "30px",
                 }}
                 variant="outlined"
-                className="mt-10 p-4 w-96 bg-white-300 bg-opacity-40 shadow-lg blur-lg rounded-3xl"
+                className="mt-10 p-4 w-96 bg-white-300 bg-opacity-40 shadow-lg blur-lg"
               >
                 <Typography className="flex justify-center">
                   <h1 className="title text-4xl font-bold">Register</h1>
@@ -264,7 +264,7 @@ export default function Register() {
                         name={"Register"}
                         type={"submit"}
                         classStyle={
-                          "fixed mt-10 relative p-5 title text-sm font-bold transition duration-500 ease-in-out bg-green-400 text-white font-bold w-full rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
+                          "fixed mt-5 relative p-5 title text-sm font-bold transition duration-500 ease-in-out bg-green-400 text-white font-bold w-full rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
                         }
                       />
                     </div>

@@ -118,7 +118,7 @@ export default function ProjectsTabel(props) {
                                       );
                                     }}
                                   >
-                                    <i classNameName="fas fa-copy" />
+                                    <i className="fas fa-copy" />
                                   </span>
                                 </p>
                               </div>

@@ -1,4 +1,9 @@
+import React, { useState } from 'react';
+
 export default function Navbar(props) {
+
+  const [open, setOpen] = useState(false)
+
   return (
     <nav className="p-1 bg-gray-800 relative select-none bg-grey lg:flex lg:items-stretch w-full">
       <div className="flex flex-no-shrink items-stretch h-12">
@@ -12,9 +17,12 @@ export default function Navbar(props) {
           </a>
         ) : null}
 
-        <button className="block lg:hidden cursor-pointer ml-auto relative w-12 h-12 p-4">
+        <button onClick={() => {
+          setOpen(!open)
+        }}
+          className="block lg:hidden cursor-pointer ml-auto relative w-12 h-12 p-4">
           <svg
-            className="fill-current text-blue-500"
+            className="fill-current text-blue-500 hover:text-white"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
           >
@@ -22,7 +30,7 @@ export default function Navbar(props) {
           </svg>
         </button>
       </div>
-      <div className="lg:flex lg:items-stretch lg:flex-no-shrink lg:flex-grow">
+      <div className={open ? `hidden` : `lg:flex lg:items-stretch lg:flex-no-shrink lg:flex-grow`}>
         <div className="lg:flex lg:items-stretch lg:justify-end ml-auto">
           <a
             href="/"

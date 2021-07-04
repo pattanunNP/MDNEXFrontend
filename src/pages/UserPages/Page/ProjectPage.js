@@ -5,15 +5,18 @@ import {
   Paper,
   Tabs,
   Box,
+  TextField,
   Typography,
   Tab,
   AppBar,
+  Tooltip
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import SearchBox from "../../../components/objects/SearchBox";
 import Sidenavbar from "../../../components/objects/Sidenavbar";
 import useSWR from "swr";
 import { IconButton } from "@material-ui/core";
+import CustomButton from "../../../components/objects/CustomButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -93,9 +96,9 @@ export default function ProjectPage() {
     setValue(newValue);
   };
 
-  function handleStartLabel() {
+  // function handleStartLabel() {
 
-  }
+  // }
 
 
   return (
@@ -221,17 +224,60 @@ export default function ProjectPage() {
                 {" "}
                 <div className="bg-gray-200 p-2 w-full">
                   <Typography>
-                    <h1 className="text-xl font-extrabold">Task</h1>
+                    <h1 className="text-xl font-extrabold">Tasks</h1>
                   </Typography>
                 </div>
-                <Typography>
-                  <button className="mt-20 btn p-3 bg-green-400 text-white  rounded-3xl hover:bg-green-500"
-                    onClick={handleStartLabel}>
-                    Start Label
-                  </button>
+                <Paper>
+                  <div className="my-5 flex justify-center h-full">
+                    <div className="grid grid-rows-2 gap-0">
+                      <Typography>
+                        <h1 className="title text-3xl font-semibold text-green-500"> Create Task</h1>
+                      </Typography>
+                      <div className="grid md:grid-cols-3 gap-10 sm:grid-cols-1 sm:gap-10">
+                        <div className="w-64">
+                          <Typography>
+                            <h1 className="text-xl">Task Name : </h1>
+                          </Typography>
+                          <TextField style={{
 
+                            marginTop: "10px"
+                          }} variant="outlined" placeholder="Task name:"></TextField>
+                          <div className="mt-5 grid grid-cols-5 gap-0">
+                            < Tooltip title="Add members">
+                              <div className="flex w-12 h-12 bg-green-400 ring-2 ring-green-300 justify-center rounded-full hover:bg-green-500 hover:ring-4">
+                                <div className="p-3"><i className="fas fa-plus text-white"></i></div>
+                              </div></Tooltip>
 
-                </Typography>
+                            {info.project_members.map((item, idx) => (
+                              <img alt="member" key={idx} src={item.member_info.profile_photo} className="rounded-full w-12 h-12" />
+                            ))}
+                          </div>
+
+                        </div>
+                        <div className="w-64">
+                          <Typography>
+                            <i className="fas fa-clock"></i>
+                            <h1 className="text-xl" >Due Time : </h1>
+                          </Typography>
+                        </div>
+                        <div className="w-64">
+                          <Typography>
+                            <i className="fas fa-info-circle"></i>
+                            <h1 className="text-xl" >Mode : </h1>
+                          </Typography>
+                        </div>
+                      </div>
+                      <CustomButton
+                        name={"Create Task"}
+                        type={"submit"}
+                        classStyle={
+                          "my-5 p-3 title text-lg font-bold transition duration-500 ease-in-out bg-blue-400 text-white font-bold w-64 rounded-full hover:bg-blue-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
+                        }
+                      />
+                    </div>
+                  </div>
+                </Paper>
+
               </div>
             </Paper>
           </TabPanel>
@@ -248,7 +294,7 @@ export default function ProjectPage() {
                 {" "}
                 <div className="bg-gray-200 p-2 w-full">
                   <Typography>
-                    <h1 className="text-4xl font-extrabold">Project Member</h1>
+                    <h1 className="text-xl font-extrabold">Project Member</h1>
                   </Typography>
                 </div>
               </div>
@@ -280,9 +326,15 @@ export default function ProjectPage() {
                         <tr key={item.uuid} className="shadow-sm">
                           <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5">
                             <div className="grid grid-cols-1 gap-5">
-                              <img alt="user_profile"
-                                src={item.member_info.profile_photo}
-                                className="w-12 h-12 rounded-full" />
+                              <img
+                                alt="user"
+                                className="my-2 hidden h-12 w-12 rounded-full sm:block object-cover mr-2 border-4 border-green-400"
+                                src={
+                                  item.member_info.profile_photo !== undefined
+                                    ? item.member_info.profile_photo
+                                    : "https://image.flaticon.com/icons/png/512/149/149071.png"
+                                }
+                              />
                               <p
                                 style={{
 
@@ -291,8 +343,7 @@ export default function ProjectPage() {
 
                           </td>
 
-
-                          <td class="px-6 py-4 whitespace-no-wrap text-md leading-5">
+                          <td class="px-6  whitespace-no-wrap text-md leading-5">
                             <div class="flex space-x-4">
                               <div class="flex justify-center">
                                 <p style={{

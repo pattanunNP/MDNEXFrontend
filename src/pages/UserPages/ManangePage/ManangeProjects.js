@@ -102,7 +102,7 @@ export default function ManangeProjects() {
                             {" "}
                             {project.project_name}
                           </h1>
-                        </p>{" "}
+                        </p>
                         <div className="flex justify-center text-gray-400 text-sm">
                           <Link to={`/project/${project.project_uuid}`}>
                             <button className="mx-3 p-1 bg-blue-500 text-white rounded-xl text-sm w-16 shadow-sm">
@@ -122,12 +122,7 @@ export default function ManangeProjects() {
                             Attach Dataset
                           </button>
                         </div>
-                        <p className="flex justify-center text-gray-400 text-sm">
-                          Owner:
-                          <a href={`/profile/${project.project_owner_uuid}`}>
-                            {project.project_owner_name}
-                          </a>
-                        </p>
+
                       </div>
                     ))
                   ) : (

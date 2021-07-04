@@ -150,12 +150,11 @@ export default function Login() {
           <div>
             <Paper
               style={{
-                height: "450px",
-                width: "530px",
+                height: "420px",
                 borderRadius: "30px",
               }}
               variant="outlined"
-              className="mt-10 p-4 bg-white-300 bg-opacity-40 shadow-lg blur-lg"
+              className="mt-10 p-4 w-96 bg-white-300 bg-opacity-40 shadow-lg blur-lg"
             >
               <Typography className="flex justify-center">
                 <h1 className="title text-4xl font-bold">Login</h1>
@@ -207,10 +206,10 @@ export default function Login() {
                 </form>
               </div>
 
-              <Typography className="mt-32">
+              <Typography className="mt-16">
                 <a
                   href="/forgotpassword"
-                  className="mt-20 title text-sm font-bold flex justify-self-stretch text-blue-300 hover:text-blue-400"
+                  className="mt-12 title text-sm font-bold flex justify-self-stretch text-blue-300 hover:text-blue-400"
                 >
                   {" "}
                   Forgot password ?
