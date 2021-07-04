@@ -51,7 +51,7 @@ export default function Sidenavbar(props) {
     <div>
       {opensidebar ? (
         <FadeIn>
-          <aside className="z-20 flex-shink-0 hidden w-60 h-screen pl-2 bg-white overflow-y-auto  rounded-rb-2xl filter drop-shadow-lg border-r-1 border-green-400 md:block">
+          <aside className="z-20 flex-shink-0 hidden w-60 h-screen pl-2 bg-white overflow-y-auto  rounded-rb-2xl border-r-1 border-green-400 md:block">
             <div>
               <div className="text-white">
                 <div>
@@ -199,7 +199,7 @@ export default function Sidenavbar(props) {
         </FadeIn>
       ) : (
         <FadeIn>
-          <aside className="z-20 flex-shrink-0 w-20 h-screen px-2 overflow-y-auto overflow-x-hidden  border-r-1 border-green-400 bg-white rounded-rb-2xl filter drop-shadow-lg">
+          <aside className="z-20 flex-shrink-0 w-20 h-screen px-2 overflow-y-auto overflow-x-hidden  border-r-1 border-green-400 bg-white rounded-rb-2xl filter ">
             <div>
               <div className="text-white">
                 <div>
