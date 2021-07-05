@@ -249,7 +249,7 @@ export default function Data() {
                   {datasets.length > 0 ? (
                     datasets.map((dataset) => (
                       <div
-                        className="shadow-md bg-white w-64 h-72 rounded-xl hover:shadow-xl"
+                        className="shadow-md bg-white w-64 h-96 rounded-xl hover:shadow-xl"
                         key={dataset.dataset_uuid}
                       >
 

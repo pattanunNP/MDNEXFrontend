@@ -4,115 +4,40 @@ import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 import { IconButton } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
+import useSWR from "swr";
+import axios from "axios"
 import { StoreContext } from "../../context/store";
-export default function LabelBrowser() {
+
+async function FetchImage(path) {
+  const url = process.env.REACT_APP_API_URL;
+  const access_token = sessionStorage.getItem("access_token");
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${access_token}`,
+  };
+
+  const response = await axios.get(`${url}${path}`, { headers: headers });
+
+  if (!response.statusText === "OK") {
+    const error = new Error("An error occurred while fetching the data.");
+    // Attach extra info to the error object.
+    error.info = await response.data;
+    error.status = response.status;
+    throw error;
+  }
+  // console.log(response.data);
+  return response.data
+}
+
+export default function LabelBrowser(props) {
   const { openSidebar, setOpenSidebar } = useContext(StoreContext);
-  const mockdata = [
-    {
-      id: "1",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: true,
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "2",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "3",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: true,
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "4",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: true,
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "5",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: true,
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "6",
-      name: "image2.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: true,
-      url: "/2",
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "7",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: false,
-      url: "/2",
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "8",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: false,
-      url: "/2",
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "9",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: false,
-      url: "/2",
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "10",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: false,
-      url: "/2",
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-    {
-      id: "11",
-      name: "12.jpg",
-      last_edit: "pattanun",
-      last_edit_time: "1 month ago",
-      is_Labeled: false,
-      url: "/2",
-      image:
-        "https://res.cloudinary.com/image-chatbot/image/upload/v1623427934/MD_NEX/image1_howum6.png",
-    },
-  ];
+  const task_id = props.task_id
+  const options = { suspense: true };
+  const { data: image } = useSWR(
+    `/api/v1/labeling/gettasks?task_id=${task_id}`,
+    FetchImage,
+    options
+  );
   return (
     <aside
       className={`${openSidebar === true
@@ -148,29 +73,31 @@ export default function LabelBrowser() {
                 </div>
 
                 <div className=" bg-gray-700 h-full w-full border-2 border-green-300">
-                  {mockdata.map((item, id) => (
-                    <Link to={item.url}>
+
+                  {Object.keys(image.task).map((item, idx) => (
+
+                    < Link to={`/dashboard/labeltool/${task_id}?queue_id=${item}`}>
                       <button
-                        key={id}
+                        key={item}
                         className=" mt-1 shadow-xl p-2 bg-gray-800 w-full h-28 text-white hover:bg-gray-700"
                       >
+
                         <div className="grid grid-cols-4 gap-2">
+                          <div> {idx}</div>
+
                           <div>
-                            {" "}
+
+
                             <img
                               alt="thumnail"
                               className="w-16 h-16"
-                              src={item.image}
+                              src={image.task[item].image.file_url}
                             />{" "}
-                            <div className="text-sm">{item.name}</div>
+                            <div className="text-sm truncate">{image.task[item].image.filename}</div>
                             <div className="text-sm text-gray-300">
-                              &nbsp;by&nbsp;
-                              {item.last_edit}
+                              &nbsp;id&nbsp;
+                              {item}
                             </div>
-                          </div>
-
-                          <div className="text-sm text-gray-400">
-                            {item.last_edit_time}
                           </div>
 
                           <div>
@@ -188,6 +115,6 @@ export default function LabelBrowser() {
           </div>
         </div>
       </FadeIn>
-    </aside>
+    </aside >
   );
 }

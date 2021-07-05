@@ -69,6 +69,26 @@ async function FetchProjects(path) {
   // console.log(response.data);
   return response.data;
 }
+// async function FetchImage(path) {
+//   const url = process.env.REACT_APP_API_URL;
+//   const access_token = sessionStorage.getItem("access_token");
+//   const headers = {
+//     "Content-Type": "application/json",
+//     Authorization: `Bearer ${access_token}`,
+//   };
+
+//   const response = await axios.get(`${url}${path}`, { headers: headers });
+
+//   if (!response.statusText === "OK") {
+//     const error = new Error("An error occurred while fetching the data.");
+//     // Attach extra info to the error object.
+//     error.info = await response.data;
+//     error.status = response.status;
+//     throw error;
+//   }
+//   // console.log(response.data);
+//   return response.data
+// }
 export default function ProjectPage() {
   let { uuid } = useParams();
   const [value, setValue] = useState(0);
@@ -96,10 +116,15 @@ export default function ProjectPage() {
     setValue(newValue);
   };
 
-  // function handleStartLabel() {
+  // const task_info = () => {
 
+  //   const options = { suspense: true };
+  //   const { data: image } = useSWR(
+  //     `/api/v1/labeling/gettasks?task_id=${task_id}`,
+  //     FetchImage,
+  //     options
+  //   );
   // }
-
 
   return (
     <div className="bg-right-top bg-auto bg-no-repeat bg-fixed bg-mainbackground2 flex h-screen">
