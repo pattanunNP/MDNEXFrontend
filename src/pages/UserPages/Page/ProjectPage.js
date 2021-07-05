@@ -66,7 +66,7 @@ async function FetchProjects(path) {
     error.status = response.status;
     throw error;
   }
-  console.log(response.data);
+  // console.log(response.data);
   return response.data;
 }
 export default function ProjectPage() {

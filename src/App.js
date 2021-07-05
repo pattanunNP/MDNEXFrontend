@@ -20,10 +20,13 @@ const Labeltool = lazy(() =>
   import("./pages/UserPages/DashboardPage/Labeltool")
 );
 
+const Setting = lazy(() =>
+  import("./pages/UserPages/DashboardPage/Setting"))
+
 // Page
 const ProjectPage = lazy(() => import("./pages/UserPages/Page/ProjectPage"));
 const DatasetPage = lazy(() => import("./pages/UserPages/Page/DatasetPage"));
-
+const UserProfilePage = lazy(() => import("./pages/UserPages/Page/UserProfilePage"))
 // new
 const NewData = lazy(() => import("./pages/UserPages/NewPage/NewDataset"));
 const NewProjects = lazy(() => import("./pages/UserPages/NewPage/NewProjects"));
@@ -62,6 +65,12 @@ function App() {
 
               <PrivateRoute
                 exact
+                path={ROUTES.SETTING}
+                component={Setting}
+              />
+
+              <PrivateRoute
+                exact
                 path={ROUTES.PROJECT}
                 component={ProjectPage}
               />
@@ -69,6 +78,11 @@ function App() {
                 exact
                 path={ROUTES.DATA_PAGE}
                 component={DatasetPage}
+              />
+              <PrivateRoute
+                exact
+                path={ROUTES.PROFILE}
+                component={UserProfilePage}
               />
               <PrivateRoute
                 exact

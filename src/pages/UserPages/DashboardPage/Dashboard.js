@@ -18,10 +18,6 @@ export default function Dashboard() {
       <div className="flex flex-col flex-1 w-full overflow-y-auto">
         <header className="bg-gray-800 h-16 w-full">
           <div className="flex justify-center"> <SearchBox className="order-first" /></div>
-
-
-
-
         </header>
         <main>
           <div className="mt-40 pb-10 px-8 mx-4 rounded-3xl">

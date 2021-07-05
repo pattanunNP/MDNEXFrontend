@@ -226,7 +226,7 @@ export default function Data() {
                   onClick={() => {
                     history.push("/dashboard/datasets/newdata");
                   }}
-                  className="p-2 transition duration-500 ease-in-out bg-green-400 text-white w-48 font-bold rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
+                  className="p-2 transition duration-500 ease-in-out bg-green-400 text-white w-64 font-bold rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10"
                 >
                   <AddCircleIcon />
                   Create New Dataset
