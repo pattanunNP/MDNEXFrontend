@@ -345,7 +345,7 @@ export default function DatasetPage() {
                                 className="relative bottom-0"
                               >
                                 <p
-                                  className="p-2"
+                                  className="p-2 truncate"
                                   style={{
                                     fontSize: "12px",
                                     backgroundColor: "rgba(255, 255, 255,0.5)",
@@ -392,9 +392,9 @@ export default function DatasetPage() {
                                     className="w-16 h-16 object-contain object-center"
                                   />
                                 </td>{" "}
-                                <td>{image[0].filename}<br></br>{image[0].file_uuid}</td>{" "}
-                                <td>Width:&nbsp;{image[0].file_metadata.width}px<br></br>Height:&nbsp;{image[0].file_metadata.height}px</td>{" "}
-                                {/* <td>{image[0].file_uuid}</td>{" "} */}
+                                <td className="truncate">{image[0].filename}<br></br>{image[0].file_uuid}</td>{" "}
+                                <td className="truncate">Width:&nbsp;{image[0].file_metadata.width}px<br></br>Height:&nbsp;{image[0].file_metadata.height}px</td>{" "}
+
                                 <td>
                                   <a
                                     href={image[0].file_url}

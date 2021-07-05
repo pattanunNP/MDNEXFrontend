@@ -5,7 +5,7 @@ import DrawableArea from "../../../components/objects/DrawableArea";
 import LabelBrowser from "../../../components/objects/LabelBrowser"
 import TopBar from "../../../components/objects/TopBar";
 import ToolBar from "../../../components/objects/ToolBar";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import useSWR from "swr";
 import axios from "axios"
 
@@ -28,23 +28,21 @@ async function FetchImage(path) {
     error.status = response.status;
     throw error;
   }
-  console.log(response.data);
+  // console.log(response.data);
   return response.data
 }
 
 export default function Labeltool() {
-
-
-  let { project_id } = useParams();
-
-  let { dataset_id } = useParams();
-
-  let { file_id } = useParams();
-
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  let query = useQuery();
+  let { task_id } = useParams();
+  let queue_id = query.get("queue_id")
 
   const options = { suspense: true };
   const { data: image } = useSWR(
-    `/api/v1/labeling/getimage?project_id=${project_id}&dataset_id=${dataset_id}&file_id=${file_id}`,
+    `/api/v1/labeling/getimage?task_id=${task_id}&queue_id=${queue_id}`,
     FetchImage,
     options
   );
@@ -56,15 +54,15 @@ export default function Labeltool() {
       <TopBar />
 
       <div className="flex justify-between">
-        <LabelBrowser />
+        <LabelBrowser task_id={task_id} />
 
 
         <Panel className="relative">
           <DrawableArea
             className="absolute inset-0"
-            image_url={image['file_url']}
-            img_width={image['file_metadata']['width']}
-            img_height={image['file_metadata']['height']}
+            image_url={image['image']['file_url']}
+            img_width={image['image']['file_metadata']['width']}
+            img_height={image['image']['file_metadata']['height']}
             filter_brightness={filter_brightness}
             filter_contrast={filter_contrast}
           />

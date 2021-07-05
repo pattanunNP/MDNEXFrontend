@@ -26,13 +26,13 @@ export default function Dashboard() {
           <div className="mb-3 px-8 mx-4">
             <div className="grid gap-5 grid-rows-2 lg:grid-rows-2">
               <Link to="/dashboard/projects/newproject">
-                <button className="p-1 transition duration-500 ease-in-out bg-green-400 text-white w-48 font-bold rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10">
+                <button className="p-1 transition duration-500 ease-in-out bg-green-400 text-white w-64 font-bold rounded-full hover:bg-green-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10">
                   <AddCircleIcon className="mr-2" />
                   Create New Project
                 </button>
               </Link>
               <Link to="/dashboard/teams/newteam">
-                <button className="p-1 transition duration-500 ease-in-out bg-blue-400 text-white w-48 font-bold rounded-full hover:bg-blue-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10">
+                <button className="p-1 transition duration-500 ease-in-out bg-blue-400 text-white w-64 font-bold rounded-full hover:bg-blue-500 filter drop-shadow-lg  transform hover:-translate-y-1 hover:scale-10">
                   <AddCircleIcon className="mr-5" />
                   Create New Team
                 </button>
