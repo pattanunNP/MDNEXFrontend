@@ -2,14 +2,18 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import SearchIcon from "@material-ui/icons/Search";
 
-import { IconButton, Tooltip } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
-
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import { Link } from "react-router-dom";
 export default function SearchBox(props) {
   const [searchQuery, setSearchQuery] = useState("");
   const inputElement = useRef("");
   const [matchedQuery, setMatchedQuery] = useState([]);
-  const [invite, setInvite] = useState({});
+
 
   useEffect(() => {
     let access_token = sessionStorage.getItem("access_token");
@@ -42,15 +46,15 @@ export default function SearchBox(props) {
   function role_color(role) {
     let color;
     if (role === "admin") {
-      color = "justify-self-start font-semibold bg-red-300 p-1 rounded-xl";
+      color = "ml-20 justify-self-start font-semibold bg-red-300 p-1 rounded-xl";
     } else if (role === "co-responding") {
-      color = "justify-self-start font-semibold bg-blue-300 p-1 rounded-xl";
+      color = "ml-20 justify-self-start font-semibold bg-blue-300 p-1 rounded-xl";
     } else if (role === "labeler") {
-      color = "justify-self-start font-semibold bg-yellow-300 p-1 rounded-xl";
+      color = "ml-20 justify-self-start font-semibold bg-yellow-300 p-1 rounded-xl";
     } else if (role === "researcher") {
-      color = "justify-self-start font-semibold bg-pink-300 p-1 rounded-xl";
+      color = "ml-20 justify-self-start font-semibold bg-pink-300 p-1 rounded-xl";
     } else if (role === "visitor") {
-      color = "justify-self-start font-semibold bg-green-200 p-1 rounded-xl";
+      color = "ml-20 justify-self-start font-semibold bg-green-200 p-1 rounded-xl";
     }
     return color;
   }
@@ -69,57 +73,53 @@ export default function SearchBox(props) {
       </span>
       {matchedQuery.length > 0 ? (
         <div className="z-40 overflow-y-auto overflow-x-hidden ">
-          <ul className="z-0 w-96 h-64">
+          <List className="z-0 w-96 h-64">
             {matchedQuery.map((search) => (
-              <li
-                style={{
-                  background: "rgba(20, 20, 20, 0.4 )",
-                  backdropFilter: "blur( 5.0px )",
-                }}
-                className="flex justify-between  rounded-b-sm  h-24 p-3 w-full"
-                key={search.uuid}
-              >
-                <div className="order-3 opacity-100">
-                  <img
-                    alt="profile_img"
-                    src={search.profileimage}
-                    className="border-2 border-green-400  w-8 h-8 justify-self-start rounded-full flex items-center justify-center"
-                  />
-                  <div className="order-5">
-                    <span className="font-bold text-white">
-                      {search.username}
-                    </span>
-                  </div>
-                  <div className="order-last">
-                    <span className={role_color(search.role)}>
-                      {search.role}
-                    </span>
-                  </div>
-                </div>
-                <div className="order-last">
-                  <Tooltip title="Send Invite">
-                    <IconButton
-                      onClick={() => {
-                        setInvite({
-                          ...invite,
-                          uuid: search.uuid,
-                          email: search.email,
-                          username: search.username,
-                          expire: "1 days",
-                        });
-                      }}
+              <Link to={`/profile/${search.uuid}`}>
+                <button className=" w-full"
+
+                >
+                  <ListItem
+                    style={{
+                      background: "rgba(20, 20, 20, 0.4 )",
+                      backdropFilter: "blur( 5.0px )",
+                    }}
+                    className=" h-16  w-full"
+                    key={search.uuid}
+                  >
+
+                    <ListItemAvatar>
+                      <Avatar>
+                        <img
+                          alt="profile_img"
+                          src={search.profileimage}
+                          className="border-2 border-green-400  w-10 h-10 rounded-full flex items-center "
+                        />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
                     >
-                      <SendIcon className="text-green-300 hover:text-green-400" />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              </li>
+                      <span className="font-bold text-white">
+                        {search.username}
+                      </span><br></br>
+                      <span className={role_color(search.role)}>
+                        {search.role}
+                      </span>
+                    </ListItemText>
+
+
+
+                    <Divider variant="inset" component="li" />
+                  </ListItem>
+                </button>
+              </Link>
             ))}
-          </ul>
-        </div>
+          </List>
+        </div >
       ) : (
         <div></div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

@@ -10,6 +10,7 @@ export const VERIFY_EMAIL = "/verify/email";
 export const MANAGE_TEAMS = "/dashboard/teams/manage";
 export const MANAGE_PROJECTS = "/dashboard/projects/manage";
 export const MANAGE_DATASET = "/dashboard/datasets/manage";
+export const SETTING = "/dashboard/setting"
 
 export const NEW_TEAM = "/dashboard/teams/newteam";
 export const NEW_DATA = "/dashboard/datasets/newdata";

@@ -98,7 +98,7 @@ export default function Stat() {
         </a>
         <a
           className="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
-          href="/work"
+          href="/dashboard/projects/manage"
         >
           <div className="p-5">
             <div className="my-4 flex justify-center">
